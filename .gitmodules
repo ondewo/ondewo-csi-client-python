@@ -1,0 +1,4 @@
+[submodule "ondewo-csi-api"]
+	path = ondewo-csi-api
+	url = https://github.com/ondewo/ondewo-csi-api.git
+        branch = .
