@@ -2,3 +2,10 @@ grpcio==1.31.0
 grpcio-reflection==1.31.0
 grpcio-tools==1.31.0
 mypy-protobuf==1.20
+# Uncomment this when you are done developing with the client
+# ondewo-nlu-client
+# ondewo-s2t-client
+# ondewo-t2s-client
+-e git+https://github.com/ondewo/ondewo-nlu-client-python.git@a7bdc71a656004036b62401de41613e8b50e7c3e#egg=ondewo-nlu-client-python
+-e git+https://github.com/ondewo/ondewo-s2t-client-python.git@7c2a620fcfffb2dce31af32128db167be6fca1d7#egg=ondewo-s2t-client
+-e git+https://github.com/ondewo/ondewo-t2s-client-python.git@b05cd636e33deb9f5b49a12f5add015b11fe20c0#egg=ondewo-t2s-client
