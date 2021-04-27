@@ -1,11 +1,19 @@
 import setuptools
 
-
 with open("README.md", "r") as f:
-     long_description = f.read()
+    long_description = f.read()
 
 with open("requirements.txt") as f:
-    requires = f.read().splitlines()
+    requires = []
+    for line in f:
+        req = line.strip()
+        if "#egg=" in req:
+            req_url, req_name = req.split("#egg=")
+            req_str = f"{req_name} @ {req_url}"
+        else:
+            req_str = req
+        print(req_str)
+        requires.append(req_str)
 
 setuptools.setup(
     name="ondewo-csi-client",
@@ -17,11 +25,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/ondewo/ondewo-csi-client-python",
     packages=[
-        np
-        for np in filter(
-            lambda n: n.startswith('ondewo.') or n == 'ondewo',
-            setuptools.find_packages()
-        )
+        np for np in filter(lambda n: n.startswith("ondewo.") or n == "ondewo", setuptools.find_packages())
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
