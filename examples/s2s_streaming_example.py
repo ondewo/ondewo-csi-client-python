@@ -19,6 +19,7 @@ import wave
 from typing import Iterator
 
 from ondewo.nlu.session_pb2 import QueryResult
+from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
 
 from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
@@ -67,13 +68,22 @@ def main():
     streaming_request: Iterator[S2sStreamRequest] = create_streaming_request(audio_stream)
 
     # get back responses
-    for i, response in enumerate(conversations_service.s2s_stream(streaming_request)):
-        query_result: QueryResult = response.detect_intent_response.query_result
-        print(f"{query_result.query_text} -> {query_result.fulfillment_messages}")
-        with open(f"examples/audiofiles/response_{i + 1}.wav", "wb") as f:
-            f.write(response.synthetize_response.audio)
-        # data, rate = soundfile.read(io.BytesIO(response.synthetize_response.audio))
-        # display.Audio(data, rate=rate)
+    i = 0
+    j = 0
+    for response in conversations_service.s2s_stream(streaming_request):
+        if response.detect_intent_response.response_id:
+            query_result: QueryResult = response.detect_intent_response.query_result
+            print(f"{i}: {query_result.query_text} -> {query_result.intent.display_name}")
+            i += 1
+            j = 0
+        elif response.synthetize_response.audio:
+            t2s_response: SynthesizeResponse = response.synthetize_response
+            print(f"\t{j}: {t2s_response.text}")
+            with open(f"examples/audiofiles/response_{i}-{j}.wav", "wb") as f:
+                f.write(response.synthetize_response.audio)
+            # data, rate = soundfile.read(io.BytesIO(response.synthetize_response.audio))
+            # display.Audio(data, rate=rate)
+            j += 1
 
 
 if __name__ == "__main__":
