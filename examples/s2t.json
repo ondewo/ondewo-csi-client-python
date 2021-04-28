@@ -1,0 +1,8 @@
+{
+  "host": "localhost",
+  "port": "50051",
+  "http_token": "bla",
+  "user_name": "bla",
+  "password": "bla"
+}
+
