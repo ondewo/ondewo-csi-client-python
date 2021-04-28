@@ -41,6 +41,8 @@ def get_streaming_audio(audio_path: str) -> Iterator[bytes]:
 def create_streaming_request(
     audio_stream: Iterator[bytes],
 ) -> Iterator[S2sStreamRequest]:
+    # create an initial request with session id specified
+    yield S2sStreamRequest(session_id="streaming-test-pizza")
     for i, chunk in enumerate(audio_stream):
         yield S2sStreamRequest(audio=chunk)
     yield S2sStreamRequest(end_of_stream=True)
