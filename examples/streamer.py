@@ -37,7 +37,7 @@ class PyAudioStreamer:
         self.stream.close()
         self.pyaudio_object.terminate()
 
-    def create_s2s_request(session_id: str = "streaming-test-pizza") -> Iterator[S2sStreamRequest]:
+    def create_s2s_request(self, session_id: str = "streaming-test-pizza") -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
         yield S2sStreamRequest(session_id=session_id)
 
@@ -50,6 +50,8 @@ class PyAudioStreamer:
             if len(data_save) < RATE:
                 continue
             yield S2sStreamRequest(audio=data_save)
+            data_save = bytes()
+            time.sleep(0.1)
 
         yield S2sStreamRequest(end_of_stream=True)
 
@@ -65,6 +67,7 @@ class PyAudioStreamer:
                 end_of_stream=False,
             )
             time.sleep(0.1)
+
 
 class PysoundIOStreamer:
     def __init__(self) -> object:
@@ -103,6 +106,9 @@ class PysoundIOStreamer:
             if len(data_save) < RATE:
                 continue
             yield S2sStreamRequest(audio=data_save)
+            data_save = bytes()
+            time.sleep(0.1)
+
 
         yield S2sStreamRequest(end_of_stream=True)
 
