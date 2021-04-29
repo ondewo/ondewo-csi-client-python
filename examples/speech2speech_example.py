@@ -15,16 +15,14 @@
 # limitations under the License.
 from typing import Iterator
 
-# from ondewo.nlu.client import Client
-# from ondewo.nlu.client_config import ClientConfig
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
+from streamer import PyAudioStreamer
 
 from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
 from ondewo.csi.client.services.conversations import Conversations
 from ondewo.csi.conversation_pb2 import S2sStreamRequest
-from streamer import PyAudioStreamer
 
 
 def main():
@@ -32,16 +30,10 @@ def main():
         config: ClientConfig = ClientConfig.from_json(f.read())
 
     client: Client = Client(config=config, use_secure_channel=False)
-    # sessions_service: Sessions = client.services.sessions
     conversations_service: Conversations = client.services.conversations
 
-    # Get audio stream (iterator of audio chunks)
-    # cai_project = "924e70ca-c786-494c-bc48-4d0999da74db"
-    # cai_session = "streaming-test"
-    # streaming_request = PysoundIOStreamer().create_intent_request(cai_project=cai_project, cai_session=cai_session)
+    # Get audio stream (iterator of audio chunks):
     streaming_request: Iterator[S2sStreamRequest] = PyAudioStreamer().create_s2s_request()
-    # get back responses
-    # for response in sessions_service.streaming_detect_intent(streaming_request):
     i = 0
     j = 0
     for response in conversations_service.s2s_stream(streaming_request):
@@ -55,15 +47,7 @@ def main():
             print(f"\t{j}: {t2s_response.text}")
             with open(f"examples/audiofiles/response_{i}-{j}.wav", "wb") as f:
                 f.write(response.synthetize_response.audio)
-            # data, rate = soundfile.read(io.BytesIO(response.synthetize_response.audio))
-            # display.Audio(data, rate=rate)
             j += 1
-
-        # for message in query_result.fulfillment_messages:
-        # for text in message.text.text:
-        #    print(message)
-        # data, rate = soundfile.read(io.BytesIO(audio_response))
-        # display.Audio(data, rate=rate)
 
 
 if __name__ == "__main__":

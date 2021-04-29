@@ -70,7 +70,7 @@ class PyAudioStreamer:
 
 
 class PysoundIOStreamer:
-    def __init__(self) -> object:
+    def __init__(self) -> None:
         logging.debug("Initializing PySoundIo streamer")
 
         self.buffer: queue.Queue = queue.Queue(maxsize=CHUNK * 50)
@@ -93,7 +93,7 @@ class PysoundIOStreamer:
     def close(self):
         pass
 
-    def create_s2s_request(session_id: str = "streaming-test-pizza") -> Iterator[S2sStreamRequest]:
+    def create_s2s_request(self, session_id: str = "streaming-test-pizza") -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
         yield S2sStreamRequest(session_id=session_id)
 
@@ -109,11 +109,10 @@ class PysoundIOStreamer:
             data_save = bytes()
             time.sleep(0.1)
 
-
         yield S2sStreamRequest(end_of_stream=True)
 
     def create_intent_request(
-            self, cai_project: str, cai_session: str
+        self, cai_project: str, cai_session: str
     ) -> Iterator[StreamingDetectIntentRequest]:
         count = 0
         data_save = bytes()
@@ -138,7 +137,7 @@ class PysoundIOStreamer:
             time.sleep(0.1)
 
     def create_pysoundio_streaming_request(
-            self, pipeline_id: str
+        self, pipeline_id: str
     ) -> Iterator[speech_to_text_pb2.TranscribeStreamRequest]:
 
         count = 0
