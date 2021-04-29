@@ -14,6 +14,8 @@ from ondewo.nlu.session_pb2 import (
 from ondewo.s2t import speech_to_text_pb2
 from ondewo.s2t.speech_to_text_pb2 import TranscribeStreamRequest
 
+from ondewo.csi.conversation_pb2 import S2sStreamRequest
+
 CHUNK: int = 8000
 MONO: int = 1
 RATE: int = 16000
@@ -74,6 +76,24 @@ class PysoundIOStreamer:
 
     def close(self):
         pass
+
+    def create_s2s_request(
+            session_id: str = "streaming-test-pizza"
+    ) -> Iterator[S2sStreamRequest]:
+        # create an initial request with session id specified
+        yield S2sStreamRequest(session_id=session_id)
+
+        count = 0
+        data_save = bytes()
+        while True:  # not self.stop.done():
+            count += 1
+            data: bytes = self.buffer.get()  # type: ignore
+            data_save += data
+            if len(data_save) < RATE:
+                continue
+            yield S2sStreamRequest(audio=data_save)
+
+        yield S2sStreamRequest(end_of_stream=True)
 
     def create_intent_request(self, cai_project: str,
                               cai_session: str) -> Iterator[StreamingDetectIntentRequest]:
