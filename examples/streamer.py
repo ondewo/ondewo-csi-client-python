@@ -22,7 +22,6 @@ RATE: int = 16000
 
 
 class PyAudioStreamer:
-
     def __init__(self) -> None:
         self.CHUNK: int = CHUNK
         self.pyaudio_object: pyaudio.PyAudio = pyaudio.PyAudio()
@@ -38,6 +37,22 @@ class PyAudioStreamer:
         self.stream.close()
         self.pyaudio_object.terminate()
 
+    def create_s2s_request(session_id: str = "streaming-test-pizza") -> Iterator[S2sStreamRequest]:
+        # create an initial request with session id specified
+        yield S2sStreamRequest(session_id=session_id)
+
+        count = 0
+        data_save = bytes()
+        while True:  # not self.stop.done():
+            count += 1
+            data: bytes = self.stream.read(CHUNK)  # type: ignore
+            data_save += data
+            if len(data_save) < RATE:
+                continue
+            yield S2sStreamRequest(audio=data_save)
+
+        yield S2sStreamRequest(end_of_stream=True)
+
     def create_pyaudio_streaming_request(self, pipeline_id: str) -> Iterator[TranscribeStreamRequest]:
         while True:
             chunk: bytes = self.stream.read(CHUNK)
@@ -51,9 +66,7 @@ class PyAudioStreamer:
             )
             time.sleep(0.1)
 
-
 class PysoundIOStreamer:
-
     def __init__(self) -> object:
         logging.debug("Initializing PySoundIo streamer")
 
@@ -77,9 +90,7 @@ class PysoundIOStreamer:
     def close(self):
         pass
 
-    def create_s2s_request(
-            session_id: str = "streaming-test-pizza"
-    ) -> Iterator[S2sStreamRequest]:
+    def create_s2s_request(session_id: str = "streaming-test-pizza") -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
         yield S2sStreamRequest(session_id=session_id)
 
@@ -95,8 +106,9 @@ class PysoundIOStreamer:
 
         yield S2sStreamRequest(end_of_stream=True)
 
-    def create_intent_request(self, cai_project: str,
-                              cai_session: str) -> Iterator[StreamingDetectIntentRequest]:
+    def create_intent_request(
+            self, cai_project: str, cai_session: str
+    ) -> Iterator[StreamingDetectIntentRequest]:
         count = 0
         data_save = bytes()
         while True:  # not self.stop.done():
@@ -119,8 +131,9 @@ class PysoundIOStreamer:
             data_save = bytes()
             time.sleep(0.1)
 
-    def create_pysoundio_streaming_request(self, pipeline_id: str) -> Iterator[
-        speech_to_text_pb2.TranscribeStreamRequest]:
+    def create_pysoundio_streaming_request(
+            self, pipeline_id: str
+    ) -> Iterator[speech_to_text_pb2.TranscribeStreamRequest]:
 
         count = 0
         data_save = bytes()
