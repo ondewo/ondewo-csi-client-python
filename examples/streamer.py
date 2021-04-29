@@ -21,7 +21,22 @@ MONO: int = 1
 RATE: int = 16000
 
 
-class PyAudioStreamer:
+class PyAudioStreamerOut:
+    def __init__(self) -> None:
+        self.CHUNK: int = CHUNK
+        self.pyaudio_object: pyaudio.PyAudio = pyaudio.PyAudio()
+        self.stream: pyaudio.Stream = self.pyaudio_object.open(
+            channels=1,
+            format=pyaudio.paInt16,
+            rate=22000,
+            output=True,
+        )
+
+    def play(self, data):
+        self.stream.write(data)
+
+
+class PyAudioStreamerIn:
     def __init__(self) -> None:
         self.CHUNK: int = CHUNK
         self.pyaudio_object: pyaudio.PyAudio = pyaudio.PyAudio()
