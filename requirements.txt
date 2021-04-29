@@ -6,6 +6,8 @@ git+https://github.com/ondewo/ondewo-nlu-client-python.git@4fef3df0c4d8f9b7f23ca
 git+https://github.com/ondewo/ondewo-s2t-client-python.git@7c2a620fcfffb2dce31af32128db167be6fca1d7#egg=ondewo-s2t-client
 git+https://github.com/ondewo/ondewo-t2s-client-python.git@b05cd636e33deb9f5b49a12f5add015b11fe20c0#egg=ondewo-t2s-client
 
-pyaudio~=0.2.11
-pysoundio~=1.1.0
 setuptools~=52.0.0
+
+# These requirements are only needed for the examples, please install them manually
+# pyaudio~=0.2.11
+# pysoundio~=1.1.0
