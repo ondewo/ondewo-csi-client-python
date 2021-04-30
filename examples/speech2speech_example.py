@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
+#
 # Copyright 2021 ONDEWO GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the License);
@@ -13,11 +14,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 from typing import Iterator
 
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
-from streamer import (
+from streamer import (      # type: ignore
     PyAudioStreamerIn,
     PyAudioStreamerOut,
     PysoundIOStreamerIn,
