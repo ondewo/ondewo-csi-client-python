@@ -2,6 +2,7 @@ import logging
 import queue
 import time
 from typing import Iterator
+import uuid
 
 from ondewo.logging.logger import logger_console as stream_logger
 from ondewo.nlu.session_pb2 import (
@@ -58,7 +59,7 @@ class PyAudioStreamerIn:
         self.stream.close()
         self.pyaudio_object.terminate()
 
-    def create_s2s_request(self, session_id: str = "streaming-test-pizza") -> Iterator[S2sStreamRequest]:
+    def create_s2s_request(self, session_id: str = str(uuid.uuid4())) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
         yield S2sStreamRequest(session_id=session_id)
 
@@ -159,7 +160,7 @@ class PysoundIOStreamerIn:
     def close(self):
         pass
 
-    def create_s2s_request(self, session_id: str = "streaming-test-pizza") -> Iterator[S2sStreamRequest]:
+    def create_s2s_request(self, session_id: str = str(uuid.uuid4())) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
         yield S2sStreamRequest(session_id=session_id)
 
