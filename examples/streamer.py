@@ -99,7 +99,41 @@ def create_pyaudio_streaming_request(self, pipeline_id: str) -> Iterator[Transcr
         time.sleep(0.1)
 
 
-class PysoundIOStreamer:
+class PySoundioStreamerOut:
+    def __init__(self) -> None:
+        import pysoundio
+
+        self.responses: queue.Queue = queue.Queue()
+        self.stream = None
+        self.idx = 0
+        self.CHUNK: int = CHUNK
+        self.pysoundio_object: pysoundio.PySoundIo = pysoundio.PySoundIo(backend=None)
+        self.pysoundio_object.start_output_stream(
+            device_id=None,
+            channels=MONO,
+            sample_rate=22000,
+            block_size=CHUNK,
+            dtype=pysoundio.SoundIoFormatS16LE,
+            write_callback=self.callback,
+        )
+
+    def callback(self, data, length):
+        if self.stream is not None:
+            num_bytes = length * 2 * MONO
+            data[:] = self.stream[self.idx : self.idx + num_bytes]  # noqa:
+            self.idx += num_bytes
+            if self.idx > len(self.stream):
+                self.idx = 0
+                self.stream = None
+        elif not self.responses.empty():
+            self.stream = self.responses.get()
+            self.idx = 0
+
+    def play(self, data):
+        self.responses.put(data)
+
+
+class PysoundIOStreamerIn:
     def __init__(self) -> None:
         import pysoundio
 

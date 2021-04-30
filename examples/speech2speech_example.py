@@ -17,7 +17,10 @@ from typing import Iterator
 
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
-from streamer import PyAudioStreamerIn, PyAudioStreamerOut
+from streamer import (  # PyAudioStreamerIn,; PyAudioStreamerOut,
+    PysoundIOStreamerIn,
+    PySoundioStreamerOut,
+)
 
 from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
@@ -32,9 +35,12 @@ def main():
     client: Client = Client(config=config, use_secure_channel=False)
     conversations_service: Conversations = client.services.conversations
 
-    # Get audio stream (iterator of audio chunks):
-    streaming_request: Iterator[S2sStreamRequest] = PyAudioStreamerIn().create_s2s_request()
-    player = PyAudioStreamerOut()
+    # # Get audio stream (iterator of audio chunks):
+    # streaming_request: Iterator[S2sStreamRequest] = PyAudioStreamerIn().create_s2s_request()
+    # player = PyAudioStreamerOut()
+
+    streaming_request: Iterator[S2sStreamRequest] = PysoundIOStreamerIn().create_s2s_request()
+    player = PySoundioStreamerOut()
 
     i = 0
     j = 0
@@ -49,7 +55,7 @@ def main():
             t2s_response: SynthesizeResponse = response.synthetize_response
             print(f"RESPONSE \t{j}: {t2s_response.text}")
             # with open(f"examples/audiofiles/response_{i}-{j}.wav", "wb") as f:
-            #    f.write(response.synthetize_response.audio)
+            #     f.write(response.synthetize_response.audio)
             j += 1
             player.play(response.synthetize_response.audio)
 
