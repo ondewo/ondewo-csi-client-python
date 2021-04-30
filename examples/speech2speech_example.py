@@ -26,7 +26,7 @@ from ondewo.csi.conversation_pb2 import S2sStreamRequest
 
 
 def main():
-    with open("examples/configs/csi.json") as f:
+    with open("configs/csi.json") as f:
         config: ClientConfig = ClientConfig.from_json(f.read())
 
     client: Client = Client(config=config, use_secure_channel=False)

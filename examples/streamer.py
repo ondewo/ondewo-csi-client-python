@@ -3,8 +3,6 @@ import queue
 import time
 from typing import Iterator
 
-import pyaudio
-import pysoundio
 from ondewo.logging.logger import logger_console as stream_logger
 from ondewo.nlu.session_pb2 import (
     InputAudioConfig,
@@ -23,6 +21,7 @@ RATE: int = 16000
 
 class PyAudioStreamerOut:
     def __init__(self) -> None:
+        import pyaudio
         self.CHUNK: int = CHUNK
         self.pyaudio_object: pyaudio.PyAudio = pyaudio.PyAudio()
         self.stream: pyaudio.Stream = self.pyaudio_object.open(
@@ -38,6 +37,7 @@ class PyAudioStreamerOut:
 
 class PyAudioStreamerIn:
     def __init__(self) -> None:
+        import pyaudio
         self.CHUNK: int = CHUNK
         self.pyaudio_object: pyaudio.PyAudio = pyaudio.PyAudio()
         self.stream: pyaudio.Stream = self.pyaudio_object.open(
@@ -86,6 +86,7 @@ class PyAudioStreamerIn:
 
 class PysoundIOStreamer:
     def __init__(self) -> None:
+        import pysoundio
         logging.debug("Initializing PySoundIo streamer")
 
         self.buffer: queue.Queue = queue.Queue(maxsize=CHUNK * 50)
