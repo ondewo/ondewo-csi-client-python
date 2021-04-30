@@ -48,8 +48,8 @@ def main():
         elif response.synthetize_response.audio:
             t2s_response: SynthesizeResponse = response.synthetize_response
             print(f"RESPONSE \t{j}: {t2s_response.text}")
-            with open(f"examples/audiofiles/response_{i}-{j}.wav", "wb") as f:
-                f.write(response.synthetize_response.audio)
+            # with open(f"examples/audiofiles/response_{i}-{j}.wav", "wb") as f:
+            #    f.write(response.synthetize_response.audio)
             j += 1
             player.play(response.synthetize_response.audio)
 
