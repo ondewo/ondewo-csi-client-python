@@ -19,6 +19,7 @@ CHUNK: int = 8000
 MONO: int = 1
 RATE: int = 16000
 PLAYING: bool = False
+WAV_HEADER_LENGTH: int = 46
 
 
 class PyAudioStreamerOut:
@@ -37,7 +38,7 @@ class PyAudioStreamerOut:
     def play(self, data):
         global PLAYING
         PLAYING = True
-        self.stream.write(data)
+        self.stream.write(data[WAV_HEADER_LENGTH:])
         PLAYING = False
 
 
@@ -119,16 +120,19 @@ class PySoundioStreamerOut:
         )
 
     def callback(self, data, length):
+        global PLAYING
         if self.stream is not None:
             num_bytes = length * 2 * MONO
             data[:] = self.stream[self.idx : self.idx + num_bytes]  # noqa:
             self.idx += num_bytes
             if self.idx > len(self.stream):
-                self.idx = 0
+                PLAYING = False
+                self.idx = WAV_HEADER_LENGTH
                 self.stream = None
         elif not self.responses.empty():
+            PLAYING = True
             self.stream = self.responses.get()
-            self.idx = 0
+            self.idx = WAV_HEADER_LENGTH
 
     def play(self, data):
         self.responses.put(data)
