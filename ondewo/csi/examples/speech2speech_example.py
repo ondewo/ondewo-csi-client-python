@@ -19,7 +19,7 @@ from typing import Iterator
 
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
-from streamer import (      # type: ignore
+from ondewo.csi.examples.streamer import (      # type: ignore
     PyAudioStreamerIn,
     PyAudioStreamerOut,
     PysoundIOStreamerIn,
