@@ -27,9 +27,12 @@ import ondewo.t2s.text_to_speech_pb2 as t2s
 with open('examples/configs/csi.json') as fi:
     config = ClientConfig.from_json(fi.read())
 
-csi_client = CsiClient(config=config, use_secure_channel=False)
-s2t_client = S2tClient(config=config, use_secure_channel=False)
-t2s_client = T2sClient(config=config, use_secure_channel=False)
+csi_client = CsiClient(config=config)
+s2t_client = S2tClient(config=config)
+t2s_client = T2sClient(config=config)
 
-s2t_client.services.speech_to_text.list_s2t_pipelines(request=s2t.ListS2tPipelinesRequest())
-t2s_client.services.text_to_speech.list_t2s_pipelines(request=t2s.ListT2sPipelinesRequest())
+s2t_pipelines = s2t_client.services.speech_to_text.list_s2t_pipelines(request=s2t.ListS2tPipelinesRequest())
+t2s_pipelines = t2s_client.services.text_to_speech.list_t2s_pipelines(request=t2s.ListT2sPipelinesRequest())
+
+print([pipeline.id for pipeline in s2t_pipelines.pipeline_configs])
+print([pipeline.id for pipeline in t2s_pipelines.pipelines])
