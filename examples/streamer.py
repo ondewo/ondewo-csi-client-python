@@ -86,19 +86,18 @@ class PyAudioStreamerIn:
 
         yield S2sStreamRequest(end_of_stream=True)
 
-
-def create_pyaudio_streaming_request(self, pipeline_id: str) -> Iterator[TranscribeStreamRequest]:
-    while True:
-        chunk: bytes = self.stream.read(CHUNK)
-        logging.info(f"Sending {len(chunk)} bytes")
-        yield TranscribeStreamRequest(
-            audio_chunk=chunk,
-            s2t_pipeline_id=pipeline_id,
-            spelling_correction=False,
-            ctc_decoding=speech_to_text_pb2.CTCDecoding.BEAM_SEARCH_WITH_LM,
-            end_of_stream=False,
-        )
-        time.sleep(0.1)
+    def create_pyaudio_streaming_request(self, pipeline_id: str) -> Iterator[TranscribeStreamRequest]:
+        while True:
+            chunk: bytes = self.stream.read(CHUNK)
+            logging.info(f"Sending {len(chunk)} bytes")
+            yield TranscribeStreamRequest(
+                audio_chunk=chunk,
+                s2t_pipeline_id=pipeline_id,
+                spelling_correction=False,
+                ctc_decoding=speech_to_text_pb2.CTCDecoding.BEAM_SEARCH_WITH_LM,
+                end_of_stream=False,
+            )
+            time.sleep(0.1)
 
 
 class PySoundioStreamerOut:
@@ -121,14 +120,15 @@ class PySoundioStreamerOut:
 
     def callback(self, data, length):
         global PLAYING
+        if self.stream and self.idx > len(self.stream):
+            self.idx = WAV_HEADER_LENGTH
+            self.stream = None
+            time.sleep(0.7)
+            PLAYING = False
         if self.stream is not None:
             num_bytes = length * 2 * MONO
             data[:] = self.stream[self.idx : self.idx + num_bytes]  # noqa:
             self.idx += num_bytes
-            if self.idx > len(self.stream):
-                PLAYING = False
-                self.idx = WAV_HEADER_LENGTH
-                self.stream = None
         elif not self.responses.empty():
             PLAYING = True
             self.stream = self.responses.get()
@@ -140,6 +140,8 @@ class PySoundioStreamerOut:
 
 class PysoundIOStreamerIn:
     def __init__(self) -> None:
+        global PLAYING
+        PLAYING = False
         import pysoundio
 
         logging.debug("Initializing PySoundIo streamer")
@@ -159,7 +161,9 @@ class PysoundIOStreamerIn:
         stream_logger.debug("Streamer initialized")
 
     def callback(self, data: bytes, length: int) -> None:
-        self.buffer.put(data)
+        global PLAYING
+        if not PLAYING:
+            self.buffer.put(data)
 
     def close(self):
         pass
