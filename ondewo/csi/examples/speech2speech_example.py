@@ -39,17 +39,17 @@ def main():
     client: Client = Client(config=config)
     conversations_service: Conversations = client.services.conversations
 
-    # # # Get audio stream (iterator of audio chunks):
-    # streaming_request: Iterator[S2sStreamRequest] = PyAudioStreamerIn().create_s2s_request(
-    #     save_to_disk=True
-    # )
-    # player = PyAudioStreamerOut()
-
-    # Get audio stream (iterator of audio chunks):
-    streaming_request: Iterator[S2sStreamRequest] = PySoundIoStreamerIn().create_s2s_request(
+    # # Get audio stream (iterator of audio chunks):
+    streaming_request: Iterator[S2sStreamRequest] = PyAudioStreamerIn().create_s2s_request(
         session_id='1234', save_to_disk=True
     )
-    player = PySoundIoStreamerOut()
+    player = PyAudioStreamerOut()
+
+    # # Get audio stream (iterator of audio chunks):
+    # streaming_request: Iterator[S2sStreamRequest] = PySoundIoStreamerIn().create_s2s_request(
+    #     session_id='1234', save_to_disk=True
+    # )
+    # player = PySoundIoStreamerOut()
 
     i = 0
     j = 0
