@@ -29,10 +29,10 @@ from ondewo.csi.conversation_pb2 import S2sStreamRequest
 
 
 def main():
-    with open("configs/csi_secure.json") as f:
+    with open("csi.json") as f:
         config: ClientConfig = ClientConfig.from_json(f.read())
 
-    client: Client = Client(config=config, use_secure_channel=True)
+    client: Client = Client(config=config)
     conversations_service: Conversations = client.services.conversations
 
     # # Get audio stream (iterator of audio chunks):
