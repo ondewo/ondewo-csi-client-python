@@ -120,15 +120,14 @@ class PySoundioStreamerOut:
 
     def callback(self, data, length):
         global PLAYING
-        if self.stream and self.idx > len(self.stream):
-            self.idx = WAV_HEADER_LENGTH
-            self.stream = None
-            time.sleep(0.7)
-            PLAYING = False
         if self.stream is not None:
             num_bytes = length * 2 * MONO
             data[:] = self.stream[self.idx : self.idx + num_bytes]  # noqa:
             self.idx += num_bytes
+            if self.idx > len(self.stream):
+                PLAYING = False
+                self.idx = WAV_HEADER_LENGTH
+                self.stream = None
         elif not self.responses.empty():
             PLAYING = True
             self.stream = self.responses.get()
@@ -140,8 +139,6 @@ class PySoundioStreamerOut:
 
 class PysoundIOStreamerIn:
     def __init__(self) -> None:
-        global PLAYING
-        PLAYING = False
         import pysoundio
 
         logging.debug("Initializing PySoundIo streamer")
@@ -161,20 +158,25 @@ class PysoundIOStreamerIn:
         stream_logger.debug("Streamer initialized")
 
     def callback(self, data: bytes, length: int) -> None:
-        global PLAYING
-        if not PLAYING:
-            self.buffer.put(data)
+        self.buffer.put(data)
 
     def close(self):
         pass
 
     def create_s2s_request(self, session_id: str = str(uuid.uuid4())) -> Iterator[S2sStreamRequest]:
+        global PLAYING
         # create an initial request with session id specified
         yield S2sStreamRequest(session_id=session_id)
 
         count = 0
         data_save = bytes()
+
         while True:  # not self.stop.done():
+            if PLAYING:
+                # data : bytes = bytes()
+                time.sleep(0.5)
+                continue
+
             count += 1
             data: bytes = self.buffer.get()  # type: ignore
             data_save += data
@@ -183,8 +185,6 @@ class PysoundIOStreamerIn:
             yield S2sStreamRequest(audio=data_save)
             data_save = bytes()
             time.sleep(0.1)
-
-        yield S2sStreamRequest(end_of_stream=True)
 
     def create_intent_request(
         self, cai_project: str, cai_session: str
