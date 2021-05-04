@@ -105,6 +105,7 @@ class PySoundioStreamerOut:
         import pysoundio
 
         self.responses: queue.Queue = queue.Queue()
+        # Typically this 'stream' is a single utterance.
         self.stream = None
         self.idx = 0
         self.CHUNK: int = CHUNK
@@ -120,14 +121,15 @@ class PySoundioStreamerOut:
 
     def callback(self, data, length):
         global PLAYING
+        if self.stream and self.idx > len(self.stream):
+            PLAYING = False
+            self.idx = WAV_HEADER_LENGTH
+            self.stream = None
+
         if self.stream is not None:
             num_bytes = length * 2 * MONO
             data[:] = self.stream[self.idx : self.idx + num_bytes]  # noqa:
             self.idx += num_bytes
-            if self.idx > len(self.stream):
-                PLAYING = False
-                self.idx = WAV_HEADER_LENGTH
-                self.stream = None
         elif not self.responses.empty():
             PLAYING = True
             self.stream = self.responses.get()
