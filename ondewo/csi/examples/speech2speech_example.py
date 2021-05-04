@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
+#
 # Copyright 2021 ONDEWO GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the License);
@@ -13,13 +14,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 from typing import Iterator
 
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
-from streamer import (   # type: ignore
-    PysoundIOStreamerIn,
-    PySoundioStreamerOut,
+from ondewo.csi.examples.streamer import (      # type: ignore
+    PySoundIoStreamerIn,
+    PySoundIoStreamerOut,
     PyAudioStreamerIn,
     PyAudioStreamerOut,
 )
@@ -44,10 +46,10 @@ def main():
     # player = PyAudioStreamerOut()
 
     # Get audio stream (iterator of audio chunks):
-    streaming_request: Iterator[S2sStreamRequest] = PysoundIOStreamerIn().create_s2s_request(
+    streaming_request: Iterator[S2sStreamRequest] = PySoundIoStreamerIn().create_s2s_request(
         session_id='1234', save_to_disk=True
     )
-    player = PySoundioStreamerOut()
+    player = PySoundIoStreamerOut()
 
     i = 0
     j = 0
@@ -61,8 +63,6 @@ def main():
         elif response.synthetize_response.audio:
             t2s_response: SynthesizeResponse = response.synthetize_response
             print(f"RESPONSE \t{j}: {t2s_response.text}")
-            # with open(f"examples/audiofiles/response_{i}-{j}.wav", "wb") as f:
-            #     f.write(response.synthetize_response.audio)
             j += 1
             player.play(response.synthetize_response.audio)
 
