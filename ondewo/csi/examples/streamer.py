@@ -86,19 +86,18 @@ class PyAudioStreamerIn:
 
         yield S2sStreamRequest(end_of_stream=True)
 
-
-def create_pyaudio_streaming_request(self, pipeline_id: str) -> Iterator[TranscribeStreamRequest]:
-    while True:
-        chunk: bytes = self.stream.read(CHUNK)
-        logging.info(f"Sending {len(chunk)} bytes")
-        yield TranscribeStreamRequest(
-            audio_chunk=chunk,
-            s2t_pipeline_id=pipeline_id,
-            spelling_correction=False,
-            ctc_decoding=speech_to_text_pb2.CTCDecoding.BEAM_SEARCH_WITH_LM,
-            end_of_stream=False,
-        )
-        time.sleep(0.1)
+    def create_pyaudio_streaming_request(self, pipeline_id: str) -> Iterator[TranscribeStreamRequest]:
+        while True:
+            chunk: bytes = self.stream.read(CHUNK)
+            logging.info(f"Sending {len(chunk)} bytes")
+            yield TranscribeStreamRequest(
+                audio_chunk=chunk,
+                s2t_pipeline_id=pipeline_id,
+                spelling_correction=False,
+                ctc_decoding=speech_to_text_pb2.CTCDecoding.BEAM_SEARCH_WITH_LM,
+                end_of_stream=False,
+            )
+            time.sleep(0.1)
 
 
 class PySoundioStreamerOut:
@@ -165,12 +164,19 @@ class PysoundIOStreamerIn:
         pass
 
     def create_s2s_request(self, session_id: str = str(uuid.uuid4())) -> Iterator[S2sStreamRequest]:
+        global PLAYING
         # create an initial request with session id specified
         yield S2sStreamRequest(session_id=session_id)
 
         count = 0
         data_save = bytes()
+
         while True:  # not self.stop.done():
+            if PLAYING:
+                # data : bytes = bytes()
+                time.sleep(0.5)
+                continue
+
             count += 1
             data: bytes = self.buffer.get()  # type: ignore
             data_save += data
@@ -179,8 +185,6 @@ class PysoundIOStreamerIn:
             yield S2sStreamRequest(audio=data_save)
             data_save = bytes()
             time.sleep(0.1)
-
-        yield S2sStreamRequest(end_of_stream=True)
 
     def create_intent_request(
         self, cai_project: str, cai_session: str

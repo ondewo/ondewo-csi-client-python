@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
+#
 # Copyright 2021 ONDEWO GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the License);
@@ -13,11 +14,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 from typing import Iterator
 
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
-from streamer import (
+from ondewo.csi.examples.streamer import (      # type: ignore
     PyAudioStreamerIn,
     PyAudioStreamerOut,
     PysoundIOStreamerIn,
@@ -31,10 +33,10 @@ from ondewo.csi.conversation_pb2 import S2sStreamRequest
 
 
 def main():
-    with open("configs/csi.json") as f:
+    with open("csi.json") as f:
         config: ClientConfig = ClientConfig.from_json(f.read())
 
-    client: Client = Client(config=config, use_secure_channel=False)
+    client: Client = Client(config=config)
     conversations_service: Conversations = client.services.conversations
 
     # # Get audio stream (iterator of audio chunks):
@@ -57,8 +59,6 @@ def main():
         elif response.synthetize_response.audio:
             t2s_response: SynthesizeResponse = response.synthetize_response
             print(f"RESPONSE \t{j}: {t2s_response.text}")
-            # with open(f"examples/audiofiles/response_{i}-{j}.wav", "wb") as f:
-            #     f.write(response.synthetize_response.audio)
             j += 1
             player.play(response.synthetize_response.audio)
 
