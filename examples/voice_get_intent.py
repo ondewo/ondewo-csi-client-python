@@ -15,23 +15,19 @@
 # limitations under the License.
 from typing import Iterator
 
-import pyaudio
+# from ondewo.nlu.client import Client
+# from ondewo.nlu.client_config import ClientConfig
+from ondewo.nlu.session_pb2 import QueryResult
+from streamer import PysoundIOStreamerIn
+
 from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
 from ondewo.csi.client.services.conversations import Conversations
-# from ondewo.nlu.client import Client
-# from ondewo.nlu.client_config import ClientConfig
-from ondewo.nlu.services.sessions import Sessions
-from ondewo.nlu.session_pb2 import (
-    QueryResult,
-)
-
 from ondewo.csi.conversation_pb2 import S2sStreamRequest
-from streamer import PysoundIOStreamer
 
 
 def main():
-    with open('s2t.json') as f:
+    with open("s2t.json") as f:
         config: ClientConfig = ClientConfig.from_json(f.read())
 
     client: Client = Client(config=config, use_secure_channel=False)
@@ -39,10 +35,10 @@ def main():
     conversations_service: Conversations = client.services.conversations
 
     # Get audio stream (iterator of audio chunks)
-    cai_project = "924e70ca-c786-494c-bc48-4d0999da74db"
-    cai_session = "streaming-test"
-    # streaming_request = PysoundIOStreamer().create_intent_request(cai_project=cai_project, cai_session=cai_session)
-    streaming_request: Iterator[S2sStreamRequest] = PysoundIOStreamer().create_s2s_request()
+    pipeline_id: str = "pizza"
+    streaming_request: Iterator[S2sStreamRequest] = PysoundIOStreamerIn().create_s2s_request(
+        pipeline_id=pipeline_id
+    )
 
     # get back responses
     # for response in sessions_service.streaming_detect_intent(streaming_request):

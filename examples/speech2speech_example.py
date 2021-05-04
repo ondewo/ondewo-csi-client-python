@@ -15,47 +15,48 @@
 # limitations under the License.
 from typing import Iterator
 
-import pyaudio
+from ondewo.nlu.session_pb2 import QueryResult
+from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
+from streamer import PysoundIOStreamerIn, PySoundioStreamerOut
+
 from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
 from ondewo.csi.client.services.conversations import Conversations
-# from ondewo.nlu.client import Client
-# from ondewo.nlu.client_config import ClientConfig
-from ondewo.nlu.services.sessions import Sessions
-from ondewo.nlu.session_pb2 import (
-    QueryResult,
-)
-
 from ondewo.csi.conversation_pb2 import S2sStreamRequest
-from streamer import PysoundIOStreamer
 
 
 def main():
-    with open('s2t.json') as f:
+    with open("examples/configs/csi.json") as f:
         config: ClientConfig = ClientConfig.from_json(f.read())
 
     client: Client = Client(config=config, use_secure_channel=False)
-    # sessions_service: Sessions = client.services.sessions
     conversations_service: Conversations = client.services.conversations
 
-    # Get audio stream (iterator of audio chunks)
-    cai_project = "924e70ca-c786-494c-bc48-4d0999da74db"
-    cai_session = "streaming-test"
-    # streaming_request = PysoundIOStreamer().create_intent_request(cai_project=cai_project, cai_session=cai_session)
-    streaming_request: Iterator[S2sStreamRequest] = PysoundIOStreamer().create_s2s_request()
+    # # Get audio stream (iterator of audio chunks):
+    # streaming_request: Iterator[S2sStreamRequest] = PyAudioStreamerIn().create_s2s_request()
+    # player = PyAudioStreamerOut()
 
-    # get back responses
-    # for response in sessions_service.streaming_detect_intent(streaming_request):
-    for i, response in enumerate(conversations_service.s2s_stream(streaming_request)):
-        query_result: QueryResult = response.detect_intent_response.query_result  # response.query_result
-        print(f"{query_result.query_text} -> {query_result.fulfillment_messages}")
-        # diagnostic_info: Dict[str, Any] = MessageToDict(query_result.diagnostic_info)
+    # Get audio stream (iterator of audio chunks):
+    pipeline_id: str = "pizza"
+    streaming_request: Iterator[S2sStreamRequest] = PysoundIOStreamerIn().create_s2s_request(
+        pipeline_id=pipeline_id,
+    )
+    player = PySoundioStreamerOut()
 
-        # for message in query_result.fulfillment_messages:
-        # for text in message.text.text:
-        #    print(message)
-        # data, rate = soundfile.read(io.BytesIO(audio_response))
-        # display.Audio(data, rate=rate)
+    i = 0
+    j = 0
+
+    for response in conversations_service.s2s_stream(streaming_request):
+        if response.HasField("detect_intent_response"):
+            query_result: QueryResult = response.detect_intent_response.query_result
+            print(f"INTENT {i}: {query_result.query_text} -> {query_result.intent.display_name}")
+            i += 1
+            j = 0
+        elif response.HasField("synthetize_response"):
+            t2s_response: SynthesizeResponse = response.synthetize_response
+            print(f"RESPONSE \t{j}: {t2s_response.text}")
+            j += 1
+            player.play(response.synthetize_response.audio)
 
 
 if __name__ == "__main__":

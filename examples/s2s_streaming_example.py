@@ -15,8 +15,10 @@
 # limitations under the License.
 
 import argparse
+import time
 import wave
 from typing import Iterator
+from uuid import uuid4
 
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
@@ -43,9 +45,10 @@ def create_streaming_request(
     audio_stream: Iterator[bytes],
 ) -> Iterator[S2sStreamRequest]:
     # create an initial request with session id specified
-    yield S2sStreamRequest(session_id="streaming-test-pizza")
+    yield S2sStreamRequest(pipeline_id="pizza", session_id=str(uuid4()))
     for i, chunk in enumerate(audio_stream):
         yield S2sStreamRequest(audio=chunk)
+        time.sleep(0.3)
     yield S2sStreamRequest(end_of_stream=True)
 
 
@@ -71,18 +74,17 @@ def main():
     i = 0
     j = 0
     for response in conversations_service.s2s_stream(streaming_request):
-        if response.detect_intent_response.response_id:
+        if response.HasField("detect_intent_response"):
             query_result: QueryResult = response.detect_intent_response.query_result
             print(f"{i}: {query_result.query_text} -> {query_result.intent.display_name}")
             i += 1
             j = 0
-        elif response.synthetize_response.audio:
+        elif response.HasField("synthetize_response"):
             t2s_response: SynthesizeResponse = response.synthetize_response
             print(f"\t{j}: {t2s_response.text}")
             with open(f"examples/audiofiles/response_{i}-{j}.wav", "wb") as f:
                 f.write(response.synthetize_response.audio)
-            # data, rate = soundfile.read(io.BytesIO(response.synthetize_response.audio))
-            # display.Audio(data, rate=rate)
+
             j += 1
 
 
