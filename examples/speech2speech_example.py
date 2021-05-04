@@ -17,11 +17,9 @@ from typing import Iterator
 
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
-from streamer import (
+from streamer import (  # PysoundIOStreamerIn,; PySoundioStreamerOut,
     PyAudioStreamerIn,
     PyAudioStreamerOut,
-    PysoundIOStreamerIn,
-    PySoundioStreamerOut,
 )
 
 from ondewo.csi.client.client import Client
@@ -31,19 +29,21 @@ from ondewo.csi.conversation_pb2 import S2sStreamRequest
 
 
 def main():
-    with open("configs/csi.json") as f:
+    with open("configs/csi_secure.json") as f:
         config: ClientConfig = ClientConfig.from_json(f.read())
 
-    client: Client = Client(config=config, use_secure_channel=False)
+    client: Client = Client(config=config, use_secure_channel=True)
     conversations_service: Conversations = client.services.conversations
 
     # # Get audio stream (iterator of audio chunks):
-    # streaming_request: Iterator[S2sStreamRequest] = PyAudioStreamerIn().create_s2s_request()
-    # player = PyAudioStreamerOut()
+    streaming_request: Iterator[S2sStreamRequest] = PyAudioStreamerIn().create_s2s_request(
+        "streaming-test-pizza", save_to_disk=True
+    )
+    player = PyAudioStreamerOut()
 
     # Get audio stream (iterator of audio chunks):
-    streaming_request: Iterator[S2sStreamRequest] = PysoundIOStreamerIn().create_s2s_request()
-    player = PySoundioStreamerOut()
+    # streaming_request: Iterator[S2sStreamRequest] = PysoundIOStreamerIn().create_s2s_request()
+    # player = PySoundioStreamerOut()
 
     i = 0
     j = 0

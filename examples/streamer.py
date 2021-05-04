@@ -39,6 +39,7 @@ class PyAudioStreamerOut:
         global PLAYING
         PLAYING = True
         self.stream.write(data[WAV_HEADER_LENGTH:])
+        # self.stream.write(data)
         PLAYING = False
 
 
@@ -60,14 +61,20 @@ class PyAudioStreamerIn:
         self.stream.close()
         self.pyaudio_object.terminate()
 
-    def create_s2s_request(self, session_id: str = str(uuid.uuid4())) -> Iterator[S2sStreamRequest]:
+    def create_s2s_request(
+        self, session_id: str = str(uuid.uuid4()), save_to_disk=False
+    ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
         yield S2sStreamRequest(session_id=session_id)
 
         count = 0
         data_save = bytes()
+        if save_to_disk:
+            f = open("audiofiles/record_bla.wav", "wb")
+
         global PLAYING
         while True:  # not self.stop.done():
+
             if PLAYING:
                 print("PLAYING")
                 time.sleep(0.5)
@@ -81,6 +88,8 @@ class PyAudioStreamerIn:
             if len(data_save) < RATE:
                 continue
             yield S2sStreamRequest(audio=data_save)
+            if save_to_disk:
+                f.write(data_save)
             data_save = bytes()
             time.sleep(0.1)
 
@@ -185,6 +194,7 @@ class PysoundIOStreamerIn:
                 continue
             yield S2sStreamRequest(audio=data_save)
             data_save = bytes()
+            print("bla")
             time.sleep(0.1)
 
         yield S2sStreamRequest(end_of_stream=True)
