@@ -19,12 +19,7 @@ from typing import Iterator
 
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
-from ondewo.csi.examples.streamer import (      # type: ignore
-    PyAudioStreamerIn,
-    PyAudioStreamerOut,
-    PysoundIOStreamerIn,
-    PySoundioStreamerOut,
-)
+from streamer import PysoundIOStreamerIn, PySoundioStreamerOut
 
 from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
@@ -36,7 +31,7 @@ def main():
     with open("csi.json") as f:
         config: ClientConfig = ClientConfig.from_json(f.read())
 
-    client: Client = Client(config=config)
+    client: Client = Client(config=config, use_secure_channel=False)
     conversations_service: Conversations = client.services.conversations
 
     # # Get audio stream (iterator of audio chunks):
@@ -44,19 +39,22 @@ def main():
     # player = PyAudioStreamerOut()
 
     # Get audio stream (iterator of audio chunks):
-    streaming_request: Iterator[S2sStreamRequest] = PysoundIOStreamerIn().create_s2s_request()
+    pipeline_id: str = "pizza"
+    streaming_request: Iterator[S2sStreamRequest] = PysoundIOStreamerIn().create_s2s_request(
+        pipeline_id=pipeline_id,
+    )
     player = PySoundioStreamerOut()
 
     i = 0
     j = 0
 
     for response in conversations_service.s2s_stream(streaming_request):
-        if response.detect_intent_response.response_id:
+        if response.HasField("detect_intent_response"):
             query_result: QueryResult = response.detect_intent_response.query_result
             print(f"INTENT {i}: {query_result.query_text} -> {query_result.intent.display_name}")
             i += 1
             j = 0
-        elif response.synthetize_response.audio:
+        elif response.HasField("synthetize_response"):
             t2s_response: SynthesizeResponse = response.synthetize_response
             print(f"RESPONSE \t{j}: {t2s_response.text}")
             j += 1

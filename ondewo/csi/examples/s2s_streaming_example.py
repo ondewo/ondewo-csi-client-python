@@ -28,7 +28,7 @@ from ondewo.csi.client.client_config import ClientConfig
 from ondewo.csi.client.services.conversations import Conversations
 from ondewo.csi.conversation_pb2 import S2sStreamRequest
 
-AUDIO_FILE: str = "examples/audiofiles/pizza_de.wav"
+AUDIO_FILE: str = "ondewo/csi/examples/audiofiles/pizza_de.wav"
 CHUNK_SIZE: int = 8000
 
 
@@ -82,7 +82,7 @@ def main():
         elif response.HasField("synthetize_response"):
             t2s_response: SynthesizeResponse = response.synthetize_response
             print(f"\t{j}: {t2s_response.text}")
-            with open(f"examples/audiofiles/response_{i}-{j}.wav", "wb") as f:
+            with open(f"ondewo/csi/examples/audiofiles/response_{i}-{j}.wav", "wb") as f:
                 f.write(response.synthetize_response.audio)
 
             j += 1
