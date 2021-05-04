@@ -4,6 +4,10 @@ from google.protobuf.descriptor import (
     Descriptor as google___protobuf___descriptor___Descriptor,
 )
 
+from google.protobuf.internal.containers import (
+    RepeatedCompositeFieldContainer as google___protobuf___internal___containers___RepeatedCompositeFieldContainer,
+)
+
 from google.protobuf.message import (
     Message as google___protobuf___message___Message,
 )
@@ -17,6 +21,7 @@ from ondewo.t2s.text_to_speech_pb2 import (
 )
 
 from typing import (
+    Iterable as typing___Iterable,
     Optional as typing___Optional,
     Text as typing___Text,
     Union as typing___Union,
@@ -34,16 +39,129 @@ if sys.version_info < (3,):
     builtin___buffer = buffer
     builtin___unicode = unicode
 
+class S2sPipeline(google___protobuf___message___Message):
+    DESCRIPTOR: google___protobuf___descriptor___Descriptor = ...
+    id = ...  # type: typing___Text
+    s2t_pipeline_id = ...  # type: typing___Text
+    nlu_project_id = ...  # type: typing___Text
+    nlu_language_code = ...  # type: typing___Text
+    t2s_pipeline_id = ...  # type: typing___Text
+    def __init__(
+        self,
+        *,
+        id: typing___Optional[typing___Text] = None,
+        s2t_pipeline_id: typing___Optional[typing___Text] = None,
+        nlu_project_id: typing___Optional[typing___Text] = None,
+        nlu_language_code: typing___Optional[typing___Text] = None,
+        t2s_pipeline_id: typing___Optional[typing___Text] = None,
+    ) -> None: ...
+    if sys.version_info >= (3,):
+        @classmethod
+        def FromString(cls, s: builtin___bytes) -> S2sPipeline: ...
+    else:
+        @classmethod
+        def FromString(
+            cls, s: typing___Union[builtin___bytes, builtin___buffer, builtin___unicode]
+        ) -> S2sPipeline: ...
+    def MergeFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
+    def CopyFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
+    def ClearField(
+        self,
+        field_name: typing_extensions___Literal[
+            "id",
+            b"id",
+            "nlu_language_code",
+            b"nlu_language_code",
+            "nlu_project_id",
+            b"nlu_project_id",
+            "s2t_pipeline_id",
+            b"s2t_pipeline_id",
+            "t2s_pipeline_id",
+            b"t2s_pipeline_id",
+        ],
+    ) -> None: ...
+
+global___S2sPipeline = S2sPipeline
+
+class S2sPipelineId(google___protobuf___message___Message):
+    DESCRIPTOR: google___protobuf___descriptor___Descriptor = ...
+    id = ...  # type: typing___Text
+    def __init__(
+        self,
+        *,
+        id: typing___Optional[typing___Text] = None,
+    ) -> None: ...
+    if sys.version_info >= (3,):
+        @classmethod
+        def FromString(cls, s: builtin___bytes) -> S2sPipelineId: ...
+    else:
+        @classmethod
+        def FromString(
+            cls, s: typing___Union[builtin___bytes, builtin___buffer, builtin___unicode]
+        ) -> S2sPipelineId: ...
+    def MergeFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
+    def CopyFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
+    def ClearField(self, field_name: typing_extensions___Literal["id", b"id"]) -> None: ...
+
+global___S2sPipelineId = S2sPipelineId
+
+class ListS2sPipelinesRequest(google___protobuf___message___Message):
+    DESCRIPTOR: google___protobuf___descriptor___Descriptor = ...
+    def __init__(
+        self,
+    ) -> None: ...
+    if sys.version_info >= (3,):
+        @classmethod
+        def FromString(cls, s: builtin___bytes) -> ListS2sPipelinesRequest: ...
+    else:
+        @classmethod
+        def FromString(
+            cls, s: typing___Union[builtin___bytes, builtin___buffer, builtin___unicode]
+        ) -> ListS2sPipelinesRequest: ...
+    def MergeFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
+    def CopyFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
+
+global___ListS2sPipelinesRequest = ListS2sPipelinesRequest
+
+class ListS2sPipelinesResponse(google___protobuf___message___Message):
+    DESCRIPTOR: google___protobuf___descriptor___Descriptor = ...
+    @property
+    def pipelines(
+        self,
+    ) -> google___protobuf___internal___containers___RepeatedCompositeFieldContainer[
+        global___S2sPipeline
+    ]: ...
+    def __init__(
+        self,
+        *,
+        pipelines: typing___Optional[typing___Iterable[global___S2sPipeline]] = None,
+    ) -> None: ...
+    if sys.version_info >= (3,):
+        @classmethod
+        def FromString(cls, s: builtin___bytes) -> ListS2sPipelinesResponse: ...
+    else:
+        @classmethod
+        def FromString(
+            cls, s: typing___Union[builtin___bytes, builtin___buffer, builtin___unicode]
+        ) -> ListS2sPipelinesResponse: ...
+    def MergeFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
+    def CopyFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
+    def ClearField(self, field_name: typing_extensions___Literal["pipelines", b"pipelines"]) -> None: ...
+
+global___ListS2sPipelinesResponse = ListS2sPipelinesResponse
+
 class S2sStreamRequest(google___protobuf___message___Message):
     DESCRIPTOR: google___protobuf___descriptor___Descriptor = ...
-    audio = ...  # type: builtin___bytes
+    pipeline_id = ...  # type: typing___Text
     session_id = ...  # type: typing___Text
+    audio = ...  # type: builtin___bytes
     end_of_stream = ...  # type: builtin___bool
     def __init__(
         self,
         *,
-        audio: typing___Optional[builtin___bytes] = None,
+        pipeline_id: typing___Optional[typing___Text] = None,
         session_id: typing___Optional[typing___Text] = None,
+        audio: typing___Optional[builtin___bytes] = None,
         end_of_stream: typing___Optional[builtin___bool] = None,
     ) -> None: ...
     if sys.version_info >= (3,):
@@ -59,7 +177,14 @@ class S2sStreamRequest(google___protobuf___message___Message):
     def ClearField(
         self,
         field_name: typing_extensions___Literal[
-            "audio", b"audio", "end_of_stream", b"end_of_stream", "session_id", b"session_id"
+            "audio",
+            b"audio",
+            "end_of_stream",
+            b"end_of_stream",
+            "pipeline_id",
+            b"pipeline_id",
+            "session_id",
+            b"session_id",
         ],
     ) -> None: ...
 

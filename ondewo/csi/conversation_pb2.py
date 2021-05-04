@@ -12,6 +12,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 from ondewo.nlu import session_pb2 as ondewo_dot_nlu_dot_session__pb2
 from ondewo.t2s import text_to_speech_pb2 as ondewo_dot_t2s_dot_text__to__speech__pb2
 
@@ -21,11 +22,232 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     syntax="proto3",
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
-    serialized_pb=b'\n\x1dondewo/csi/conversation.proto\x12\nondewo.csi\x1a\x18ondewo/nlu/session.proto\x1a\x1fondewo/t2s/text-to-speech.proto"L\n\x10S2sStreamRequest\x12\r\n\x05\x61udio\x18\x01 \x01(\x0c\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\x15\n\rend_of_stream\x18\x03 \x01(\x08"\x92\x01\n\x11S2sStreamResponse\x12@\n\x16\x64\x65tect_intent_response\x18\x01 \x01(\x0b\x32 .ondewo.nlu.DetectIntentResponse\x12;\n\x13synthetize_response\x18\x02 \x01(\x0b\x32\x1e.ondewo.t2s.SynthesizeResponse2_\n\rConversations\x12N\n\tS2sStream\x12\x1c.ondewo.csi.S2sStreamRequest\x1a\x1d.ondewo.csi.S2sStreamResponse"\x00(\x01\x30\x01\x62\x06proto3',
+    serialized_pb=b'\n\x1dondewo/csi/conversation.proto\x12\nondewo.csi\x1a\x1bgoogle/protobuf/empty.proto\x1a\x18ondewo/nlu/session.proto\x1a\x1fondewo/t2s/text-to-speech.proto"~\n\x0bS2sPipeline\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0fs2t_pipeline_id\x18\x02 \x01(\t\x12\x16\n\x0enlu_project_id\x18\x03 \x01(\t\x12\x19\n\x11nlu_language_code\x18\x04 \x01(\t\x12\x17\n\x0ft2s_pipeline_id\x18\x05 \x01(\t"\x1b\n\rS2sPipelineId\x12\n\n\x02id\x18\x01 \x01(\t"\x19\n\x17ListS2sPipelinesRequest"F\n\x18ListS2sPipelinesResponse\x12*\n\tpipelines\x18\x01 \x03(\x0b\x32\x17.ondewo.csi.S2sPipeline"a\n\x10S2sStreamRequest\x12\x13\n\x0bpipeline_id\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05\x61udio\x18\x03 \x01(\x0c\x12\x15\n\rend_of_stream\x18\x04 \x01(\x08"\x92\x01\n\x11S2sStreamResponse\x12@\n\x16\x64\x65tect_intent_response\x18\x01 \x01(\x0b\x32 .ondewo.nlu.DetectIntentResponse\x12;\n\x13synthetize_response\x18\x02 \x01(\x0b\x32\x1e.ondewo.t2s.SynthesizeResponse2\xe2\x03\n\rConversations\x12\x46\n\x11\x43reateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty"\x00\x12\x46\n\x0eGetS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x17.ondewo.csi.S2sPipeline"\x00\x12\x46\n\x11UpdateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty"\x00\x12H\n\x11\x44\x65leteS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x16.google.protobuf.Empty"\x00\x12_\n\x10ListS2sPipelines\x12#.ondewo.csi.ListS2sPipelinesRequest\x1a$.ondewo.csi.ListS2sPipelinesResponse"\x00\x12N\n\tS2sStream\x12\x1c.ondewo.csi.S2sStreamRequest\x1a\x1d.ondewo.csi.S2sStreamResponse"\x00(\x01\x30\x01\x62\x06proto3',
     dependencies=[
+        google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,
         ondewo_dot_nlu_dot_session__pb2.DESCRIPTOR,
         ondewo_dot_t2s_dot_text__to__speech__pb2.DESCRIPTOR,
     ],
+)
+
+
+_S2SPIPELINE = _descriptor.Descriptor(
+    name="S2sPipeline",
+    full_name="ondewo.csi.S2sPipeline",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="id",
+            full_name="ondewo.csi.S2sPipeline.id",
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.FieldDescriptor(
+            name="s2t_pipeline_id",
+            full_name="ondewo.csi.S2sPipeline.s2t_pipeline_id",
+            index=1,
+            number=2,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.FieldDescriptor(
+            name="nlu_project_id",
+            full_name="ondewo.csi.S2sPipeline.nlu_project_id",
+            index=2,
+            number=3,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.FieldDescriptor(
+            name="nlu_language_code",
+            full_name="ondewo.csi.S2sPipeline.nlu_language_code",
+            index=3,
+            number=4,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.FieldDescriptor(
+            name="t2s_pipeline_id",
+            full_name="ondewo.csi.S2sPipeline.t2s_pipeline_id",
+            index=4,
+            number=5,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=133,
+    serialized_end=259,
+)
+
+
+_S2SPIPELINEID = _descriptor.Descriptor(
+    name="S2sPipelineId",
+    full_name="ondewo.csi.S2sPipelineId",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="id",
+            full_name="ondewo.csi.S2sPipelineId.id",
+            index=0,
+            number=1,
+            type=9,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"".decode("utf-8"),
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=261,
+    serialized_end=288,
+)
+
+
+_LISTS2SPIPELINESREQUEST = _descriptor.Descriptor(
+    name="ListS2sPipelinesRequest",
+    full_name="ondewo.csi.ListS2sPipelinesRequest",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=290,
+    serialized_end=315,
+)
+
+
+_LISTS2SPIPELINESRESPONSE = _descriptor.Descriptor(
+    name="ListS2sPipelinesResponse",
+    full_name="ondewo.csi.ListS2sPipelinesResponse",
+    filename=None,
+    file=DESCRIPTOR,
+    containing_type=None,
+    create_key=_descriptor._internal_create_key,
+    fields=[
+        _descriptor.FieldDescriptor(
+            name="pipelines",
+            full_name="ondewo.csi.ListS2sPipelinesResponse.pipelines",
+            index=0,
+            number=1,
+            type=11,
+            cpp_type=10,
+            label=3,
+            has_default_value=False,
+            default_value=[],
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+    ],
+    extensions=[],
+    nested_types=[],
+    enum_types=[],
+    serialized_options=None,
+    is_extendable=False,
+    syntax="proto3",
+    extension_ranges=[],
+    oneofs=[],
+    serialized_start=317,
+    serialized_end=387,
 )
 
 
@@ -38,15 +260,15 @@ _S2SSTREAMREQUEST = _descriptor.Descriptor(
     create_key=_descriptor._internal_create_key,
     fields=[
         _descriptor.FieldDescriptor(
-            name="audio",
-            full_name="ondewo.csi.S2sStreamRequest.audio",
+            name="pipeline_id",
+            full_name="ondewo.csi.S2sStreamRequest.pipeline_id",
             index=0,
             number=1,
-            type=12,
+            type=9,
             cpp_type=9,
             label=1,
             has_default_value=False,
-            default_value=b"",
+            default_value=b"".decode("utf-8"),
             message_type=None,
             enum_type=None,
             containing_type=None,
@@ -76,10 +298,29 @@ _S2SSTREAMREQUEST = _descriptor.Descriptor(
             create_key=_descriptor._internal_create_key,
         ),
         _descriptor.FieldDescriptor(
-            name="end_of_stream",
-            full_name="ondewo.csi.S2sStreamRequest.end_of_stream",
+            name="audio",
+            full_name="ondewo.csi.S2sStreamRequest.audio",
             index=2,
             number=3,
+            type=12,
+            cpp_type=9,
+            label=1,
+            has_default_value=False,
+            default_value=b"",
+            message_type=None,
+            enum_type=None,
+            containing_type=None,
+            is_extension=False,
+            extension_scope=None,
+            serialized_options=None,
+            file=DESCRIPTOR,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.FieldDescriptor(
+            name="end_of_stream",
+            full_name="ondewo.csi.S2sStreamRequest.end_of_stream",
+            index=3,
+            number=4,
             type=8,
             cpp_type=7,
             label=1,
@@ -103,8 +344,8 @@ _S2SSTREAMREQUEST = _descriptor.Descriptor(
     syntax="proto3",
     extension_ranges=[],
     oneofs=[],
-    serialized_start=104,
-    serialized_end=180,
+    serialized_start=389,
+    serialized_end=486,
 )
 
 
@@ -163,19 +404,68 @@ _S2SSTREAMRESPONSE = _descriptor.Descriptor(
     syntax="proto3",
     extension_ranges=[],
     oneofs=[],
-    serialized_start=183,
-    serialized_end=329,
+    serialized_start=489,
+    serialized_end=635,
 )
 
+_LISTS2SPIPELINESRESPONSE.fields_by_name["pipelines"].message_type = _S2SPIPELINE
 _S2SSTREAMRESPONSE.fields_by_name[
     "detect_intent_response"
 ].message_type = ondewo_dot_nlu_dot_session__pb2._DETECTINTENTRESPONSE
 _S2SSTREAMRESPONSE.fields_by_name[
     "synthetize_response"
 ].message_type = ondewo_dot_t2s_dot_text__to__speech__pb2._SYNTHESIZERESPONSE
+DESCRIPTOR.message_types_by_name["S2sPipeline"] = _S2SPIPELINE
+DESCRIPTOR.message_types_by_name["S2sPipelineId"] = _S2SPIPELINEID
+DESCRIPTOR.message_types_by_name["ListS2sPipelinesRequest"] = _LISTS2SPIPELINESREQUEST
+DESCRIPTOR.message_types_by_name["ListS2sPipelinesResponse"] = _LISTS2SPIPELINESRESPONSE
 DESCRIPTOR.message_types_by_name["S2sStreamRequest"] = _S2SSTREAMREQUEST
 DESCRIPTOR.message_types_by_name["S2sStreamResponse"] = _S2SSTREAMRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
+
+S2sPipeline = _reflection.GeneratedProtocolMessageType(
+    "S2sPipeline",
+    (_message.Message,),
+    {
+        "DESCRIPTOR": _S2SPIPELINE,
+        "__module__": "ondewo.csi.conversation_pb2"
+        # @@protoc_insertion_point(class_scope:ondewo.csi.S2sPipeline)
+    },
+)
+_sym_db.RegisterMessage(S2sPipeline)
+
+S2sPipelineId = _reflection.GeneratedProtocolMessageType(
+    "S2sPipelineId",
+    (_message.Message,),
+    {
+        "DESCRIPTOR": _S2SPIPELINEID,
+        "__module__": "ondewo.csi.conversation_pb2"
+        # @@protoc_insertion_point(class_scope:ondewo.csi.S2sPipelineId)
+    },
+)
+_sym_db.RegisterMessage(S2sPipelineId)
+
+ListS2sPipelinesRequest = _reflection.GeneratedProtocolMessageType(
+    "ListS2sPipelinesRequest",
+    (_message.Message,),
+    {
+        "DESCRIPTOR": _LISTS2SPIPELINESREQUEST,
+        "__module__": "ondewo.csi.conversation_pb2"
+        # @@protoc_insertion_point(class_scope:ondewo.csi.ListS2sPipelinesRequest)
+    },
+)
+_sym_db.RegisterMessage(ListS2sPipelinesRequest)
+
+ListS2sPipelinesResponse = _reflection.GeneratedProtocolMessageType(
+    "ListS2sPipelinesResponse",
+    (_message.Message,),
+    {
+        "DESCRIPTOR": _LISTS2SPIPELINESRESPONSE,
+        "__module__": "ondewo.csi.conversation_pb2"
+        # @@protoc_insertion_point(class_scope:ondewo.csi.ListS2sPipelinesResponse)
+    },
+)
+_sym_db.RegisterMessage(ListS2sPipelinesResponse)
 
 S2sStreamRequest = _reflection.GeneratedProtocolMessageType(
     "S2sStreamRequest",
@@ -207,13 +497,63 @@ _CONVERSATIONS = _descriptor.ServiceDescriptor(
     index=0,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
-    serialized_start=331,
-    serialized_end=426,
+    serialized_start=638,
+    serialized_end=1120,
     methods=[
+        _descriptor.MethodDescriptor(
+            name="CreateS2sPipeline",
+            full_name="ondewo.csi.Conversations.CreateS2sPipeline",
+            index=0,
+            containing_service=None,
+            input_type=_S2SPIPELINE,
+            output_type=google_dot_protobuf_dot_empty__pb2._EMPTY,
+            serialized_options=None,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.MethodDescriptor(
+            name="GetS2sPipeline",
+            full_name="ondewo.csi.Conversations.GetS2sPipeline",
+            index=1,
+            containing_service=None,
+            input_type=_S2SPIPELINEID,
+            output_type=_S2SPIPELINE,
+            serialized_options=None,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.MethodDescriptor(
+            name="UpdateS2sPipeline",
+            full_name="ondewo.csi.Conversations.UpdateS2sPipeline",
+            index=2,
+            containing_service=None,
+            input_type=_S2SPIPELINE,
+            output_type=google_dot_protobuf_dot_empty__pb2._EMPTY,
+            serialized_options=None,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.MethodDescriptor(
+            name="DeleteS2sPipeline",
+            full_name="ondewo.csi.Conversations.DeleteS2sPipeline",
+            index=3,
+            containing_service=None,
+            input_type=_S2SPIPELINEID,
+            output_type=google_dot_protobuf_dot_empty__pb2._EMPTY,
+            serialized_options=None,
+            create_key=_descriptor._internal_create_key,
+        ),
+        _descriptor.MethodDescriptor(
+            name="ListS2sPipelines",
+            full_name="ondewo.csi.Conversations.ListS2sPipelines",
+            index=4,
+            containing_service=None,
+            input_type=_LISTS2SPIPELINESREQUEST,
+            output_type=_LISTS2SPIPELINESRESPONSE,
+            serialized_options=None,
+            create_key=_descriptor._internal_create_key,
+        ),
         _descriptor.MethodDescriptor(
             name="S2sStream",
             full_name="ondewo.csi.Conversations.S2sStream",
-            index=0,
+            index=5,
             containing_service=None,
             input_type=_S2SSTREAMREQUEST,
             output_type=_S2SSTREAMRESPONSE,
