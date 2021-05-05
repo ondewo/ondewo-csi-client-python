@@ -36,6 +36,11 @@ class ConversationsStub(object):
                 request_serializer=ondewo_dot_csi_dot_conversation__pb2.S2sPipelineId.SerializeToString,
                 response_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                 )
+        self.ListS2sPipelines = channel.unary_unary(
+                '/ondewo.csi.Conversations/ListS2sPipelines',
+                request_serializer=ondewo_dot_csi_dot_conversation__pb2.ListS2sPipelinesRequest.SerializeToString,
+                response_deserializer=ondewo_dot_csi_dot_conversation__pb2.ListS2sPipelinesResponse.FromString,
+                )
         self.S2sStream = channel.stream_stream(
                 '/ondewo.csi.Conversations/S2sStream',
                 request_serializer=ondewo_dot_csi_dot_conversation__pb2.S2sStreamRequest.SerializeToString,
@@ -48,25 +53,36 @@ class ConversationsServicer(object):
     """
 
     def CreateS2sPipeline(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Create the S2S pipeline specified in the request message. The pipeline with the specified ID must not exist.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def GetS2sPipeline(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Retrieve the S2S pipeline with the ID specified in the request message.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def UpdateS2sPipeline(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Update the S2S pipeline specified in the request message. The pipeline must exist.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def DeleteS2sPipeline(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Delete the S2S pipeline with the ID specified in the request message. The pipeline must exist.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListS2sPipelines(self, request, context):
+        """List all S2S pipelines of the server.
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -101,6 +117,11 @@ def add_ConversationsServicer_to_server(servicer, server):
                     servicer.DeleteS2sPipeline,
                     request_deserializer=ondewo_dot_csi_dot_conversation__pb2.S2sPipelineId.FromString,
                     response_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            ),
+            'ListS2sPipelines': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListS2sPipelines,
+                    request_deserializer=ondewo_dot_csi_dot_conversation__pb2.ListS2sPipelinesRequest.FromString,
+                    response_serializer=ondewo_dot_csi_dot_conversation__pb2.ListS2sPipelinesResponse.SerializeToString,
             ),
             'S2sStream': grpc.stream_stream_rpc_method_handler(
                     servicer.S2sStream,
@@ -183,6 +204,23 @@ class Conversations(object):
         return grpc.experimental.unary_unary(request, target, '/ondewo.csi.Conversations/DeleteS2sPipeline',
             ondewo_dot_csi_dot_conversation__pb2.S2sPipelineId.SerializeToString,
             google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ListS2sPipelines(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ondewo.csi.Conversations/ListS2sPipelines',
+            ondewo_dot_csi_dot_conversation__pb2.ListS2sPipelinesRequest.SerializeToString,
+            ondewo_dot_csi_dot_conversation__pb2.ListS2sPipelinesResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
