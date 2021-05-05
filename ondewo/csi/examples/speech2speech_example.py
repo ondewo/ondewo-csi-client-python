@@ -51,7 +51,7 @@ def main():
     streaming_request: Iterator[S2sStreamRequest] = PySoundIoStreamerIn().create_s2s_request(
         pipeline_id="pizza",
         session_id='1234',
-        save_to_disk=True
+        save_to_disk=False
     )
     player = PySoundIoStreamerOut()
 

@@ -73,7 +73,7 @@ class PyAudioStreamerIn:
         count = 0
         data_save = bytes()
         if save_to_disk:
-            f = open(f"audiofiles/record_{session_id}.raw", "wb")
+            f = open(f"record_{session_id}.raw", "wb")
 
         global PLAYING
         while True:  # not self.stop.done():
@@ -186,7 +186,7 @@ class PySoundIoStreamerIn:
         yield S2sStreamRequest(pipeline_id=pipeline_id, session_id=session_id or str(uuid.uuid4()))
 
         if save_to_disk:
-            f = open(f"audiofiles/record_{session_id}.raw", "wb")
+            f = open(f"record_{session_id}.raw", "wb")
 
         count = 0
         data_save = bytes()
