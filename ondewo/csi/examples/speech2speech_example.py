@@ -24,7 +24,12 @@ from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
 from ondewo.csi.client.services.conversations import Conversations
 from ondewo.csi.conversation_pb2 import S2sStreamRequest
-from ondewo.csi.examples.streamer import PyAudioStreamerIn, PyAudioStreamerOut
+from ondewo.csi.examples.streamer import (      # type: ignore
+    PySoundIoStreamerIn,
+    PySoundIoStreamerOut,
+    PyAudioStreamerIn,
+    PyAudioStreamerOut
+)
 
 
 def main():
@@ -34,19 +39,21 @@ def main():
     client: Client = Client(config=config, use_secure_channel=True)
     conversations_service: Conversations = client.services.conversations
 
-    # # Get audio stream (iterator of audio chunks):
-    streaming_request: Iterator[S2sStreamRequest] = PyAudioStreamerIn().create_s2s_request(
-        pipeline_id="pizza",
-        session_id="1234",
-        save_to_disk=True,
-    )
-    player = PyAudioStreamerOut()
-
-    # # Get audio stream (iterator of audio chunks):
-    # streaming_request: Iterator[S2sStreamRequest] = PySoundIoStreamerIn().create_s2s_request(
-    #     session_id='1234', save_to_disk=True
+    # # # Get audio stream (iterator of audio chunks):
+    # streaming_request: Iterator[S2sStreamRequest] = PyAudioStreamerIn().create_s2s_request(
+    #     pipeline_id="pizza",
+    #     session_id="1234",
+    #     save_to_disk=True,
     # )
-    # player = PySoundIoStreamerOut()
+    # player = PyAudioStreamerOut()
+
+    # Get audio stream (iterator of audio chunks):
+    streaming_request: Iterator[S2sStreamRequest] = PySoundIoStreamerIn().create_s2s_request(
+        pipeline_id="pizza",
+        session_id='1234',
+        save_to_disk=True
+    )
+    player = PySoundIoStreamerOut()
 
     i = 0
     j = 0

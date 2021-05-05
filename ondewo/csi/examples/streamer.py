@@ -132,14 +132,14 @@ class PySoundIoStreamerOut:
 
     def callback(self, data, length):
         global PLAYING
+        if self.stream and self.idx > len(self.stream):
+            PLAYING = False
+            self.idx = WAV_HEADER_LENGTH
+            self.stream = None
         if self.stream is not None:
             num_bytes = length * 2 * MONO
             data[:] = self.stream[self.idx : self.idx + num_bytes]  # noqa:
             self.idx += num_bytes
-            if self.idx > len(self.stream):
-                PLAYING = False
-                self.idx = WAV_HEADER_LENGTH
-                self.stream = None
         elif not self.responses.empty():
             PLAYING = True
             self.stream = self.responses.get()
@@ -194,7 +194,7 @@ class PySoundIoStreamerIn:
         while True:  # not self.stop.done():
             if PLAYING:
                 # data : bytes = bytes()
-                time.sleep(0.5)
+                time.sleep(0.7)
                 continue
 
             count += 1
