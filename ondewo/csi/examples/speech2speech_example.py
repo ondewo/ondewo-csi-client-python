@@ -24,12 +24,7 @@ from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
 from ondewo.csi.client.services.conversations import Conversations
 from ondewo.csi.conversation_pb2 import S2sStreamRequest
-from ondewo.csi.examples.streamer import (
-    PyAudioStreamerIn,
-    PyAudioStreamerOut,
-    PySoundIoStreamerIn,
-    PySoundIoStreamerOut,
-)
+from ondewo.csi.examples.streamer import PyAudioStreamerIn, PyAudioStreamerOut
 
 
 def main():
