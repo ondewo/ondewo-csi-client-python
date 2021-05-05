@@ -146,4 +146,6 @@ cython_debug/
 # config
 examples/configs/
 examples/audiofiles/*
+examples/tests/
+
 
