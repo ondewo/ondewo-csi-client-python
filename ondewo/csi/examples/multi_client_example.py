@@ -16,23 +16,33 @@
 # limitations under the License.
 
 from ondewo.csi.client.client_config import ClientConfig
+from ondewo.nlu.client_config import ClientConfig as NluClientConfig
 
 from ondewo.csi.client.client import Client as CsiClient
 from ondewo.s2t.client.client import Client as S2tClient
 from ondewo.t2s.client.client import Client as T2sClient
+from ondewo.nlu.client import Client as NluClient
 
 import ondewo.s2t.speech_to_text_pb2 as s2t
 import ondewo.t2s.text_to_speech_pb2 as t2s
+import ondewo.nlu.agent_pb2 as agent
 
-with open('examples/configs/csi.json') as fi:
+with open('csi.json') as fi:
     config = ClientConfig.from_json(fi.read())
+with open('csi.json') as fi:
+    nlu_config = NluClientConfig.from_json(fi.read())
 
 csi_client = CsiClient(config=config)
 s2t_client = S2tClient(config=config)
 t2s_client = T2sClient(config=config)
+nlu_client = NluClient(config=nlu_config)
 
 s2t_pipelines = s2t_client.services.speech_to_text.list_s2t_pipelines(request=s2t.ListS2tPipelinesRequest())
 t2s_pipelines = t2s_client.services.text_to_speech.list_t2s_pipelines(request=t2s.ListT2sPipelinesRequest())
 
-print([pipeline.id for pipeline in s2t_pipelines.pipeline_configs])
-print([pipeline.id for pipeline in t2s_pipelines.pipelines])
+print(f"Speech to text pipelines: {[pipeline.id for pipeline in s2t_pipelines.pipeline_configs]}")
+print(f"Text to speech pipelines: {[pipeline.id for pipeline in t2s_pipelines.pipelines]}")
+
+agents = nlu_client.services.agents.list_agents(request=agent.ListAgentsRequest())
+
+print(f"Nlu agents: {[agent.agent.parent for agent in agents.agents_with_owners]}")
