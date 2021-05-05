@@ -65,10 +65,10 @@ class PyAudioStreamerIn:
         self,
         pipeline_id: str,
         session_id: Optional[str] = None,
-        save_to_disk=False,
+        save_to_disk: bool = False,
     ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
-        yield S2sStreamRequest(pipeline_id=pipeline_id, session_id=session_id)
+        yield S2sStreamRequest(pipeline_id=pipeline_id, session_id=session_id or str(uuid.uuid4()))
 
         count = 0
         data_save = bytes()
