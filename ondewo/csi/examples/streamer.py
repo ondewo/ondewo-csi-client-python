@@ -4,7 +4,7 @@ import time
 import uuid
 from typing import Iterator, Optional
 
-from ondewo.logging.logger import logger_console as stream_logger
+from ondewo.logging.logger import logger_console
 from ondewo.nlu.session_pb2 import (
     InputAudioConfig,
     QueryInput,
@@ -119,8 +119,8 @@ class PySoundIoStreamerOut:
 
         self.responses: queue.Queue = queue.Queue()
         # This is typically a single utterance from TTS
-        self.stream = None
-        self.idx = 0
+        self.response: Optional[bytes] = None
+        self.idx: int = 0
         self.CHUNK: int = CHUNK
         self.pysoundio_object: pysoundio.PySoundIo = pysoundio.PySoundIo(backend=None)
         self.pysoundio_object.start_output_stream(
@@ -133,20 +133,30 @@ class PySoundIoStreamerOut:
         )
 
     def callback(self, data, length):
-        if self.stream and self.idx > len(self.stream):
-            self.responses.task_done()
-            self.idx = WAV_HEADER_LENGTH
-            self.stream = None
-        if self.stream is not None:
-            num_bytes = length * SAMPLEWIDTH * MONO
-            data[:] = self.stream[self.idx : self.idx + num_bytes]  # noqa:
-            self.idx += num_bytes
-        elif not self.responses.empty():
-            self.stream = self.responses.get()
-            self.idx = WAV_HEADER_LENGTH
+        if self.response is not None:
+            # if we are currently playing a response
+            if self.idx <= len(self.response):
+                # if the response is still being played: calculate the length in bytes, overwrite the output
+                # data with the portion of the response, increase the index and return
+                num_bytes = length * SAMPLEWIDTH * MONO
+                data[:] = self.response[self.idx : self.idx + num_bytes]  # noqa:
+                self.idx += num_bytes
+                return
 
-    def play(self, audio_file):
+            # if the whole response was played: remove the response and set task done in the response queue
+            self.response = None
+            self.responses.task_done()
+            logger_console.debug("done playing")
+
+        if not self.responses.empty():
+            # if there is a response to play, get get it from the queue and reset the index
+            self.response = self.responses.get()
+            self.idx = WAV_HEADER_LENGTH
+            logger_console.debug("start playing")
+
+    def play(self, audio_file: bytes) -> None:
         self.responses.put(audio_file)
+        logger_console.debug(f"output {len(audio_file)} bytes")
         self.responses.join()
 
 
@@ -169,9 +179,10 @@ class PySoundIoStreamerIn:
             dtype=pysoundio.SoundIoFormatS16LE,
             read_callback=self.callback,
         )
-        stream_logger.debug("Streamer initialized")
+        logger_console.debug("Streamer initialized")
 
     def callback(self, data: bytes, length: int) -> None:
+        # logger_console.debug(f'input {len(data)} bytes')
         self.buffer.put(data)
 
     def close(self):
@@ -189,16 +200,15 @@ class PySoundIoStreamerIn:
         if save_to_disk:
             f = open(f"record_{session_id}.raw", "wb")
 
-        count = 0
         data_save = bytes()
 
-        while True:  # not self.stop.done():
+        while True:
+            data: bytes = self.buffer.get()  # type: ignore
+
             if self.mute:
-                time.sleep(0.2)
+                # logger_console.debug(f'dropping {len(data)} bytes')
                 continue
 
-            count += 1
-            data: bytes = self.buffer.get()  # type: ignore
             data_save += data
             if len(data_save) < RATE:
                 continue

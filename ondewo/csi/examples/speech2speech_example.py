@@ -16,10 +16,10 @@
 # limitations under the License.
 
 import argparse
-from typing import Iterator, Optional
 import uuid
-import time
+from typing import Iterator
 
+from ondewo.logging.logger import logger_console
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
 
@@ -27,11 +27,11 @@ from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
 from ondewo.csi.client.services.conversations import Conversations
 from ondewo.csi.conversation_pb2 import S2sStreamRequest
-from ondewo.csi.examples.streamer import (      # type: ignore
+from ondewo.csi.examples.streamer import (
+    PyAudioStreamerIn,
+    PyAudioStreamerOut,
     PySoundIoStreamerIn,
     PySoundIoStreamerOut,
-    PyAudioStreamerIn,
-    PyAudioStreamerOut
 )
 
 
@@ -40,27 +40,28 @@ def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer_name: s
     with open("csi.json") as f:
         config: ClientConfig = ClientConfig.from_json(f.read())
 
-    client: Client = Client(config=config, use_secure_channel=True)
+    client: Client = Client(config=config, use_secure_channel=config.grpc_cert is not None)
     conversations_service: Conversations = client.services.conversations
 
     if "pyaudio" in streamer_name:
         # Get audio stream (iterator of audio chunks):
-        streaming_request: Iterator[S2sStreamRequest] = PyAudioStreamerIn().create_s2s_request(
+        streamer = PyAudioStreamerIn()
+        streaming_request: Iterator[S2sStreamRequest] = streamer.create_s2s_request(
             pipeline_id=pipeline_id,
             session_id=session_id,
             save_to_disk=save_to_disk,
         )
         player = PyAudioStreamerOut()
 
-    if "pysoundio" in streamer_name:
+    elif "pysoundio" in streamer_name:
         # Get audio stream (iterator of audio chunks):
         streamer = PySoundIoStreamerIn()
-        streaming_request: Iterator[S2sStreamRequest] = streamer.create_s2s_request(
-            pipeline_id=pipeline_id,
-            session_id=session_id,
-            save_to_disk=save_to_disk
+        streaming_request = streamer.create_s2s_request(
+            pipeline_id=pipeline_id, session_id=session_id, save_to_disk=save_to_disk
         )
         player = PySoundIoStreamerOut()
+    else:
+        raise ValueError(f'Unknown streamer name "{streamer_name}".')
 
     i = 0
     j = 0
@@ -76,8 +77,10 @@ def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer_name: s
             print(f"RESPONSE \t{j}: {t2s_response.text}")
             j += 1
             streamer.mute = True
+            logger_console.debug("muted")
             player.play(response.synthetize_response.audio)
             streamer.mute = False
+            logger_console.debug("unmuted")
 
 
 if __name__ == "__main__":
