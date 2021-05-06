@@ -15,7 +15,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Iterator
+import argparse
+from typing import Iterator, Optional
+import uuid
 
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
@@ -32,28 +34,31 @@ from ondewo.csi.examples.streamer import (      # type: ignore
 )
 
 
-def main():
+def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer: str) -> None:
+    session_id = session_id if session_id else str(uuid.uuid4())
     with open("csi.json") as f:
         config: ClientConfig = ClientConfig.from_json(f.read())
 
     client: Client = Client(config=config, use_secure_channel=True)
     conversations_service: Conversations = client.services.conversations
 
-    # # # Get audio stream (iterator of audio chunks):
-    # streaming_request: Iterator[S2sStreamRequest] = PyAudioStreamerIn().create_s2s_request(
-    #     pipeline_id="pizza",
-    #     session_id="1234",
-    #     save_to_disk=True,
-    # )
-    # player = PyAudioStreamerOut()
+    if "pyaudio" in streamer:
+        # Get audio stream (iterator of audio chunks):
+        streaming_request: Iterator[S2sStreamRequest] = PyAudioStreamerIn().create_s2s_request(
+            pipeline_id=pipeline_id,
+            session_id=session_id,
+            save_to_disk=save_to_disk,
+        )
+        player = PyAudioStreamerOut()
 
-    # Get audio stream (iterator of audio chunks):
-    streaming_request: Iterator[S2sStreamRequest] = PySoundIoStreamerIn().create_s2s_request(
-        pipeline_id="pizza",
-        session_id='1234',
-        save_to_disk=False
-    )
-    player = PySoundIoStreamerOut()
+    if "pysoundio" in streamer:
+        # Get audio stream (iterator of audio chunks):
+        streaming_request: Iterator[S2sStreamRequest] = PySoundIoStreamerIn().create_s2s_request(
+            pipeline_id=pipeline_id,
+            session_id=session_id,
+            save_to_disk=save_to_disk
+        )
+        player = PySoundIoStreamerOut()
 
     i = 0
     j = 0
@@ -72,4 +77,12 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser: argparse.ArgumentParser = argparse.ArgumentParser(description="Streams stuff to websocket")
+    parser.add_argument("--pipeline_id", default="pizza")
+    parser.add_argument("--session_id", default=str(uuid.uuid4()))
+    parser.add_argument("--save_to_disk", default=False)
+    parser.add_argument("--streamer", default="pysoundio")
+
+    args: argparse.Namespace = parser.parse_args()
+
+    main(args.pipeline_id, args.session_id, args.save_to_disk, args.streamer)
