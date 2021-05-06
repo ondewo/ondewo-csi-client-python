@@ -20,6 +20,7 @@ MONO: int = 1
 RATE: int = 16000
 PLAYING: bool = False
 WAV_HEADER_LENGTH: int = 46
+SAMPLEWIDTH: int = 2
 
 
 class PyAudioStreamerOut:
@@ -117,6 +118,7 @@ class PySoundIoStreamerOut:
         import pysoundio
 
         self.responses: queue.Queue = queue.Queue()
+        # This is typically a single utterance from TTS
         self.stream = None
         self.idx = 0
         self.CHUNK: int = CHUNK
@@ -131,22 +133,21 @@ class PySoundIoStreamerOut:
         )
 
     def callback(self, data, length):
-        global PLAYING
         if self.stream and self.idx > len(self.stream):
-            PLAYING = False
+            self.responses.task_done()
             self.idx = WAV_HEADER_LENGTH
             self.stream = None
         if self.stream is not None:
-            num_bytes = length * 2 * MONO
+            num_bytes = length * SAMPLEWIDTH * MONO
             data[:] = self.stream[self.idx : self.idx + num_bytes]  # noqa:
             self.idx += num_bytes
         elif not self.responses.empty():
-            PLAYING = True
             self.stream = self.responses.get()
             self.idx = WAV_HEADER_LENGTH
 
-    def play(self, data):
-        self.responses.put(data)
+    def play(self, audio_file):
+        self.responses.put(audio_file)
+        self.responses.join()
 
 
 class PySoundIoStreamerIn:
@@ -155,6 +156,7 @@ class PySoundIoStreamerIn:
 
         logging.debug("Initializing PySoundIo streamer")
 
+        self.mute = False
         self.buffer: queue.Queue = queue.Queue(maxsize=CHUNK * 50)
         logging.info("Starting stream")
         # start recording
@@ -181,7 +183,6 @@ class PySoundIoStreamerIn:
         session_id: Optional[str] = None,
         save_to_disk: bool = False,
     ) -> Iterator[S2sStreamRequest]:
-        global PLAYING
         # create an initial request with session id specified
         yield S2sStreamRequest(pipeline_id=pipeline_id, session_id=session_id or str(uuid.uuid4()))
 
@@ -192,9 +193,8 @@ class PySoundIoStreamerIn:
         data_save = bytes()
 
         while True:  # not self.stop.done():
-            if PLAYING:
-                # data : bytes = bytes()
-                time.sleep(0.7)
+            if self.mute:
+                time.sleep(0.2)
                 continue
 
             count += 1
