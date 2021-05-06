@@ -124,7 +124,7 @@ class PySoundIoStreamerOut:
         self.CHUNK: int = CHUNK
         self.pysoundio_object: pysoundio.PySoundIo = pysoundio.PySoundIo(backend=None)
         self.pysoundio_object.start_output_stream(
-            device_id=None,
+            device_id=1,
             channels=MONO,
             sample_rate=22000,
             block_size=CHUNK,
@@ -172,7 +172,7 @@ class PySoundIoStreamerIn:
         # start recording
         self.pysoundio_object: pysoundio.PySoundIo = pysoundio.PySoundIo(backend=None)
         self.pysoundio_object.start_input_stream(
-            device_id=None,
+            device_id=0,
             channels=MONO,
             sample_rate=RATE,
             block_size=CHUNK,
