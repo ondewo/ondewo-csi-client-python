@@ -13,7 +13,7 @@ Python Installation
 ```bash
 git clone git@github.com:ondewo/ondewo-csi-client-python.git
 cd ondewo-csi-client-python
-pip install -r requirements.txt
+pip install -e .
 ```
 
 Let's Get Started! (WIP)
@@ -45,3 +45,5 @@ sudo apt install -y libsoundio-dev
 
 pip install pysoundio
 ```
+
+once you have those installed, you can run ./ondewo/csi/examples/speech2speech_example.py

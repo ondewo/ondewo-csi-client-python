@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
     syntax="proto3",
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
-    serialized_pb=b'\n\x1dondewo/csi/conversation.proto\x12\nondewo.csi\x1a\x1bgoogle/protobuf/empty.proto\x1a\x18ondewo/nlu/session.proto\x1a\x1fondewo/t2s/text-to-speech.proto"~\n\x0bS2sPipeline\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0fs2t_pipeline_id\x18\x02 \x01(\t\x12\x16\n\x0enlu_project_id\x18\x03 \x01(\t\x12\x19\n\x11nlu_language_code\x18\x04 \x01(\t\x12\x17\n\x0ft2s_pipeline_id\x18\x05 \x01(\t"\x1b\n\rS2sPipelineId\x12\n\n\x02id\x18\x01 \x01(\t"\x19\n\x17ListS2sPipelinesRequest"F\n\x18ListS2sPipelinesResponse\x12*\n\tpipelines\x18\x01 \x03(\x0b\x32\x17.ondewo.csi.S2sPipeline"a\n\x10S2sStreamRequest\x12\x13\n\x0bpipeline_id\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05\x61udio\x18\x03 \x01(\x0c\x12\x15\n\rend_of_stream\x18\x04 \x01(\x08"\x92\x01\n\x11S2sStreamResponse\x12@\n\x16\x64\x65tect_intent_response\x18\x01 \x01(\x0b\x32 .ondewo.nlu.DetectIntentResponse\x12;\n\x13synthetize_response\x18\x02 \x01(\x0b\x32\x1e.ondewo.t2s.SynthesizeResponse2\xe2\x03\n\rConversations\x12\x46\n\x11\x43reateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty"\x00\x12\x46\n\x0eGetS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x17.ondewo.csi.S2sPipeline"\x00\x12\x46\n\x11UpdateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty"\x00\x12H\n\x11\x44\x65leteS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x16.google.protobuf.Empty"\x00\x12_\n\x10ListS2sPipelines\x12#.ondewo.csi.ListS2sPipelinesRequest\x1a$.ondewo.csi.ListS2sPipelinesResponse"\x00\x12N\n\tS2sStream\x12\x1c.ondewo.csi.S2sStreamRequest\x1a\x1d.ondewo.csi.S2sStreamResponse"\x00(\x01\x30\x01\x62\x06proto3',
+    serialized_pb=b'\n\x1dondewo/csi/conversation.proto\x12\nondewo.csi\x1a\x1bgoogle/protobuf/empty.proto\x1a\x18ondewo/nlu/session.proto\x1a\x1fondewo/t2s/text-to-speech.proto"~\n\x0bS2sPipeline\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0fs2t_pipeline_id\x18\x02 \x01(\t\x12\x16\n\x0enlu_project_id\x18\x03 \x01(\t\x12\x19\n\x11nlu_language_code\x18\x04 \x01(\t\x12\x17\n\x0ft2s_pipeline_id\x18\x05 \x01(\t"\x1b\n\rS2sPipelineId\x12\n\n\x02id\x18\x01 \x01(\t"\x19\n\x17ListS2sPipelinesRequest"F\n\x18ListS2sPipelinesResponse\x12*\n\tpipelines\x18\x01 \x03(\x0b\x32\x17.ondewo.csi.S2sPipeline"a\n\x10S2sStreamRequest\x12\x13\n\x0bpipeline_id\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05\x61udio\x18\x03 \x01(\x0c\x12\x15\n\rend_of_stream\x18\x04 \x01(\x08"\xa2\x01\n\x11S2sStreamResponse\x12\x42\n\x16\x64\x65tect_intent_response\x18\x01 \x01(\x0b\x32 .ondewo.nlu.DetectIntentResponseH\x00\x12=\n\x13synthetize_response\x18\x02 \x01(\x0b\x32\x1e.ondewo.t2s.SynthesizeResponseH\x00\x42\n\n\x08response2\xe2\x03\n\rConversations\x12\x46\n\x11\x43reateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty"\x00\x12\x46\n\x0eGetS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x17.ondewo.csi.S2sPipeline"\x00\x12\x46\n\x11UpdateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty"\x00\x12H\n\x11\x44\x65leteS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x16.google.protobuf.Empty"\x00\x12_\n\x10ListS2sPipelines\x12#.ondewo.csi.ListS2sPipelinesRequest\x1a$.ondewo.csi.ListS2sPipelinesResponse"\x00\x12N\n\tS2sStream\x12\x1c.ondewo.csi.S2sStreamRequest\x1a\x1d.ondewo.csi.S2sStreamResponse"\x00(\x01\x30\x01\x62\x06proto3',
     dependencies=[
         google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,
         ondewo_dot_nlu_dot_session__pb2.DESCRIPTOR,
@@ -403,9 +403,18 @@ _S2SSTREAMRESPONSE = _descriptor.Descriptor(
     is_extendable=False,
     syntax="proto3",
     extension_ranges=[],
-    oneofs=[],
+    oneofs=[
+        _descriptor.OneofDescriptor(
+            name="response",
+            full_name="ondewo.csi.S2sStreamResponse.response",
+            index=0,
+            containing_type=None,
+            create_key=_descriptor._internal_create_key,
+            fields=[],
+        ),
+    ],
     serialized_start=489,
-    serialized_end=635,
+    serialized_end=651,
 )
 
 _LISTS2SPIPELINESRESPONSE.fields_by_name["pipelines"].message_type = _S2SPIPELINE
@@ -415,6 +424,18 @@ _S2SSTREAMRESPONSE.fields_by_name[
 _S2SSTREAMRESPONSE.fields_by_name[
     "synthetize_response"
 ].message_type = ondewo_dot_t2s_dot_text__to__speech__pb2._SYNTHESIZERESPONSE
+_S2SSTREAMRESPONSE.oneofs_by_name["response"].fields.append(
+    _S2SSTREAMRESPONSE.fields_by_name["detect_intent_response"]
+)
+_S2SSTREAMRESPONSE.fields_by_name[
+    "detect_intent_response"
+].containing_oneof = _S2SSTREAMRESPONSE.oneofs_by_name["response"]
+_S2SSTREAMRESPONSE.oneofs_by_name["response"].fields.append(
+    _S2SSTREAMRESPONSE.fields_by_name["synthetize_response"]
+)
+_S2SSTREAMRESPONSE.fields_by_name["synthetize_response"].containing_oneof = _S2SSTREAMRESPONSE.oneofs_by_name[
+    "response"
+]
 DESCRIPTOR.message_types_by_name["S2sPipeline"] = _S2SPIPELINE
 DESCRIPTOR.message_types_by_name["S2sPipelineId"] = _S2SPIPELINEID
 DESCRIPTOR.message_types_by_name["ListS2sPipelinesRequest"] = _LISTS2SPIPELINESREQUEST
@@ -497,8 +518,8 @@ _CONVERSATIONS = _descriptor.ServiceDescriptor(
     index=0,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
-    serialized_start=638,
-    serialized_end=1120,
+    serialized_start=654,
+    serialized_end=1136,
     methods=[
         _descriptor.MethodDescriptor(
             name="CreateS2sPipeline",

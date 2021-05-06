@@ -51,31 +51,31 @@ class ConversationsServicer(object):
     """endpoints of csi service"""
 
     def CreateS2sPipeline(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Create the S2S pipeline specified in the request message. The pipeline with the specified ID must not exist."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
     def GetS2sPipeline(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Retrieve the S2S pipeline with the ID specified in the request message."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
     def UpdateS2sPipeline(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Update the S2S pipeline specified in the request message. The pipeline must exist."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
     def DeleteS2sPipeline(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Delete the S2S pipeline with the ID specified in the request message. The pipeline must exist."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")
 
     def ListS2sPipelines(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """List all S2S pipelines of the server."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details("Method not implemented!")
         raise NotImplementedError("Method not implemented!")

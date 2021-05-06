@@ -215,14 +215,27 @@ class S2sStreamResponse(google___protobuf___message___Message):
     def HasField(
         self,
         field_name: typing_extensions___Literal[
-            "detect_intent_response", b"detect_intent_response", "synthetize_response", b"synthetize_response"
+            "detect_intent_response",
+            b"detect_intent_response",
+            "response",
+            b"response",
+            "synthetize_response",
+            b"synthetize_response",
         ],
     ) -> builtin___bool: ...
     def ClearField(
         self,
         field_name: typing_extensions___Literal[
-            "detect_intent_response", b"detect_intent_response", "synthetize_response", b"synthetize_response"
+            "detect_intent_response",
+            b"detect_intent_response",
+            "response",
+            b"response",
+            "synthetize_response",
+            b"synthetize_response",
         ],
     ) -> None: ...
+    def WhichOneof(
+        self, oneof_group: typing_extensions___Literal["response", b"response"]
+    ) -> typing_extensions___Literal["detect_intent_response", "synthetize_response"]: ...
 
 global___S2sStreamResponse = S2sStreamResponse

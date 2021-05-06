@@ -2,7 +2,7 @@ import logging
 import queue
 import time
 import uuid
-from typing import Iterator
+from typing import Iterator, Optional
 
 from ondewo.logging.logger import logger_console as stream_logger
 from ondewo.nlu.session_pb2 import (
@@ -20,6 +20,7 @@ MONO: int = 1
 RATE: int = 16000
 PLAYING: bool = False
 WAV_HEADER_LENGTH: int = 46
+SAMPLEWIDTH: int = 2
 
 
 class PyAudioStreamerOut:
@@ -39,6 +40,7 @@ class PyAudioStreamerOut:
         global PLAYING
         PLAYING = True
         self.stream.write(data[WAV_HEADER_LENGTH:])
+        # self.stream.write(data)
         PLAYING = False
 
 
@@ -60,14 +62,23 @@ class PyAudioStreamerIn:
         self.stream.close()
         self.pyaudio_object.terminate()
 
-    def create_s2s_request(self, session_id: str = str(uuid.uuid4())) -> Iterator[S2sStreamRequest]:
+    def create_s2s_request(
+        self,
+        pipeline_id: str,
+        session_id: Optional[str] = None,
+        save_to_disk: bool = False,
+    ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
-        yield S2sStreamRequest(session_id=session_id)
+        yield S2sStreamRequest(pipeline_id=pipeline_id, session_id=session_id or str(uuid.uuid4()))
 
         count = 0
         data_save = bytes()
+        if save_to_disk:
+            f = open(f"record_{session_id}.raw", "wb")
+
         global PLAYING
         while True:  # not self.stop.done():
+
             if PLAYING:
                 print("PLAYING")
                 time.sleep(0.5)
@@ -81,31 +92,33 @@ class PyAudioStreamerIn:
             if len(data_save) < RATE:
                 continue
             yield S2sStreamRequest(audio=data_save)
+            if save_to_disk:
+                f.write(data_save)
             data_save = bytes()
             time.sleep(0.1)
 
         yield S2sStreamRequest(end_of_stream=True)
 
+    def create_pyaudio_streaming_request(self, pipeline_id: str) -> Iterator[TranscribeStreamRequest]:
+        while True:
+            chunk: bytes = self.stream.read(CHUNK)
+            logging.info(f"Sending {len(chunk)} bytes")
+            yield TranscribeStreamRequest(
+                audio_chunk=chunk,
+                s2t_pipeline_id=pipeline_id,
+                spelling_correction=False,
+                ctc_decoding=speech_to_text_pb2.CTCDecoding.BEAM_SEARCH_WITH_LM,
+                end_of_stream=False,
+            )
+            time.sleep(0.1)
 
-def create_pyaudio_streaming_request(self, pipeline_id: str) -> Iterator[TranscribeStreamRequest]:
-    while True:
-        chunk: bytes = self.stream.read(CHUNK)
-        logging.info(f"Sending {len(chunk)} bytes")
-        yield TranscribeStreamRequest(
-            audio_chunk=chunk,
-            s2t_pipeline_id=pipeline_id,
-            spelling_correction=False,
-            ctc_decoding=speech_to_text_pb2.CTCDecoding.BEAM_SEARCH_WITH_LM,
-            end_of_stream=False,
-        )
-        time.sleep(0.1)
 
-
-class PySoundioStreamerOut:
+class PySoundIoStreamerOut:
     def __init__(self) -> None:
         import pysoundio
 
         self.responses: queue.Queue = queue.Queue()
+        # This is typically a single utterance from TTS
         self.stream = None
         self.idx = 0
         self.CHUNK: int = CHUNK
@@ -120,30 +133,30 @@ class PySoundioStreamerOut:
         )
 
     def callback(self, data, length):
-        global PLAYING
+        if self.stream and self.idx > len(self.stream):
+            self.responses.task_done()
+            self.idx = WAV_HEADER_LENGTH
+            self.stream = None
         if self.stream is not None:
-            num_bytes = length * 2 * MONO
+            num_bytes = length * SAMPLEWIDTH * MONO
             data[:] = self.stream[self.idx : self.idx + num_bytes]  # noqa:
             self.idx += num_bytes
-            if self.idx > len(self.stream):
-                PLAYING = False
-                self.idx = WAV_HEADER_LENGTH
-                self.stream = None
         elif not self.responses.empty():
-            PLAYING = True
             self.stream = self.responses.get()
             self.idx = WAV_HEADER_LENGTH
 
-    def play(self, data):
-        self.responses.put(data)
+    def play(self, audio_file):
+        self.responses.put(audio_file)
+        self.responses.join()
 
 
-class PysoundIOStreamerIn:
+class PySoundIoStreamerIn:
     def __init__(self) -> None:
         import pysoundio
 
         logging.debug("Initializing PySoundIo streamer")
 
+        self.mute = False
         self.buffer: queue.Queue = queue.Queue(maxsize=CHUNK * 50)
         logging.info("Starting stream")
         # start recording
@@ -164,18 +177,24 @@ class PysoundIOStreamerIn:
     def close(self):
         pass
 
-    def create_s2s_request(self, session_id: str = str(uuid.uuid4())) -> Iterator[S2sStreamRequest]:
-        global PLAYING
+    def create_s2s_request(
+        self,
+        pipeline_id: str,
+        session_id: Optional[str] = None,
+        save_to_disk: bool = False,
+    ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
-        yield S2sStreamRequest(session_id=session_id)
+        yield S2sStreamRequest(pipeline_id=pipeline_id, session_id=session_id or str(uuid.uuid4()))
+
+        if save_to_disk:
+            f = open(f"record_{session_id}.raw", "wb")
 
         count = 0
         data_save = bytes()
 
         while True:  # not self.stop.done():
-            if PLAYING:
-                # data : bytes = bytes()
-                time.sleep(0.5)
+            if self.mute:
+                time.sleep(0.2)
                 continue
 
             count += 1
@@ -184,10 +203,10 @@ class PysoundIOStreamerIn:
             if len(data_save) < RATE:
                 continue
             yield S2sStreamRequest(audio=data_save)
+            if save_to_disk:
+                f.write(data_save)
             data_save = bytes()
             time.sleep(0.1)
-
-        yield S2sStreamRequest(end_of_stream=True)
 
     def create_intent_request(
         self, cai_project: str, cai_session: str
