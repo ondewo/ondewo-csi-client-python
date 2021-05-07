@@ -204,12 +204,12 @@ class SipTrigger(google___protobuf___message___Message):
         def items(cls) -> typing___List[typing___Tuple[builtin___str, 'SipTrigger.SipTriggerType']]: ...
         UNSPECIFIED = typing___cast('SipTrigger.SipTriggerType', 0)
         HANGUP = typing___cast('SipTrigger.SipTriggerType', 1)
-        HANDOVER = typing___cast('SipTrigger.SipTriggerType', 2)
+        HUMAN_HANDOVER = typing___cast('SipTrigger.SipTriggerType', 2)
         SEND_NOW = typing___cast('SipTrigger.SipTriggerType', 3)
         PAUSE = typing___cast('SipTrigger.SipTriggerType', 4)
     UNSPECIFIED = typing___cast('SipTrigger.SipTriggerType', 0)
     HANGUP = typing___cast('SipTrigger.SipTriggerType', 1)
-    HANDOVER = typing___cast('SipTrigger.SipTriggerType', 2)
+    HUMAN_HANDOVER = typing___cast('SipTrigger.SipTriggerType', 2)
     SEND_NOW = typing___cast('SipTrigger.SipTriggerType', 3)
     PAUSE = typing___cast('SipTrigger.SipTriggerType', 4)
     global___SipTriggerType = SipTriggerType
