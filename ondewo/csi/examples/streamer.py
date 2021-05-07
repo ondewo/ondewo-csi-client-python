@@ -101,7 +101,7 @@ class PyAudioStreamerIn:
 
     def create_pyaudio_streaming_request(self, pipeline_id: str) -> Iterator[TranscribeStreamRequest]:
         while True:
-            chunk: bytes = self.stream.read(CHUNK)
+            chunk: bytes = self.stream.read(CHUNK)  # type: ignore
             logging.info(f"Sending {len(chunk)} bytes")
             yield TranscribeStreamRequest(
                 audio_chunk=chunk,
@@ -182,6 +182,9 @@ class PySoundIoStreamerIn:
         logger_console.debug("Streamer initialized")
 
     def callback(self, data: bytes, length: int) -> None:
+        if self.mute:
+            # logger_console.debug(f'dropping {len(data)} bytes, {length} samples')
+            return
         # logger_console.debug(f'input {len(data)} bytes')
         self.buffer.put(data)
 
@@ -203,11 +206,7 @@ class PySoundIoStreamerIn:
         data_save = bytes()
 
         while True:
-            data: bytes = self.buffer.get()  # type: ignore
-
-            if self.mute:
-                # logger_console.debug(f'dropping {len(data)} bytes')
-                continue
+            data: bytes = self.buffer.get()
 
             data_save += data
             if len(data_save) < RATE:
@@ -225,7 +224,7 @@ class PySoundIoStreamerIn:
         data_save = bytes()
         while True:  # not self.stop.done():
             count += 1
-            data: bytes = self.buffer.get()  # type: ignore
+            data: bytes = self.buffer.get()
             data_save += data
             if len(data_save) < RATE:
                 continue
@@ -251,7 +250,7 @@ class PySoundIoStreamerIn:
         data_save = bytes()
         while count < 100:  # not self.stop.done():
             count += 1
-            data: bytes = self.buffer.get()  # type: ignore
+            data: bytes = self.buffer.get()
             data_save += data
             if len(data_save) < RATE:
                 continue
