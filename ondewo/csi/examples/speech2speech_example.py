@@ -16,6 +16,7 @@
 # limitations under the License.
 
 import argparse
+import time
 import uuid
 from typing import Iterator
 
@@ -79,6 +80,8 @@ def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer_name: s
             streamer.mute = True
             logger_console.debug("muted")
             player.play(response.synthetize_response.audio)
+            # playing the audio is a bit delayed, so still wait.
+            time.sleep(0.2)
             streamer.mute = False
             logger_console.debug("unmuted")
 
