@@ -1,18 +1,15 @@
 # Release History
 *****************
 
-## Release ONDEWO CSI Python Client Template
+## Release ONDEWO CSI Python Client 0.2.1
 
 ### New Features
+* Double check licenses
 
-### Improvements
+*****************
+## Release ONDEWO CSI Python Client 0.2.0
 
-### Bug fixes
-
-### Breaking Changes
-
-### Known issues not covered in this release
-
-### Migration Guide
+### New Features
+* New client!
 
 *****************
