@@ -141,3 +141,11 @@ cython_debug/
 **/__pycache__/**
 *grpc.json
 
+
+
+# config
+examples/configs/
+examples/audiofiles/*
+examples/tests/
+
+

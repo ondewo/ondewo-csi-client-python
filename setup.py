@@ -12,12 +12,11 @@ with open("requirements.txt") as f:
             req_str = f"{req_name} @ {req_url}"
         else:
             req_str = req
-        print(req_str)
         requires.append(req_str)
 
 setuptools.setup(
     name="ondewo-csi-client",
-    version="0.1.0",
+    version="0.2.0",
     author="ONDEWO GbmH",
     author_email="info@ondewo.com",
     description="exposes the ondewo-csi-grpc-server endpoints in a user-friendly way",

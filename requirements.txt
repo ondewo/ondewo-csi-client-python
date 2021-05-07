@@ -2,11 +2,12 @@ grpcio==1.31.0
 grpcio-reflection==1.31.0
 grpcio-tools==1.31.0
 mypy-protobuf==1.20
-git+https://github.com/ondewo/ondewo-nlu-client-python.git@4fef3df0c4d8f9b7f23cac0430081f9f80167d75#egg=ondewo-nlu-client-python
-git+https://github.com/ondewo/ondewo-s2t-client-python.git@7c2a620fcfffb2dce31af32128db167be6fca1d7#egg=ondewo-s2t-client
-git+https://github.com/ondewo/ondewo-t2s-client-python.git@b05cd636e33deb9f5b49a12f5add015b11fe20c0#egg=ondewo-t2s-client
+git+https://github.com/ondewo/ondewo-nlu-client-python.git@3331e5dddbcf0b9c31210b9de4563d7f35e5c265#egg=ondewo-nlu-client
+git+https://github.com/ondewo/ondewo-s2t-client-python.git@a81e43bde16ee4e143176836959cfa8b5dd0f47d#egg=ondewo-s2t-client
+git+https://github.com/ondewo/ondewo-t2s-client-python.git@abd1b00183dce0b860db37ac43cc5003c50bfb52#egg=ondewo-t2s-client
 
 setuptools~=52.0.0
+ondewo-logging>=2.0.2
 
 # These requirements are only needed for the examples, please install them manually
 # pyaudio~=0.2.11
