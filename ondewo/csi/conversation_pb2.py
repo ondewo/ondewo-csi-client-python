@@ -12,6 +12,7 @@ _sym_db = _symbol_database.Default()
 
 
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
+from google.rpc import status_pb2 as google_dot_rpc_dot_status__pb2
 from ondewo.nlu import session_pb2 as ondewo_dot_nlu_dot_session__pb2
 from ondewo.t2s import text_to_speech_pb2 as ondewo_dot_t2s_dot_text__to__speech__pb2
 
@@ -22,9 +23,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1dondewo/csi/conversation.proto\x12\nondewo.csi\x1a\x1bgoogle/protobuf/empty.proto\x1a\x18ondewo/nlu/session.proto\x1a\x1fondewo/t2s/text-to-speech.proto\"~\n\x0bS2sPipeline\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0fs2t_pipeline_id\x18\x02 \x01(\t\x12\x16\n\x0enlu_project_id\x18\x03 \x01(\t\x12\x19\n\x11nlu_language_code\x18\x04 \x01(\t\x12\x17\n\x0ft2s_pipeline_id\x18\x05 \x01(\t\"\x1b\n\rS2sPipelineId\x12\n\n\x02id\x18\x01 \x01(\t\"\x19\n\x17ListS2sPipelinesRequest\"F\n\x18ListS2sPipelinesResponse\x12*\n\tpipelines\x18\x01 \x03(\x0b\x32\x17.ondewo.csi.S2sPipeline\"a\n\x10S2sStreamRequest\x12\x13\n\x0bpipeline_id\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05\x61udio\x18\x03 \x01(\x0c\x12\x15\n\rend_of_stream\x18\x04 \x01(\x08\"\xa2\x01\n\x11S2sStreamResponse\x12\x42\n\x16\x64\x65tect_intent_response\x18\x01 \x01(\x0b\x32 .ondewo.nlu.DetectIntentResponseH\x00\x12=\n\x13synthetize_response\x18\x02 \x01(\x0b\x32\x1e.ondewo.t2s.SynthesizeResponseH\x00\x42\n\n\x08response2\xe2\x03\n\rConversations\x12\x46\n\x11\x43reateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12\x46\n\x0eGetS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x17.ondewo.csi.S2sPipeline\"\x00\x12\x46\n\x11UpdateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12H\n\x11\x44\x65leteS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x16.google.protobuf.Empty\"\x00\x12_\n\x10ListS2sPipelines\x12#.ondewo.csi.ListS2sPipelinesRequest\x1a$.ondewo.csi.ListS2sPipelinesResponse\"\x00\x12N\n\tS2sStream\x12\x1c.ondewo.csi.S2sStreamRequest\x1a\x1d.ondewo.csi.S2sStreamResponse\"\x00(\x01\x30\x01\x62\x06proto3'
+  serialized_pb=b'\n\x1dondewo/csi/conversation.proto\x12\nondewo.csi\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17google/rpc/status.proto\x1a\x18ondewo/nlu/session.proto\x1a\x1fondewo/t2s/text-to-speech.proto\"~\n\x0bS2sPipeline\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0fs2t_pipeline_id\x18\x02 \x01(\t\x12\x16\n\x0enlu_project_id\x18\x03 \x01(\t\x12\x19\n\x11nlu_language_code\x18\x04 \x01(\t\x12\x17\n\x0ft2s_pipeline_id\x18\x05 \x01(\t\"\x1b\n\rS2sPipelineId\x12\n\n\x02id\x18\x01 \x01(\t\"\x19\n\x17ListS2sPipelinesRequest\"F\n\x18ListS2sPipelinesResponse\x12*\n\tpipelines\x18\x01 \x03(\x0b\x32\x17.ondewo.csi.S2sPipeline\"a\n\x10S2sStreamRequest\x12\x13\n\x0bpipeline_id\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05\x61udio\x18\x03 \x01(\x0c\x12\x15\n\rend_of_stream\x18\x04 \x01(\x08\"\xa2\x01\n\x11S2sStreamResponse\x12\x42\n\x16\x64\x65tect_intent_response\x18\x01 \x01(\x0b\x32 .ondewo.nlu.DetectIntentResponseH\x00\x12=\n\x13synthetize_response\x18\x02 \x01(\x0b\x32\x1e.ondewo.t2s.SynthesizeResponseH\x00\x42\n\n\x08response\"\x14\n\x12\x43heckHealthRequest\"\x8d\x01\n\x13\x43heckHealthResponse\x12&\n\ns2t_status\x18\x01 \x01(\x0b\x32\x12.google.rpc.Status\x12&\n\nnlu_status\x18\x02 \x01(\x0b\x32\x12.google.rpc.Status\x12&\n\nt2s_status\x18\x03 \x01(\x0b\x32\x12.google.rpc.Status2\xb4\x04\n\rConversations\x12\x46\n\x11\x43reateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12\x46\n\x0eGetS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x17.ondewo.csi.S2sPipeline\"\x00\x12\x46\n\x11UpdateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12H\n\x11\x44\x65leteS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x16.google.protobuf.Empty\"\x00\x12_\n\x10ListS2sPipelines\x12#.ondewo.csi.ListS2sPipelinesRequest\x1a$.ondewo.csi.ListS2sPipelinesResponse\"\x00\x12N\n\tS2sStream\x12\x1c.ondewo.csi.S2sStreamRequest\x1a\x1d.ondewo.csi.S2sStreamResponse\"\x00(\x01\x30\x01\x12P\n\x0b\x43heckHealth\x12\x1e.ondewo.csi.CheckHealthRequest\x1a\x1f.ondewo.csi.CheckHealthResponse\"\x00\x62\x06proto3'
   ,
-  dependencies=[google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,ondewo_dot_nlu_dot_session__pb2.DESCRIPTOR,ondewo_dot_t2s_dot_text__to__speech__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,google_dot_rpc_dot_status__pb2.DESCRIPTOR,ondewo_dot_nlu_dot_session__pb2.DESCRIPTOR,ondewo_dot_t2s_dot_text__to__speech__pb2.DESCRIPTOR,])
 
 
 
@@ -84,8 +85,8 @@ _S2SPIPELINE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=133,
-  serialized_end=259,
+  serialized_start=158,
+  serialized_end=284,
 )
 
 
@@ -116,8 +117,8 @@ _S2SPIPELINEID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=261,
-  serialized_end=288,
+  serialized_start=286,
+  serialized_end=313,
 )
 
 
@@ -141,8 +142,8 @@ _LISTS2SPIPELINESREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=290,
-  serialized_end=315,
+  serialized_start=315,
+  serialized_end=340,
 )
 
 
@@ -173,8 +174,8 @@ _LISTS2SPIPELINESRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=317,
-  serialized_end=387,
+  serialized_start=342,
+  serialized_end=412,
 )
 
 
@@ -226,8 +227,8 @@ _S2SSTREAMREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=389,
-  serialized_end=486,
+  serialized_start=414,
+  serialized_end=511,
 )
 
 
@@ -270,8 +271,79 @@ _S2SSTREAMRESPONSE = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=489,
-  serialized_end=651,
+  serialized_start=514,
+  serialized_end=676,
+)
+
+
+_CHECKHEALTHREQUEST = _descriptor.Descriptor(
+  name='CheckHealthRequest',
+  full_name='ondewo.csi.CheckHealthRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=678,
+  serialized_end=698,
+)
+
+
+_CHECKHEALTHRESPONSE = _descriptor.Descriptor(
+  name='CheckHealthResponse',
+  full_name='ondewo.csi.CheckHealthResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='s2t_status', full_name='ondewo.csi.CheckHealthResponse.s2t_status', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='nlu_status', full_name='ondewo.csi.CheckHealthResponse.nlu_status', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='t2s_status', full_name='ondewo.csi.CheckHealthResponse.t2s_status', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=701,
+  serialized_end=842,
 )
 
 _LISTS2SPIPELINESRESPONSE.fields_by_name['pipelines'].message_type = _S2SPIPELINE
@@ -283,12 +355,17 @@ _S2SSTREAMRESPONSE.fields_by_name['detect_intent_response'].containing_oneof = _
 _S2SSTREAMRESPONSE.oneofs_by_name['response'].fields.append(
   _S2SSTREAMRESPONSE.fields_by_name['synthetize_response'])
 _S2SSTREAMRESPONSE.fields_by_name['synthetize_response'].containing_oneof = _S2SSTREAMRESPONSE.oneofs_by_name['response']
+_CHECKHEALTHRESPONSE.fields_by_name['s2t_status'].message_type = google_dot_rpc_dot_status__pb2._STATUS
+_CHECKHEALTHRESPONSE.fields_by_name['nlu_status'].message_type = google_dot_rpc_dot_status__pb2._STATUS
+_CHECKHEALTHRESPONSE.fields_by_name['t2s_status'].message_type = google_dot_rpc_dot_status__pb2._STATUS
 DESCRIPTOR.message_types_by_name['S2sPipeline'] = _S2SPIPELINE
 DESCRIPTOR.message_types_by_name['S2sPipelineId'] = _S2SPIPELINEID
 DESCRIPTOR.message_types_by_name['ListS2sPipelinesRequest'] = _LISTS2SPIPELINESREQUEST
 DESCRIPTOR.message_types_by_name['ListS2sPipelinesResponse'] = _LISTS2SPIPELINESRESPONSE
 DESCRIPTOR.message_types_by_name['S2sStreamRequest'] = _S2SSTREAMREQUEST
 DESCRIPTOR.message_types_by_name['S2sStreamResponse'] = _S2SSTREAMRESPONSE
+DESCRIPTOR.message_types_by_name['CheckHealthRequest'] = _CHECKHEALTHREQUEST
+DESCRIPTOR.message_types_by_name['CheckHealthResponse'] = _CHECKHEALTHRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 S2sPipeline = _reflection.GeneratedProtocolMessageType('S2sPipeline', (_message.Message,), {
@@ -333,6 +410,20 @@ S2sStreamResponse = _reflection.GeneratedProtocolMessageType('S2sStreamResponse'
   })
 _sym_db.RegisterMessage(S2sStreamResponse)
 
+CheckHealthRequest = _reflection.GeneratedProtocolMessageType('CheckHealthRequest', (_message.Message,), {
+  'DESCRIPTOR' : _CHECKHEALTHREQUEST,
+  '__module__' : 'ondewo.csi.conversation_pb2'
+  # @@protoc_insertion_point(class_scope:ondewo.csi.CheckHealthRequest)
+  })
+_sym_db.RegisterMessage(CheckHealthRequest)
+
+CheckHealthResponse = _reflection.GeneratedProtocolMessageType('CheckHealthResponse', (_message.Message,), {
+  'DESCRIPTOR' : _CHECKHEALTHRESPONSE,
+  '__module__' : 'ondewo.csi.conversation_pb2'
+  # @@protoc_insertion_point(class_scope:ondewo.csi.CheckHealthResponse)
+  })
+_sym_db.RegisterMessage(CheckHealthResponse)
+
 
 
 _CONVERSATIONS = _descriptor.ServiceDescriptor(
@@ -342,8 +433,8 @@ _CONVERSATIONS = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=654,
-  serialized_end=1136,
+  serialized_start=845,
+  serialized_end=1409,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateS2sPipeline',
@@ -402,6 +493,16 @@ _CONVERSATIONS = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_S2SSTREAMREQUEST,
     output_type=_S2SSTREAMRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='CheckHealth',
+    full_name='ondewo.csi.Conversations.CheckHealth',
+    index=6,
+    containing_service=None,
+    input_type=_CHECKHEALTHREQUEST,
+    output_type=_CHECKHEALTHRESPONSE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

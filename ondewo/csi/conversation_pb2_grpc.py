@@ -46,6 +46,11 @@ class ConversationsStub(object):
                 request_serializer=ondewo_dot_csi_dot_conversation__pb2.S2sStreamRequest.SerializeToString,
                 response_deserializer=ondewo_dot_csi_dot_conversation__pb2.S2sStreamResponse.FromString,
                 )
+        self.CheckHealth = channel.unary_unary(
+                '/ondewo.csi.Conversations/CheckHealth',
+                request_serializer=ondewo_dot_csi_dot_conversation__pb2.CheckHealthRequest.SerializeToString,
+                response_deserializer=ondewo_dot_csi_dot_conversation__pb2.CheckHealthResponse.FromString,
+                )
 
 
 class ConversationsServicer(object):
@@ -95,6 +100,13 @@ class ConversationsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def CheckHealth(self, request, context):
+        """Check the health of S2T, NLU and T2S servers
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ConversationsServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -127,6 +139,11 @@ def add_ConversationsServicer_to_server(servicer, server):
                     servicer.S2sStream,
                     request_deserializer=ondewo_dot_csi_dot_conversation__pb2.S2sStreamRequest.FromString,
                     response_serializer=ondewo_dot_csi_dot_conversation__pb2.S2sStreamResponse.SerializeToString,
+            ),
+            'CheckHealth': grpc.unary_unary_rpc_method_handler(
+                    servicer.CheckHealth,
+                    request_deserializer=ondewo_dot_csi_dot_conversation__pb2.CheckHealthRequest.FromString,
+                    response_serializer=ondewo_dot_csi_dot_conversation__pb2.CheckHealthResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -238,5 +255,22 @@ class Conversations(object):
         return grpc.experimental.stream_stream(request_iterator, target, '/ondewo.csi.Conversations/S2sStream',
             ondewo_dot_csi_dot_conversation__pb2.S2sStreamRequest.SerializeToString,
             ondewo_dot_csi_dot_conversation__pb2.S2sStreamResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CheckHealth(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ondewo.csi.Conversations/CheckHealth',
+            ondewo_dot_csi_dot_conversation__pb2.CheckHealthRequest.SerializeToString,
+            ondewo_dot_csi_dot_conversation__pb2.CheckHealthResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
