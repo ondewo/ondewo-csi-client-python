@@ -17,7 +17,6 @@
 
 import argparse
 from typing import List
-from uuid import uuid4
 
 from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
@@ -51,42 +50,34 @@ def main():
     # get the S2S pipeline
     print(conversations_service.get_s2s_pipeline(S2sPipelineId(id=pipelines[0].id)))
 
-    # create an S2S pipeline
-    pipeline_id: str = str(uuid4())
-    pipeline: S2sPipeline = S2sPipeline(
-        id=pipeline_id,
-        s2t_pipeline_id="german_general",
-        nlu_project_id="example_project",
-        nlu_language_code="de",
-        t2s_pipeline_id="kerstin",
-    )
-    conversations_service.create_s2s_pipeline(pipeline)
-
-    # list S2S pipelines again
-    print(conversations_service.list_s2s_pipelines(list_request))
-
-    # update the created S2S pipeline
-    pipeline.s2t_pipeline_id = "my_custom_german_s2t"
-    conversations_service.update_s2s_pipeline(pipeline)
-
-    # get the u[dated S2S pipeline
-    id_request: S2sPipelineId = S2sPipelineId(id=pipeline_id)
-    print(conversations_service.get_s2s_pipeline(id_request))
-
-    # delete the created S2S pipeline
-    print(conversations_service.delete_s2s_pipeline(id_request))
-
-    # list S2S pipelines again
-    print(conversations_service.list_s2s_pipelines(list_request))
-
+    # the code below does not work since "example_project" does not exist in the NLU server
+    # # create an S2S pipeline
+    # pipeline_id: str = str(uuid4())
     # pipeline: S2sPipeline = S2sPipeline(
-    #     id='elo_webchat',
-    #     s2t_pipeline_id='german_general',
-    #     nlu_project_id='7b9273eb-e0bb-4e97-8575-7b053bc80616',
-    #     nlu_language_code='de',
-    #     t2s_pipeline_id='kerstin',
+    #     id=pipeline_id,
+    #     s2t_pipeline_id="german_general",
+    #     nlu_project_id="example_project",
+    #     nlu_language_code="de",
+    #     t2s_pipeline_id="kerstin",
     # )
     # conversations_service.create_s2s_pipeline(pipeline)
+    #
+    # # list S2S pipelines again
+    # print(conversations_service.list_s2s_pipelines(list_request))
+    #
+    # # update the created S2S pipeline
+    # pipeline.s2t_pipeline_id = "my_custom_german_s2t"
+    # conversations_service.update_s2s_pipeline(pipeline)
+    #
+    # # get the u[dated S2S pipeline
+    # id_request: S2sPipelineId = S2sPipelineId(id=pipeline_id)
+    # print(conversations_service.get_s2s_pipeline(id_request))
+    #
+    # # delete the created S2S pipeline
+    # print(conversations_service.delete_s2s_pipeline(id_request))
+    #
+    # # list S2S pipelines again
+    # print(conversations_service.list_s2s_pipelines(list_request))
 
 
 if __name__ == "__main__":
