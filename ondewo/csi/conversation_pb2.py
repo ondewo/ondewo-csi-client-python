@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1dondewo/csi/conversation.proto\x12\nondewo.csi\x1a\x1bgoogle/protobuf/empty.proto\x1a\x18ondewo/nlu/session.proto\x1a\x1fondewo/t2s/text-to-speech.proto\"~\n\x0bS2sPipeline\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0fs2t_pipeline_id\x18\x02 \x01(\t\x12\x16\n\x0enlu_project_id\x18\x03 \x01(\t\x12\x19\n\x11nlu_language_code\x18\x04 \x01(\t\x12\x17\n\x0ft2s_pipeline_id\x18\x05 \x01(\t\"\x1b\n\rS2sPipelineId\x12\n\n\x02id\x18\x01 \x01(\t\"\x19\n\x17ListS2sPipelinesRequest\"F\n\x18ListS2sPipelinesResponse\x12*\n\tpipelines\x18\x01 \x03(\x0b\x32\x17.ondewo.csi.S2sPipeline\"a\n\x10S2sStreamRequest\x12\x13\n\x0bpipeline_id\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05\x61udio\x18\x03 \x01(\x0c\x12\x15\n\rend_of_stream\x18\x04 \x01(\x08\"\xa2\x01\n\x11S2sStreamResponse\x12\x42\n\x16\x64\x65tect_intent_response\x18\x01 \x01(\x0b\x32 .ondewo.nlu.DetectIntentResponseH\x00\x12=\n\x13synthetize_response\x18\x02 \x01(\x0b\x32\x1e.ondewo.t2s.SynthesizeResponseH\x00\x42\n\n\x08response\"T\n\x14TriggerIntentRequest\x12\x13\n\x0bpipeline_id\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\x13\n\x0bintent_name\x18\x03 \x01(\t2\xb9\x04\n\rConversations\x12\x46\n\x11\x43reateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12\x46\n\x0eGetS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x17.ondewo.csi.S2sPipeline\"\x00\x12\x46\n\x11UpdateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12H\n\x11\x44\x65leteS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x16.google.protobuf.Empty\"\x00\x12_\n\x10ListS2sPipelines\x12#.ondewo.csi.ListS2sPipelinesRequest\x1a$.ondewo.csi.ListS2sPipelinesResponse\"\x00\x12N\n\tS2sStream\x12\x1c.ondewo.csi.S2sStreamRequest\x1a\x1d.ondewo.csi.S2sStreamResponse\"\x00(\x01\x30\x01\x12U\n\rTriggerIntent\x12 .ondewo.csi.TriggerIntentRequest\x1a .ondewo.nlu.DetectIntentResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x1dondewo/csi/conversation.proto\x12\nondewo.csi\x1a\x1bgoogle/protobuf/empty.proto\x1a\x18ondewo/nlu/session.proto\x1a\x1fondewo/t2s/text-to-speech.proto\"~\n\x0bS2sPipeline\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0fs2t_pipeline_id\x18\x02 \x01(\t\x12\x16\n\x0enlu_project_id\x18\x03 \x01(\t\x12\x19\n\x11nlu_language_code\x18\x04 \x01(\t\x12\x17\n\x0ft2s_pipeline_id\x18\x05 \x01(\t\"\x1b\n\rS2sPipelineId\x12\n\n\x02id\x18\x01 \x01(\t\"\x19\n\x17ListS2sPipelinesRequest\"F\n\x18ListS2sPipelinesResponse\x12*\n\tpipelines\x18\x01 \x03(\x0b\x32\x17.ondewo.csi.S2sPipeline\"\x86\x01\n\x10S2sStreamRequest\x12\x13\n\x0bpipeline_id\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05\x61udio\x18\x03 \x01(\x0c\x12\x15\n\rend_of_stream\x18\x04 \x01(\x08\x12#\n\x1binitial_intent_display_name\x18\x05 \x01(\t\"\xa2\x01\n\x11S2sStreamResponse\x12\x42\n\x16\x64\x65tect_intent_response\x18\x01 \x01(\x0b\x32 .ondewo.nlu.DetectIntentResponseH\x00\x12=\n\x13synthetize_response\x18\x02 \x01(\x0b\x32\x1e.ondewo.t2s.SynthesizeResponseH\x00\x42\n\n\x08response2\xe2\x03\n\rConversations\x12\x46\n\x11\x43reateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12\x46\n\x0eGetS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x17.ondewo.csi.S2sPipeline\"\x00\x12\x46\n\x11UpdateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12H\n\x11\x44\x65leteS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x16.google.protobuf.Empty\"\x00\x12_\n\x10ListS2sPipelines\x12#.ondewo.csi.ListS2sPipelinesRequest\x1a$.ondewo.csi.ListS2sPipelinesResponse\"\x00\x12N\n\tS2sStream\x12\x1c.ondewo.csi.S2sStreamRequest\x1a\x1d.ondewo.csi.S2sStreamResponse\"\x00(\x01\x30\x01\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,ondewo_dot_nlu_dot_session__pb2.DESCRIPTOR,ondewo_dot_t2s_dot_text__to__speech__pb2.DESCRIPTOR,])
 
@@ -214,6 +214,13 @@ _S2SSTREAMREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='initial_intent_display_name', full_name='ondewo.csi.S2sStreamRequest.initial_intent_display_name', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -226,8 +233,8 @@ _S2SSTREAMREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=389,
-  serialized_end=486,
+  serialized_start=390,
+  serialized_end=524,
 )
 
 
@@ -270,54 +277,8 @@ _S2SSTREAMRESPONSE = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=489,
-  serialized_end=651,
-)
-
-
-_TRIGGERINTENTREQUEST = _descriptor.Descriptor(
-  name='TriggerIntentRequest',
-  full_name='ondewo.csi.TriggerIntentRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='pipeline_id', full_name='ondewo.csi.TriggerIntentRequest.pipeline_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='session_id', full_name='ondewo.csi.TriggerIntentRequest.session_id', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='intent_name', full_name='ondewo.csi.TriggerIntentRequest.intent_name', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=653,
-  serialized_end=737,
+  serialized_start=527,
+  serialized_end=689,
 )
 
 _LISTS2SPIPELINESRESPONSE.fields_by_name['pipelines'].message_type = _S2SPIPELINE
@@ -335,7 +296,6 @@ DESCRIPTOR.message_types_by_name['ListS2sPipelinesRequest'] = _LISTS2SPIPELINESR
 DESCRIPTOR.message_types_by_name['ListS2sPipelinesResponse'] = _LISTS2SPIPELINESRESPONSE
 DESCRIPTOR.message_types_by_name['S2sStreamRequest'] = _S2SSTREAMREQUEST
 DESCRIPTOR.message_types_by_name['S2sStreamResponse'] = _S2SSTREAMRESPONSE
-DESCRIPTOR.message_types_by_name['TriggerIntentRequest'] = _TRIGGERINTENTREQUEST
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 S2sPipeline = _reflection.GeneratedProtocolMessageType('S2sPipeline', (_message.Message,), {
@@ -380,13 +340,6 @@ S2sStreamResponse = _reflection.GeneratedProtocolMessageType('S2sStreamResponse'
   })
 _sym_db.RegisterMessage(S2sStreamResponse)
 
-TriggerIntentRequest = _reflection.GeneratedProtocolMessageType('TriggerIntentRequest', (_message.Message,), {
-  'DESCRIPTOR' : _TRIGGERINTENTREQUEST,
-  '__module__' : 'ondewo.csi.conversation_pb2'
-  # @@protoc_insertion_point(class_scope:ondewo.csi.TriggerIntentRequest)
-  })
-_sym_db.RegisterMessage(TriggerIntentRequest)
-
 
 
 _CONVERSATIONS = _descriptor.ServiceDescriptor(
@@ -396,8 +349,8 @@ _CONVERSATIONS = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=740,
-  serialized_end=1309,
+  serialized_start=692,
+  serialized_end=1174,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateS2sPipeline',
@@ -456,16 +409,6 @@ _CONVERSATIONS = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_S2SSTREAMREQUEST,
     output_type=_S2SSTREAMRESPONSE,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='TriggerIntent',
-    full_name='ondewo.csi.Conversations.TriggerIntent',
-    index=6,
-    containing_service=None,
-    input_type=_TRIGGERINTENTREQUEST,
-    output_type=ondewo_dot_nlu_dot_session__pb2._DETECTINTENTRESPONSE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

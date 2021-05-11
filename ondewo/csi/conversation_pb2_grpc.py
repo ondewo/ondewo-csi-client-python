@@ -4,7 +4,6 @@ import grpc
 
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 from ondewo.csi import conversation_pb2 as ondewo_dot_csi_dot_conversation__pb2
-from ondewo.nlu import session_pb2 as ondewo_dot_nlu_dot_session__pb2
 
 
 class ConversationsStub(object):
@@ -46,11 +45,6 @@ class ConversationsStub(object):
                 '/ondewo.csi.Conversations/S2sStream',
                 request_serializer=ondewo_dot_csi_dot_conversation__pb2.S2sStreamRequest.SerializeToString,
                 response_deserializer=ondewo_dot_csi_dot_conversation__pb2.S2sStreamResponse.FromString,
-                )
-        self.TriggerIntent = channel.unary_unary(
-                '/ondewo.csi.Conversations/TriggerIntent',
-                request_serializer=ondewo_dot_csi_dot_conversation__pb2.TriggerIntentRequest.SerializeToString,
-                response_deserializer=ondewo_dot_nlu_dot_session__pb2.DetectIntentResponse.FromString,
                 )
 
 
@@ -101,13 +95,6 @@ class ConversationsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def TriggerIntent(self, request, context):
-        """Trigger a specific intent in NLU
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
 
 def add_ConversationsServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -140,11 +127,6 @@ def add_ConversationsServicer_to_server(servicer, server):
                     servicer.S2sStream,
                     request_deserializer=ondewo_dot_csi_dot_conversation__pb2.S2sStreamRequest.FromString,
                     response_serializer=ondewo_dot_csi_dot_conversation__pb2.S2sStreamResponse.SerializeToString,
-            ),
-            'TriggerIntent': grpc.unary_unary_rpc_method_handler(
-                    servicer.TriggerIntent,
-                    request_deserializer=ondewo_dot_csi_dot_conversation__pb2.TriggerIntentRequest.FromString,
-                    response_serializer=ondewo_dot_nlu_dot_session__pb2.DetectIntentResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -256,22 +238,5 @@ class Conversations(object):
         return grpc.experimental.stream_stream(request_iterator, target, '/ondewo.csi.Conversations/S2sStream',
             ondewo_dot_csi_dot_conversation__pb2.S2sStreamRequest.SerializeToString,
             ondewo_dot_csi_dot_conversation__pb2.S2sStreamResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def TriggerIntent(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ondewo.csi.Conversations/TriggerIntent',
-            ondewo_dot_csi_dot_conversation__pb2.TriggerIntentRequest.SerializeToString,
-            ondewo_dot_nlu_dot_session__pb2.DetectIntentResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
