@@ -142,6 +142,7 @@ class S2sStreamRequest(google___protobuf___message___Message):
     session_id = ... # type: typing___Text
     audio = ... # type: builtin___bytes
     end_of_stream = ... # type: builtin___bool
+    initial_intent_display_name = ... # type: typing___Text
 
     def __init__(self,
         *,
@@ -149,6 +150,7 @@ class S2sStreamRequest(google___protobuf___message___Message):
         session_id : typing___Optional[typing___Text] = None,
         audio : typing___Optional[builtin___bytes] = None,
         end_of_stream : typing___Optional[builtin___bool] = None,
+        initial_intent_display_name : typing___Optional[typing___Text] = None,
         ) -> None: ...
     if sys.version_info >= (3,):
         @classmethod
@@ -158,7 +160,7 @@ class S2sStreamRequest(google___protobuf___message___Message):
         def FromString(cls, s: typing___Union[builtin___bytes, builtin___buffer, builtin___unicode]) -> S2sStreamRequest: ...
     def MergeFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
     def CopyFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
-    def ClearField(self, field_name: typing_extensions___Literal[u"audio",b"audio",u"end_of_stream",b"end_of_stream",u"pipeline_id",b"pipeline_id",u"session_id",b"session_id"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions___Literal[u"audio",b"audio",u"end_of_stream",b"end_of_stream",u"initial_intent_display_name",b"initial_intent_display_name",u"pipeline_id",b"pipeline_id",u"session_id",b"session_id"]) -> None: ...
 global___S2sStreamRequest = S2sStreamRequest
 
 class S2sStreamResponse(google___protobuf___message___Message):
