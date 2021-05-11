@@ -84,9 +84,14 @@ class PyAudioStreamerIn:
         pipeline_id: str,
         session_id: Optional[str] = None,
         save_to_disk: bool = False,
+        initial_intent_display_name: Optional[str] = None,
     ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
-        yield S2sStreamRequest(pipeline_id=pipeline_id, session_id=session_id or str(uuid.uuid4()))
+        yield S2sStreamRequest(
+            pipeline_id=pipeline_id,
+            session_id=session_id or str(uuid.uuid4()),
+            initial_intent_display_name=initial_intent_display_name,
+        )
 
         count = 0
         data_save = bytes()
@@ -210,9 +215,14 @@ class PySoundIoStreamerIn:
         pipeline_id: str,
         session_id: Optional[str] = None,
         save_to_disk: bool = False,
+        initial_intent_display_name: Optional[str] = None,
     ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
-        yield S2sStreamRequest(pipeline_id=pipeline_id, session_id=session_id or str(uuid.uuid4()))
+        yield S2sStreamRequest(
+            pipeline_id=pipeline_id,
+            session_id=session_id or str(uuid.uuid4()),
+            initial_intent_display_name=initial_intent_display_name,
+        )
 
         if save_to_disk:
             f = open(f"record_{session_id}.raw", "wb")

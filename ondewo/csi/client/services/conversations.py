@@ -18,7 +18,6 @@
 from typing import Iterator
 
 from google.protobuf.empty_pb2 import Empty
-from ondewo.nlu.session_pb2 import DetectIntentResponse
 from ondewo.utils.base_services_interface import BaseServicesInterface
 
 from ondewo.csi.conversation_pb2 import (
@@ -28,7 +27,6 @@ from ondewo.csi.conversation_pb2 import (
     S2sPipelineId,
     S2sStreamRequest,
     S2sStreamResponse,
-    TriggerIntentRequest,
 )
 from ondewo.csi.conversation_pb2_grpc import ConversationsStub
 
@@ -68,7 +66,3 @@ class Conversations(BaseServicesInterface):
     def s2s_stream(self, request_iterator: Iterator[S2sStreamRequest]) -> Iterator[S2sStreamResponse]:
         response_iterator: Iterator[S2sStreamResponse] = self.stub.S2sStream(request_iterator)
         return response_iterator
-
-    def trigger_intent(self, request: TriggerIntentRequest) -> DetectIntentResponse:
-        response: DetectIntentResponse = self.stub.TriggerIntent(request)
-        return response
