@@ -118,7 +118,7 @@ class PyAudioStreamerIn:
 
     def create_pyaudio_streaming_request(self, pipeline_id: str) -> Iterator[TranscribeStreamRequest]:
         while True:
-            chunk: bytes = self.stream.read(CHUNK)  # type: ignore
+            chunk: bytes = self.stream.read(CHUNK)
             logging.info(f"Sending {len(chunk)} bytes")
             yield TranscribeStreamRequest(
                 audio_chunk=chunk,
