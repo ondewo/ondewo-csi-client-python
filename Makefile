@@ -3,6 +3,18 @@ install:
 	pip install .
 	pip install -r requirements.txt
 
+install_pyaudio:
+	sudo apt install -y libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0
+	sudo apt install -y ffmpeg libav-tools
+	pip install pyaudio
+
+install_pysoundio:
+	sudo apt install -y libsoundio-dev
+	pip install pysoundio
+
+
+
+
 # GENERATE PYTHON FILES FROM PROTOS
 ONDEWO_CSI_API_DIR=ondewo-csi-api
 ONDEWO_NLU_API_DIR=ondewo-nlu-api
