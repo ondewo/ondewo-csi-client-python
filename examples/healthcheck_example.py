@@ -18,6 +18,7 @@
 import argparse
 
 from google.protobuf.empty_pb2 import Empty
+
 from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
 from ondewo.csi.client.services.conversations import Conversations
