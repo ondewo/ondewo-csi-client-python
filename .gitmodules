@@ -17,8 +17,3 @@
 	path = ondewo-t2s-api
 	url = https://github.com/ondewo/ondewo-t2s-api.git
     branch = .
-
-[submodule "ondewo-sip-api"]
-	path = ondewo-sip-api
-	url = https://github.com/ondewo/ondewo-sip-api.git
-    branch = .
