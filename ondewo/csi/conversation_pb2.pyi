@@ -17,6 +17,10 @@ from google.protobuf.struct_pb2 import (
     Struct as google___protobuf___struct_pb2___Struct,
 )
 
+from google.rpc.status_pb2 import (
+    Status as google___rpc___status_pb2___Status,
+)
+
 from ondewo.nlu.session_pb2 import (
     DetectIntentResponse as ondewo___nlu___session_pb2___DetectIntentResponse,
 )
@@ -138,6 +142,7 @@ class S2sStreamRequest(google___protobuf___message___Message):
     session_id = ... # type: typing___Text
     audio = ... # type: builtin___bytes
     end_of_stream = ... # type: builtin___bool
+    initial_intent_display_name = ... # type: typing___Text
 
     def __init__(self,
         *,
@@ -145,6 +150,7 @@ class S2sStreamRequest(google___protobuf___message___Message):
         session_id : typing___Optional[typing___Text] = None,
         audio : typing___Optional[builtin___bytes] = None,
         end_of_stream : typing___Optional[builtin___bool] = None,
+        initial_intent_display_name : typing___Optional[typing___Text] = None,
         ) -> None: ...
     if sys.version_info >= (3,):
         @classmethod
@@ -154,7 +160,7 @@ class S2sStreamRequest(google___protobuf___message___Message):
         def FromString(cls, s: typing___Union[builtin___bytes, builtin___buffer, builtin___unicode]) -> S2sStreamRequest: ...
     def MergeFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
     def CopyFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
-    def ClearField(self, field_name: typing_extensions___Literal[u"audio",b"audio",u"end_of_stream",b"end_of_stream",u"pipeline_id",b"pipeline_id",u"session_id",b"session_id"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions___Literal[u"audio",b"audio",u"end_of_stream",b"end_of_stream",u"initial_intent_display_name",b"initial_intent_display_name",u"pipeline_id",b"pipeline_id",u"session_id",b"session_id"]) -> None: ...
 global___S2sStreamRequest = S2sStreamRequest
 
 class S2sStreamResponse(google___protobuf___message___Message):
@@ -235,3 +241,33 @@ class SipTrigger(google___protobuf___message___Message):
     def HasField(self, field_name: typing_extensions___Literal[u"content",b"content"]) -> builtin___bool: ...
     def ClearField(self, field_name: typing_extensions___Literal[u"content",b"content",u"type",b"type"]) -> None: ...
 global___SipTrigger = SipTrigger
+
+class CheckUpstreamHealthResponse(google___protobuf___message___Message):
+    DESCRIPTOR: google___protobuf___descriptor___Descriptor = ...
+
+    @property
+    def s2t_status(self) -> google___rpc___status_pb2___Status: ...
+
+    @property
+    def nlu_status(self) -> google___rpc___status_pb2___Status: ...
+
+    @property
+    def t2s_status(self) -> google___rpc___status_pb2___Status: ...
+
+    def __init__(self,
+        *,
+        s2t_status : typing___Optional[google___rpc___status_pb2___Status] = None,
+        nlu_status : typing___Optional[google___rpc___status_pb2___Status] = None,
+        t2s_status : typing___Optional[google___rpc___status_pb2___Status] = None,
+        ) -> None: ...
+    if sys.version_info >= (3,):
+        @classmethod
+        def FromString(cls, s: builtin___bytes) -> CheckUpstreamHealthResponse: ...
+    else:
+        @classmethod
+        def FromString(cls, s: typing___Union[builtin___bytes, builtin___buffer, builtin___unicode]) -> CheckUpstreamHealthResponse: ...
+    def MergeFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
+    def CopyFrom(self, other_msg: google___protobuf___message___Message) -> None: ...
+    def HasField(self, field_name: typing_extensions___Literal[u"nlu_status",b"nlu_status",u"s2t_status",b"s2t_status",u"t2s_status",b"t2s_status"]) -> builtin___bool: ...
+    def ClearField(self, field_name: typing_extensions___Literal[u"nlu_status",b"nlu_status",u"s2t_status",b"s2t_status",u"t2s_status",b"t2s_status"]) -> None: ...
+global___CheckUpstreamHealthResponse = CheckUpstreamHealthResponse

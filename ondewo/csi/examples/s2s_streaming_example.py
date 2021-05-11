@@ -16,8 +16,9 @@
 
 import argparse
 import time
+import uuid
 import wave
-from typing import Iterator
+from typing import Iterator, Optional
 from uuid import uuid4
 
 from ondewo.nlu.session_pb2 import QueryResult
@@ -43,9 +44,16 @@ def get_streaming_audio(audio_path: str) -> Iterator[bytes]:
 
 def create_streaming_request(
     audio_stream: Iterator[bytes],
+    pipeline_id: str = "pizza",
+    session_id: Optional[str] = None,
+    initial_intent_display_name: Optional[str] = None,
 ) -> Iterator[S2sStreamRequest]:
     # create an initial request with session id specified
-    yield S2sStreamRequest(pipeline_id="pizza", session_id=str(uuid4()))
+    yield S2sStreamRequest(
+        pipeline_id=pipeline_id,
+        session_id=session_id or str(uuid4()),
+        initial_intent_display_name=initial_intent_display_name,
+    )
     for i, chunk in enumerate(audio_stream):
         yield S2sStreamRequest(audio=chunk)
         time.sleep(0.3)
@@ -56,6 +64,9 @@ def main():
     parser = argparse.ArgumentParser(description="Streaming example.")
     parser.add_argument("--config", type=str)
     parser.add_argument("--secure", default=False, action="store_true")
+    parser.add_argument("--pipeline-id", default="pizza")
+    parser.add_argument("--session-id", default=str(uuid.uuid4()))
+    parser.add_argument("--intent-name")
     args = parser.parse_args()
 
     with open(args.config) as f:
@@ -68,7 +79,12 @@ def main():
     audio_stream: Iterator[bytes] = get_streaming_audio(AUDIO_FILE)
 
     # Create streaming request
-    streaming_request: Iterator[S2sStreamRequest] = create_streaming_request(audio_stream)
+    streaming_request: Iterator[S2sStreamRequest] = create_streaming_request(
+        audio_stream=audio_stream,
+        pipeline_id=args.pipeline_id,
+        session_id=args.session_id,
+        initial_intent_display_name=args.intent_name,
+    )
 
     # get back responses
     i = 0

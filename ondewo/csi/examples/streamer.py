@@ -84,9 +84,14 @@ class PyAudioStreamerIn:
         pipeline_id: str,
         session_id: Optional[str] = None,
         save_to_disk: bool = False,
+        initial_intent_display_name: Optional[str] = None,
     ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
-        yield S2sStreamRequest(pipeline_id=pipeline_id, session_id=session_id or str(uuid.uuid4()))
+        yield S2sStreamRequest(
+            pipeline_id=pipeline_id,
+            session_id=session_id or str(uuid.uuid4()),
+            initial_intent_display_name=initial_intent_display_name,
+        )
 
         count = 0
         data_save = bytes()
@@ -131,7 +136,7 @@ class PyAudioStreamerIn:
 
 
 class PySoundIoStreamerOut:
-    def __init__(self) -> None:
+    def __init__(self, device_id: Optional[int] = None) -> None:
         import pysoundio
 
         self.responses: queue.Queue = queue.Queue()
@@ -141,7 +146,7 @@ class PySoundIoStreamerOut:
         self.CHUNK: int = CHUNK
         self.pysoundio_object: pysoundio.PySoundIo = pysoundio.PySoundIo(backend=None)
         self.pysoundio_object.start_output_stream(
-            device_id=1,
+            device_id=device_id,
             channels=MONO,
             sample_rate=22000,
             block_size=CHUNK,
@@ -178,7 +183,7 @@ class PySoundIoStreamerOut:
 
 
 class PySoundIoStreamerIn:
-    def __init__(self) -> None:
+    def __init__(self, device_id: Optional[int] = None) -> None:
         import pysoundio
 
         logging.debug("Initializing PySoundIo streamer")
@@ -189,7 +194,7 @@ class PySoundIoStreamerIn:
         # start recording
         self.pysoundio_object: pysoundio.PySoundIo = pysoundio.PySoundIo(backend=None)
         self.pysoundio_object.start_input_stream(
-            device_id=0,
+            device_id=device_id,
             channels=MONO,
             sample_rate=RATE,
             block_size=CHUNK,
@@ -213,9 +218,14 @@ class PySoundIoStreamerIn:
         pipeline_id: str,
         session_id: Optional[str] = None,
         save_to_disk: bool = False,
+        initial_intent_display_name: Optional[str] = None,
     ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
-        yield S2sStreamRequest(pipeline_id=pipeline_id, session_id=session_id or str(uuid.uuid4()))
+        yield S2sStreamRequest(
+            pipeline_id=pipeline_id,
+            session_id=session_id or str(uuid.uuid4()),
+            initial_intent_display_name=initial_intent_display_name,
+        )
 
         if save_to_disk:
             f = open(f"record_{session_id}.raw", "wb")

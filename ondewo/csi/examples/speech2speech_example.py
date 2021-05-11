@@ -18,7 +18,7 @@
 import argparse
 import time
 import uuid
-from typing import Iterator
+from typing import Iterator, Optional
 
 from ondewo.logging.logger import logger_console
 from ondewo.nlu.session_pb2 import QueryResult
@@ -36,7 +36,13 @@ from ondewo.csi.examples.streamer import (
 )
 
 
-def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer_name: str) -> None:
+def main(
+    pipeline_id: str,
+    session_id: str,
+    save_to_disk: bool,
+    streamer_name: str,
+    initial_intent_display_name: Optional[str] = None,
+) -> None:
     session_id = session_id if session_id else str(uuid.uuid4())
     with open("csi.json") as f:
         config: ClientConfig = ClientConfig.from_json(f.read())
@@ -51,6 +57,7 @@ def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer_name: s
             pipeline_id=pipeline_id,
             session_id=session_id,
             save_to_disk=save_to_disk,
+            initial_intent_display_name=initial_intent_display_name,
         )
         player = PyAudioStreamerOut()
 
@@ -58,7 +65,10 @@ def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer_name: s
         # Get audio stream (iterator of audio chunks):
         streamer = PySoundIoStreamerIn()
         streaming_request = streamer.create_s2s_request(
-            pipeline_id=pipeline_id, session_id=session_id, save_to_disk=save_to_disk
+            pipeline_id=pipeline_id,
+            session_id=session_id,
+            save_to_disk=save_to_disk,
+            initial_intent_display_name=initial_intent_display_name,
         )
         player = PySoundIoStreamerOut()
     else:
@@ -92,7 +102,14 @@ if __name__ == "__main__":
     parser.add_argument("--session_id", default=str(uuid.uuid4()))
     parser.add_argument("--save_to_disk", default=False)
     parser.add_argument("--streamer_name", default="pysoundio")
+    parser.add_argument("--intent-name")
 
     args: argparse.Namespace = parser.parse_args()
 
-    main(args.pipeline_id, args.session_id, args.save_to_disk, args.streamer_name)
+    main(
+        pipeline_id=args.pipeline_id,
+        session_id=args.session_id,
+        save_to_disk=args.save_to_disk,
+        streamer_name=args.streamer_name,
+        initial_intent_display_name=args.intent_name,
+    )
