@@ -16,42 +16,54 @@
 # limitations under the License.
 
 import argparse
+import time
 import uuid
 from typing import Iterator
 
 from ondewo.logging.logger import logger_console
 from ondewo.nlu.session_pb2 import QueryResult
+from ondewo.sip.client.client import Client as SipClient
+from ondewo.sip.client.client_config import ClientConfig as SipClientConfig
+from ondewo.sip.client.services.sip import Sip
+from ondewo.sip.sip_pb2 import EndCallRequest
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
-
-from ondewo.csi.client.client import Client
-from ondewo.csi.client.client_config import ClientConfig
-from ondewo.csi.client.services.conversations import Conversations
-from ondewo.csi.conversation_pb2 import S2sStreamRequest
-from ondewo.csi.examples.streamer import (
+from streamer import (
     PyAudioStreamerIn,
     PyAudioStreamerOut,
     PySoundIoStreamerIn,
     PySoundIoStreamerOut,
+    StreamerInInterface,
+    StreamerOutInterface,
 )
+
+from ondewo.csi.client.client import Client as CsiClient
+from ondewo.csi.client.client_config import ClientConfig as CsiClientConfig
+from ondewo.csi.client.services.conversations import Conversations
+from ondewo.csi.conversation_pb2 import S2sStreamRequest, SipTrigger
 
 
 def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer_name: str) -> None:
-    session_id = session_id if session_id else str(uuid.uuid4())
     with open("csi.json") as f:
-        config: ClientConfig = ClientConfig.from_json(f.read())
+        csi_config: CsiClientConfig = CsiClientConfig.from_json(f.read())
+    csi_client: CsiClient = CsiClient(config=csi_config, use_secure_channel=csi_config.grpc_cert is not None)
+    conversations_service: Conversations = csi_client.services.conversations
 
-    client: Client = Client(config=config, use_secure_channel=config.grpc_cert is not None)
-    conversations_service: Conversations = client.services.conversations
+    with open("sip.json") as f:
+        sip_config: SipClientConfig = SipClientConfig.from_json(f.read())
+    sip_client: SipClient = SipClient(config=sip_config, use_secure_channel=sip_config.grpc_cert is not None)
+    sip_service: Sip = sip_client.services.sip
+
+    session_id = session_id if session_id else str(uuid.uuid4())
 
     if "pyaudio" in streamer_name:
         # Get audio stream (iterator of audio chunks):
-        streamer = PyAudioStreamerIn()
+        streamer: StreamerInInterface = PyAudioStreamerIn()
         streaming_request: Iterator[S2sStreamRequest] = streamer.create_s2s_request(
             pipeline_id=pipeline_id,
             session_id=session_id,
             save_to_disk=save_to_disk,
         )
-        player = PyAudioStreamerOut()
+        player: StreamerOutInterface = PyAudioStreamerOut()
 
     elif "pysoundio" in streamer_name:
         # Get audio stream (iterator of audio chunks):
@@ -76,16 +88,25 @@ def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer_name: s
             t2s_response: SynthesizeResponse = response.synthetize_response
             print(f"RESPONSE \t{j}: {t2s_response.text}")
             j += 1
-            streamer.mute = True
+            streamer.mute = True  # type: ignore
             logger_console.debug("muted")
             player.play(response.synthetize_response.audio)
-            streamer.mute = False
+            # playing the audio is a bit delayed, so still wait.
+            time.sleep(0.2)
+            streamer.mute = False  # type: ignore
             logger_console.debug("unmuted")
+        elif response.HasField("sip_trigger"):
+            sip_trigger: SipTrigger = response.sip_trigger
+            print(f"TRIGGER \t{j}: {sip_trigger.type}")
+            j += 1
+            if sip_trigger.type is SipTrigger.SipTriggerType.HANGUP:
+                sip_service.end_call(EndCallRequest(hard_hangup=True))
+                streamer.close()
 
 
 if __name__ == "__main__":
     parser: argparse.ArgumentParser = argparse.ArgumentParser(description="Streams stuff to websocket")
-    parser.add_argument("--pipeline_id", default="pizza")
+    parser.add_argument("--pipeline_id", default="hangup")
     parser.add_argument("--session_id", default=str(uuid.uuid4()))
     parser.add_argument("--save_to_disk", default=False)
     parser.add_argument("--streamer_name", default="pysoundio")

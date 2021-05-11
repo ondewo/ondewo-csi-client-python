@@ -19,6 +19,7 @@ import logging
 import queue
 import time
 import uuid
+from abc import ABCMeta, abstractmethod
 from typing import Iterator, Optional
 
 from ondewo.logging.logger import logger_console
@@ -40,7 +41,38 @@ WAV_HEADER_LENGTH: int = 46
 SAMPLEWIDTH: int = 2
 
 
-class PyAudioStreamerOut:
+class StreamerInInterface(metaclass=ABCMeta):
+    @property
+    @abstractmethod
+    def mute(self) -> bool:
+        pass
+
+    @mute.setter
+    def mute(self, value: bool) -> None:
+        pass
+
+    @abstractmethod
+    def create_s2s_request(
+        self,
+        pipeline_id: str,
+        session_id: Optional[str] = None,
+        save_to_disk: bool = False,
+        initial_intent_display_name: Optional[str] = None,
+    ) -> Iterator[S2sStreamRequest]:
+        pass
+
+    @abstractmethod
+    def close(self) -> None:
+        pass
+
+
+class StreamerOutInterface(metaclass=ABCMeta):
+    @abstractmethod
+    def play(self, data: bytes) -> None:
+        pass
+
+
+class PyAudioStreamerOut(StreamerOutInterface):
     def __init__(self) -> None:
         import pyaudio
 
@@ -61,7 +93,7 @@ class PyAudioStreamerOut:
         PLAYING = False
 
 
-class PyAudioStreamerIn:
+class PyAudioStreamerIn(StreamerInInterface):
     def __init__(self) -> None:
         import pyaudio
 
@@ -75,6 +107,15 @@ class PyAudioStreamerIn:
             frames_per_buffer=self.CHUNK,
         )
 
+    @property
+    def mute(self) -> bool:
+        return PLAYING
+
+    @mute.setter
+    def mute(self, value: bool) -> None:
+        global PLAYING
+        PLAYING = value
+
     def close(self) -> None:
         self.stream.close()
         self.pyaudio_object.terminate()
@@ -84,9 +125,14 @@ class PyAudioStreamerIn:
         pipeline_id: str,
         session_id: Optional[str] = None,
         save_to_disk: bool = False,
+        initial_intent_display_name: Optional[str] = None,
     ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
-        yield S2sStreamRequest(pipeline_id=pipeline_id, session_id=session_id or str(uuid.uuid4()))
+        yield S2sStreamRequest(
+            pipeline_id=pipeline_id,
+            session_id=session_id or str(uuid.uuid4()),
+            initial_intent_display_name=initial_intent_display_name,
+        )
 
         count = 0
         data_save = bytes()
@@ -130,8 +176,8 @@ class PyAudioStreamerIn:
             time.sleep(0.1)
 
 
-class PySoundIoStreamerOut:
-    def __init__(self) -> None:
+class PySoundIoStreamerOut(StreamerOutInterface):
+    def __init__(self, device_id: Optional[int] = None) -> None:
         import pysoundio
 
         self.responses: queue.Queue = queue.Queue()
@@ -141,7 +187,7 @@ class PySoundIoStreamerOut:
         self.CHUNK: int = CHUNK
         self.pysoundio_object: pysoundio.PySoundIo = pysoundio.PySoundIo(backend=None)
         self.pysoundio_object.start_output_stream(
-            device_id=1,
+            device_id=device_id,
             channels=MONO,
             sample_rate=22000,
             block_size=CHUNK,
@@ -171,14 +217,22 @@ class PySoundIoStreamerOut:
             self.idx = WAV_HEADER_LENGTH
             logger_console.debug("start playing")
 
-    def play(self, audio_file: bytes) -> None:
-        self.responses.put(audio_file)
-        logger_console.debug(f"output {len(audio_file)} bytes")
+    def play(self, data: bytes) -> None:
+        self.responses.put(data)
+        logger_console.debug(f"output {len(data)} bytes")
         self.responses.join()
 
 
-class PySoundIoStreamerIn:
-    def __init__(self) -> None:
+class PySoundIoStreamerIn(StreamerInInterface):
+    @property
+    def mute(self) -> bool:
+        return self._mute
+
+    @mute.setter
+    def mute(self, value: bool) -> None:
+        self._mute = value
+
+    def __init__(self, device_id: Optional[int] = None) -> None:
         import pysoundio
 
         logging.debug("Initializing PySoundIo streamer")
@@ -189,7 +243,7 @@ class PySoundIoStreamerIn:
         # start recording
         self.pysoundio_object: pysoundio.PySoundIo = pysoundio.PySoundIo(backend=None)
         self.pysoundio_object.start_input_stream(
-            device_id=0,
+            device_id=device_id,
             channels=MONO,
             sample_rate=RATE,
             block_size=CHUNK,
@@ -199,6 +253,9 @@ class PySoundIoStreamerIn:
         logger_console.debug("Streamer initialized")
 
     def callback(self, data: bytes, length: int) -> None:
+        if self.mute:
+            # logger_console.debug(f'dropping {len(data)} bytes, {length} samples')
+            return
         # logger_console.debug(f'input {len(data)} bytes')
         self.buffer.put(data)
 
@@ -210,9 +267,14 @@ class PySoundIoStreamerIn:
         pipeline_id: str,
         session_id: Optional[str] = None,
         save_to_disk: bool = False,
+        initial_intent_display_name: Optional[str] = None,
     ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
-        yield S2sStreamRequest(pipeline_id=pipeline_id, session_id=session_id or str(uuid.uuid4()))
+        yield S2sStreamRequest(
+            pipeline_id=pipeline_id,
+            session_id=session_id or str(uuid.uuid4()),
+            initial_intent_display_name=initial_intent_display_name,
+        )
 
         if save_to_disk:
             f = open(f"record_{session_id}.raw", "wb")
@@ -220,11 +282,7 @@ class PySoundIoStreamerIn:
         data_save = bytes()
 
         while True:
-            data: bytes = self.buffer.get()  # type: ignore
-
-            if self.mute:
-                # logger_console.debug(f'dropping {len(data)} bytes')
-                continue
+            data: bytes = self.buffer.get()
 
             data_save += data
             if len(data_save) < RATE:
@@ -242,7 +300,7 @@ class PySoundIoStreamerIn:
         data_save = bytes()
         while True:  # not self.stop.done():
             count += 1
-            data: bytes = self.buffer.get()  # type: ignore
+            data: bytes = self.buffer.get()
             data_save += data
             if len(data_save) < RATE:
                 continue
@@ -268,7 +326,7 @@ class PySoundIoStreamerIn:
         data_save = bytes()
         while count < 100:  # not self.stop.done():
             count += 1
-            data: bytes = self.buffer.get()  # type: ignore
+            data: bytes = self.buffer.get()
             data_save += data
             if len(data_save) < RATE:
                 continue
