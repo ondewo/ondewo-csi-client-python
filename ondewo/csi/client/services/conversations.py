@@ -21,6 +21,7 @@ from google.protobuf.empty_pb2 import Empty
 from ondewo.utils.base_services_interface import BaseServicesInterface
 
 from ondewo.csi.conversation_pb2 import (
+    CheckUpstreamHealthResponse,
     ListS2sPipelinesRequest,
     ListS2sPipelinesResponse,
     S2sPipeline,
@@ -66,3 +67,7 @@ class Conversations(BaseServicesInterface):
     def s2s_stream(self, request_iterator: Iterator[S2sStreamRequest]) -> Iterator[S2sStreamResponse]:
         response_iterator: Iterator[S2sStreamResponse] = self.stub.S2sStream(request_iterator)
         return response_iterator
+
+    def check_upstream_health(self, request: Empty) -> CheckUpstreamHealthResponse:
+        response: CheckUpstreamHealthResponse = self.stub.CheckUpstreamHealth(request)
+        return response
