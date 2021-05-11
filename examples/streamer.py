@@ -42,8 +42,8 @@ SAMPLEWIDTH: int = 2
 
 
 class StreamerInInterface(metaclass=ABCMeta):
-    @abstractmethod
     @property
+    @abstractmethod
     def mute(self) -> bool:
         pass
 
