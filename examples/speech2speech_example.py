@@ -23,17 +23,19 @@ from typing import Iterator, Optional
 from ondewo.logging.logger import logger_console
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
+from streamer import (
+    PyAudioStreamerIn,
+    PyAudioStreamerOut,
+    PySoundIoStreamerIn,
+    PySoundIoStreamerOut,
+    StreamerInInterface,
+    StreamerOutInterface,
+)
 
 from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
 from ondewo.csi.client.services.conversations import Conversations
 from ondewo.csi.conversation_pb2 import S2sStreamRequest
-from ondewo.csi.examples.streamer import (
-    PyAudioStreamerIn,
-    PyAudioStreamerOut,
-    PySoundIoStreamerIn,
-    PySoundIoStreamerOut,
-)
 
 
 def main(
@@ -52,14 +54,14 @@ def main(
 
     if "pyaudio" in streamer_name:
         # Get audio stream (iterator of audio chunks):
-        streamer = PyAudioStreamerIn()
+        streamer: StreamerInInterface = PyAudioStreamerIn()
         streaming_request: Iterator[S2sStreamRequest] = streamer.create_s2s_request(
             pipeline_id=pipeline_id,
             session_id=session_id,
             save_to_disk=save_to_disk,
             initial_intent_display_name=initial_intent_display_name,
         )
-        player = PyAudioStreamerOut()
+        player: StreamerOutInterface = PyAudioStreamerOut()
 
     elif "pysoundio" in streamer_name:
         # Get audio stream (iterator of audio chunks):

@@ -27,17 +27,19 @@ from ondewo.sip.client.client_config import ClientConfig as SipClientConfig
 from ondewo.sip.client.services.sip import Sip
 from ondewo.sip.sip_pb2 import EndCallRequest
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
+from streamer import (
+    PyAudioStreamerIn,
+    PyAudioStreamerOut,
+    PySoundIoStreamerIn,
+    PySoundIoStreamerOut,
+    StreamerInInterface,
+    StreamerOutInterface,
+)
 
 from ondewo.csi.client.client import Client as CsiClient
 from ondewo.csi.client.client_config import ClientConfig as CsiClientConfig
 from ondewo.csi.client.services.conversations import Conversations
 from ondewo.csi.conversation_pb2 import S2sStreamRequest, SipTrigger
-from ondewo.csi.examples.streamer import (
-    PyAudioStreamerIn,
-    PyAudioStreamerOut,
-    PySoundIoStreamerIn,
-    PySoundIoStreamerOut,
-)
 
 
 def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer_name: str) -> None:
@@ -55,13 +57,13 @@ def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer_name: s
 
     if "pyaudio" in streamer_name:
         # Get audio stream (iterator of audio chunks):
-        streamer = PyAudioStreamerIn()
+        streamer: StreamerInInterface = PyAudioStreamerIn()
         streaming_request: Iterator[S2sStreamRequest] = streamer.create_s2s_request(
             pipeline_id=pipeline_id,
             session_id=session_id,
             save_to_disk=save_to_disk,
         )
-        player = PyAudioStreamerOut()
+        player: StreamerOutInterface = PyAudioStreamerOut()
 
     elif "pysoundio" in streamer_name:
         # Get audio stream (iterator of audio chunks):
@@ -86,12 +88,12 @@ def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer_name: s
             t2s_response: SynthesizeResponse = response.synthetize_response
             print(f"RESPONSE \t{j}: {t2s_response.text}")
             j += 1
-            streamer.mute = True
+            streamer.mute = True  # type: ignore
             logger_console.debug("muted")
             player.play(response.synthetize_response.audio)
             # playing the audio is a bit delayed, so still wait.
             time.sleep(0.2)
-            streamer.mute = False
+            streamer.mute = False  # type: ignore
             logger_console.debug("unmuted")
         elif response.HasField("sip_trigger"):
             sip_trigger: SipTrigger = response.sip_trigger

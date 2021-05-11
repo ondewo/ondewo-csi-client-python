@@ -15,21 +15,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from ondewo.csi.client.client_config import ClientConfig
-from ondewo.nlu.client_config import ClientConfig as NluClientConfig
-
-from ondewo.csi.client.client import Client as CsiClient
-from ondewo.s2t.client.client import Client as S2tClient
-from ondewo.t2s.client.client import Client as T2sClient
-from ondewo.nlu.client import Client as NluClient
-
+import ondewo.nlu.agent_pb2 as agent
 import ondewo.s2t.speech_to_text_pb2 as s2t
 import ondewo.t2s.text_to_speech_pb2 as t2s
-import ondewo.nlu.agent_pb2 as agent
+from ondewo.nlu.client import Client as NluClient
+from ondewo.nlu.client_config import ClientConfig as NluClientConfig
+from ondewo.s2t.client.client import Client as S2tClient
+from ondewo.t2s.client.client import Client as T2sClient
 
-with open('csi.json') as fi:
+from ondewo.csi.client.client import Client as CsiClient
+from ondewo.csi.client.client_config import ClientConfig
+
+with open("csi.json") as fi:
     config = ClientConfig.from_json(fi.read())
-with open('csi.json') as fi:
+with open("csi.json") as fi:
     nlu_config = NluClientConfig.from_json(fi.read())
 
 csi_client = CsiClient(config=config)

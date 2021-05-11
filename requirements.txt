@@ -9,7 +9,3 @@ ondewo-sip-client>=2.1.0
 
 setuptools~=52.0.0
 ondewo-logging>=2.0.2
-
-# These requirements are only needed for the examples, please install them manually
-# pyaudio~=0.2.11
-# pysoundio~=1.1.0
