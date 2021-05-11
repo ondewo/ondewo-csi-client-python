@@ -17,15 +17,15 @@
 
 import argparse
 
+from google.protobuf.empty_pb2 import Empty
 from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
 from ondewo.csi.client.services.conversations import Conversations
-from ondewo.csi.conversation_pb2 import CheckHealthRequest
 
 
 def main():
     parser = argparse.ArgumentParser(description="Healthcheck example.")
-    parser.add_argument("--config", type=str)
+    parser.add_argument("--config", type=str, required=True)
     parser.add_argument("--secure", default=False, action="store_true")
     args = parser.parse_args()
 
@@ -35,7 +35,7 @@ def main():
     client: Client = Client(config=config, use_secure_channel=args.secure)
     conversations_service: Conversations = client.services.conversations
 
-    print(conversations_service.check_health(CheckHealthRequest()))
+    print(conversations_service.check_upstream_health(request=Empty()))
 
 
 if __name__ == "__main__":
