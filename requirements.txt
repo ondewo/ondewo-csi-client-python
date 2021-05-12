@@ -2,10 +2,9 @@ grpcio==1.31.0
 grpcio-reflection==1.31.0
 grpcio-tools==1.31.0
 mypy-protobuf==1.20
-git+https://github.com/ondewo/ondewo-nlu-client-python.git@3331e5dddbcf0b9c31210b9de4563d7f35e5c265#egg=ondewo-nlu-client
-git+https://github.com/ondewo/ondewo-s2t-client-python.git@a81e43bde16ee4e143176836959cfa8b5dd0f47d#egg=ondewo-s2t-client
+ondewo-logging>=2.0.2
+ondewo-nlu-client>=1.1.2
+ondewo-s2t-client>=1.5.0
 ondewo-sip-client>=2.2.0
 ondewo-t2s-client>=1.5.0
-
 setuptools~=52.0.0
-ondewo-logging>=2.0.2
