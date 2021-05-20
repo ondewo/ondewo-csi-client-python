@@ -1,6 +1,11 @@
 # Release History
 *****************
 
+## Release ONDEWO CSI Python Client 0.2.3
+
+### New Features
+* Updated ondewo-sip-client version to 2.2.1
+
 ## Release ONDEWO CSI Python Client 0.2.2
 
 ### New Features
