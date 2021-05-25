@@ -1,2 +1,0 @@
-# Ondewo csi jupyter tutorials
-
