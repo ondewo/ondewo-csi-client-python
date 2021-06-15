@@ -81,4 +81,4 @@ class Conversations(BaseServicesInterface):
         return response_iterator
 
     def set_control_status(self, request: SetControlStatusRequest) -> SetControlStatusResponse:
-        return self.stub.SetControlStatusResponse(request)
+        return self.stub.SetControlStatus(request)
