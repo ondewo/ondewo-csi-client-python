@@ -29,7 +29,9 @@ from ondewo.csi.conversation_pb2 import (
     S2sStreamRequest,
     S2sStreamResponse,
     ControlStreamRequest,
-    ControlStreamResponse
+    ControlStreamResponse,
+    SetControlStatusRequest,
+    SetControlStatusResponse
 )
 from ondewo.csi.conversation_pb2_grpc import ConversationsStub
 
@@ -77,3 +79,6 @@ class Conversations(BaseServicesInterface):
     def get_control_stream(self, request: ControlStreamRequest) -> Iterator[ControlStreamResponse]:
         response_iterator: Iterator[ControlStreamResponse] = self.stub.GetControlStream(request)
         return response_iterator
+
+    def set_control_status(self, request: SetControlStatusRequest) -> SetControlStatusResponse:
+        return self.stub.SetControlStatusResponse(request)
