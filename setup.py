@@ -4,22 +4,14 @@ with open("README.md", "r") as f:
     long_description = f.read()
 
 with open("requirements.txt") as f:
-    requires = []
-    for line in f:
-        req = line.strip()
-        if "#egg=" in req:
-            req_url, req_name = req.split("#egg=")
-            req_str = f"{req_name} @ {req_url}"
-        else:
-            req_str = req
-        requires.append(req_str)
+    requires = f.read().splitlines()
 
 setuptools.setup(
     name="ondewo-csi-client",
-    version="0.2.2",
+    version="0.2.3",
     author="ONDEWO GbmH",
     author_email="info@ondewo.com",
-    description="exposes the ondewo-csi-grpc-server endpoints in a user-friendly way",
+    description="exposes the ondewo-csi endpoints in a user-friendly way",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/ondewo/ondewo-csi-client-python",
