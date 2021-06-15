@@ -51,6 +51,11 @@ class ConversationsStub(object):
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=ondewo_dot_csi_dot_conversation__pb2.CheckUpstreamHealthResponse.FromString,
                 )
+        self.GetControlStream = channel.unary_stream(
+                '/ondewo.csi.Conversations/GetControlStream',
+                request_serializer=ondewo_dot_csi_dot_conversation__pb2.ControlStreamRequest.SerializeToString,
+                response_deserializer=ondewo_dot_csi_dot_conversation__pb2.ControlStreamResponse.FromString,
+                )
 
 
 class ConversationsServicer(object):
@@ -107,6 +112,12 @@ class ConversationsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def GetControlStream(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ConversationsServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -144,6 +155,11 @@ def add_ConversationsServicer_to_server(servicer, server):
                     servicer.CheckUpstreamHealth,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                     response_serializer=ondewo_dot_csi_dot_conversation__pb2.CheckUpstreamHealthResponse.SerializeToString,
+            ),
+            'GetControlStream': grpc.unary_stream_rpc_method_handler(
+                    servicer.GetControlStream,
+                    request_deserializer=ondewo_dot_csi_dot_conversation__pb2.ControlStreamRequest.FromString,
+                    response_serializer=ondewo_dot_csi_dot_conversation__pb2.ControlStreamResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -272,5 +288,22 @@ class Conversations(object):
         return grpc.experimental.unary_unary(request, target, '/ondewo.csi.Conversations/CheckUpstreamHealth',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ondewo_dot_csi_dot_conversation__pb2.CheckUpstreamHealthResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetControlStream(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/ondewo.csi.Conversations/GetControlStream',
+            ondewo_dot_csi_dot_conversation__pb2.ControlStreamRequest.SerializeToString,
+            ondewo_dot_csi_dot_conversation__pb2.ControlStreamResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

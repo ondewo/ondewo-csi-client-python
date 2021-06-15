@@ -28,6 +28,8 @@ from ondewo.csi.conversation_pb2 import (
     S2sPipelineId,
     S2sStreamRequest,
     S2sStreamResponse,
+    ControlStreamRequest,
+    ControlStreamResponse
 )
 from ondewo.csi.conversation_pb2_grpc import ConversationsStub
 
@@ -71,3 +73,7 @@ class Conversations(BaseServicesInterface):
     def check_upstream_health(self, request: Empty) -> CheckUpstreamHealthResponse:
         response: CheckUpstreamHealthResponse = self.stub.CheckUpstreamHealth(request)
         return response
+
+    def get_control_stream(self, request: ControlStreamRequest) -> Iterator[ControlStreamResponse]:
+        response_iterator: Iterator[ControlStreamResponse] = self.stub.GetControlStream(request)
+        return response_iterator
