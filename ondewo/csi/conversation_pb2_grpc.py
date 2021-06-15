@@ -56,6 +56,11 @@ class ConversationsStub(object):
                 request_serializer=ondewo_dot_csi_dot_conversation__pb2.ControlStreamRequest.SerializeToString,
                 response_deserializer=ondewo_dot_csi_dot_conversation__pb2.ControlStreamResponse.FromString,
                 )
+        self.SetControlStatus = channel.unary_unary(
+                '/ondewo.csi.Conversations/SetControlStatus',
+                request_serializer=ondewo_dot_csi_dot_conversation__pb2.SetControlStatusRequest.SerializeToString,
+                response_deserializer=ondewo_dot_csi_dot_conversation__pb2.SetControlStatusResponse.FromString,
+                )
 
 
 class ConversationsServicer(object):
@@ -118,6 +123,12 @@ class ConversationsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SetControlStatus(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ConversationsServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -160,6 +171,11 @@ def add_ConversationsServicer_to_server(servicer, server):
                     servicer.GetControlStream,
                     request_deserializer=ondewo_dot_csi_dot_conversation__pb2.ControlStreamRequest.FromString,
                     response_serializer=ondewo_dot_csi_dot_conversation__pb2.ControlStreamResponse.SerializeToString,
+            ),
+            'SetControlStatus': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetControlStatus,
+                    request_deserializer=ondewo_dot_csi_dot_conversation__pb2.SetControlStatusRequest.FromString,
+                    response_serializer=ondewo_dot_csi_dot_conversation__pb2.SetControlStatusResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -305,5 +321,22 @@ class Conversations(object):
         return grpc.experimental.unary_stream(request, target, '/ondewo.csi.Conversations/GetControlStream',
             ondewo_dot_csi_dot_conversation__pb2.ControlStreamRequest.SerializeToString,
             ondewo_dot_csi_dot_conversation__pb2.ControlStreamResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SetControlStatus(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ondewo.csi.Conversations/SetControlStatus',
+            ondewo_dot_csi_dot_conversation__pb2.SetControlStatusRequest.SerializeToString,
+            ondewo_dot_csi_dot_conversation__pb2.SetControlStatusResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
