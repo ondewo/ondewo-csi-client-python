@@ -66,9 +66,9 @@ class ControlStatus(builtin___int):
     def values(cls) -> typing___List['ControlStatus']: ...
     @classmethod
     def items(cls) -> typing___List[typing___Tuple[builtin___str, 'ControlStatus']]: ...
-    NORMAL_STREAM = typing___cast('ControlStatus', 0)
+    OK = typing___cast('ControlStatus', 0)
     EMERGENCY_STOP = typing___cast('ControlStatus', 1)
-NORMAL_STREAM = typing___cast('ControlStatus', 0)
+OK = typing___cast('ControlStatus', 0)
 EMERGENCY_STOP = typing___cast('ControlStatus', 1)
 global___ControlStatus = ControlStatus
 
