@@ -8,7 +8,7 @@ ONDEWO_API_DIR=ondewo-csi-api
 PROTO_OUTPUT_FOLDER= .
 
 generate_ondewo_protos:
-	for f in $$(find -L ${ONDEWO_API_DIR}/ondewo -name '*.proto'); do \
+	for f in $$(find ${ONDEWO_API_DIR}/ondewo/csi -name '*.proto'); do \
 		python -m grpc_tools.protoc -I ${ONDEWO_API_DIR} -I ${ONDEWO_API_DIR}/googleapis --python_out=${PROTO_OUTPUT_FOLDER} --mypy_out=${PROTO_OUTPUT_FOLDER} --grpc_python_out=${PROTO_OUTPUT_FOLDER} $$f; \
 	done
 
