@@ -6,8 +6,8 @@ ondewo-logging>=2.0.3
 # TODO(fpovolny): uncomment the pypi requirements after clients are released
 # ondewo-nlu-client>=2.0.0
 # ondewo-s2t-client>=2.0.0
--e git+https://github.com/ondewo/ondewo-nlu-client-python.git@develop#egg=ondewo-nlu-client
--e git+https://github.com/ondewo/ondewo-s2t-client-python.git@develop#egg=ondewo-s2t-client
+git+https://github.com/ondewo/ondewo-nlu-client-python.git@develop#egg=ondewo-nlu-client
+git+https://github.com/ondewo/ondewo-s2t-client-python.git@develop#egg=ondewo-s2t-client
 ondewo-sip-client>=2.2.1
 ondewo-t2s-client>=1.5.0
 setuptools~=52.0.0
