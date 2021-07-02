@@ -81,7 +81,7 @@ class PyAudioStreamerOut(StreamerOutInterface):
         self.stream: pyaudio.Stream = self.pyaudio_object.open(
             channels=1,
             format=pyaudio.paInt16,
-            rate=22000,
+            rate=22050,
             output=True,
         )
 
@@ -189,7 +189,7 @@ class PySoundIoStreamerOut(StreamerOutInterface):
         self.pysoundio_object.start_output_stream(
             device_id=device_id,
             channels=MONO,
-            sample_rate=22000,
+            sample_rate=22050,
             block_size=CHUNK,
             dtype=pysoundio.SoundIoFormatS16LE,
             write_callback=self.callback,
