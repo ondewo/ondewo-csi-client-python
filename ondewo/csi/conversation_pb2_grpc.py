@@ -51,6 +51,16 @@ class ConversationsStub(object):
                 request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
                 response_deserializer=ondewo_dot_csi_dot_conversation__pb2.CheckUpstreamHealthResponse.FromString,
                 )
+        self.GetControlStream = channel.unary_stream(
+                '/ondewo.csi.Conversations/GetControlStream',
+                request_serializer=ondewo_dot_csi_dot_conversation__pb2.ControlStreamRequest.SerializeToString,
+                response_deserializer=ondewo_dot_csi_dot_conversation__pb2.ControlStreamResponse.FromString,
+                )
+        self.SetControlStatus = channel.unary_unary(
+                '/ondewo.csi.Conversations/SetControlStatus',
+                request_serializer=ondewo_dot_csi_dot_conversation__pb2.SetControlStatusRequest.SerializeToString,
+                response_deserializer=ondewo_dot_csi_dot_conversation__pb2.SetControlStatusResponse.FromString,
+                )
 
 
 class ConversationsServicer(object):
@@ -59,6 +69,19 @@ class ConversationsServicer(object):
 
     def CreateS2sPipeline(self, request, context):
         """Create the S2S pipeline specified in the request message. The pipeline with the specified ID must not exist.
+
+        <p>Examples:</p>
+
+        <pre>
+        grpcurl -plaintext -d '{
+        "id": "pizza",
+        "s2t_pipeline_id": "default_german",
+        "nlu_project_id": "1f3425d2-41fd-4970-87e6-88e8e121bb49",
+        "nlu_language_code": "de",
+        "t2s_pipeline_id": "default_german"
+        }' localhost:50051 ondewo.csi.Conversations.CreateS2sPipeline
+        </pre>
+        <samp>{}</samp>
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -66,6 +89,20 @@ class ConversationsServicer(object):
 
     def GetS2sPipeline(self, request, context):
         """Retrieve the S2S pipeline with the ID specified in the request message.
+
+        <p>Examples:</p>
+
+        <pre>
+        grpcurl -plaintext -d '{"id": "pizza"}' localhost:50051 ondewo.csi.Conversations.GetS2sPipeline
+        </pre>
+        <samp>{
+        "id": "pizza",
+        "s2t_pipeline_id": "default_german",
+        "nlu_project_id": "1f3425d2-41fd-4970-87e6-88e8e121bb49",
+        "nlu_language_code": "de",
+        "t2s_pipeline_id": "default_german"
+        }
+        </samp>
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -73,6 +110,19 @@ class ConversationsServicer(object):
 
     def UpdateS2sPipeline(self, request, context):
         """Update the S2S pipeline specified in the request message. The pipeline must exist.
+
+        <p>Examples:</p>
+
+        <pre>
+        grpcurl -plaintext -d '{
+        "id": "pizza",
+        "s2t_pipeline_id": "default_german",
+        "nlu_project_id": "1f3425d2-41fd-4970-87e6-88e8e121bb49",
+        "nlu_language_code": "en",
+        "t2s_pipeline_id": "default_german"
+        }' localhost:50051 ondewo.csi.Conversations.UpdateS2sPipeline
+        </pre>
+        <samp>{}</samp>
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -80,6 +130,13 @@ class ConversationsServicer(object):
 
     def DeleteS2sPipeline(self, request, context):
         """Delete the S2S pipeline with the ID specified in the request message. The pipeline must exist.
+
+        <p>Examples:</p>
+
+        <pre>
+        grpcurl -plaintext -d '{"id": "pizza"}' localhost:50051 ondewo.csi.Conversations.DeleteS2sPipeline
+        </pre>
+        <samp>{}</samp>
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -87,6 +144,23 @@ class ConversationsServicer(object):
 
     def ListS2sPipelines(self, request, context):
         """List all S2S pipelines of the server.
+
+        <p>Examples:</p>
+
+        <pre>
+        grpcurl -plaintext localhost:50051 ondewo.csi.Conversations.ListS2sPipelines
+        </pre>
+        <samp>{
+        "pipelines": [
+        {
+        "id": "pizza",
+        "s2t_pipeline_id": "default_german",
+        "nlu_project_id": "1f3425d2-41fd-4970-87e6-88e8e121bb49",
+        "nlu_language_code": "de",
+        "t2s_pipeline_id": "default_german"
+        }
+        ]
+        }</samp>
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -102,7 +176,44 @@ class ConversationsServicer(object):
 
     def CheckUpstreamHealth(self, request, context):
         """Check the health of S2T, NLU and T2S servers
+
+        <p>Examples:</p>
+
+        <pre>
+        grpcurl -plaintext localhost:50051 ondewo.csi.Conversations.CheckUpstreamHealth
+        </pre>
+
+        All upstreams healthy:
+        <samp>{}</samp>
+
+        All upstreams unhealthy:
+        <samp>{
+        "s2t_status": {
+        "code": 14,
+        "message": "failed to connect to all addresses"
+        },
+        "nlu_status": {
+        "code": 14,
+        "message": "failed to connect to all addresses"
+        },
+        "t2s_status": {
+        "code": 14,
+        "message": "failed to connect to all addresses"
+        }
+        }</samp>
         """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def GetControlStream(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def SetControlStatus(self, request, context):
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -144,6 +255,16 @@ def add_ConversationsServicer_to_server(servicer, server):
                     servicer.CheckUpstreamHealth,
                     request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
                     response_serializer=ondewo_dot_csi_dot_conversation__pb2.CheckUpstreamHealthResponse.SerializeToString,
+            ),
+            'GetControlStream': grpc.unary_stream_rpc_method_handler(
+                    servicer.GetControlStream,
+                    request_deserializer=ondewo_dot_csi_dot_conversation__pb2.ControlStreamRequest.FromString,
+                    response_serializer=ondewo_dot_csi_dot_conversation__pb2.ControlStreamResponse.SerializeToString,
+            ),
+            'SetControlStatus': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetControlStatus,
+                    request_deserializer=ondewo_dot_csi_dot_conversation__pb2.SetControlStatusRequest.FromString,
+                    response_serializer=ondewo_dot_csi_dot_conversation__pb2.SetControlStatusResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -272,5 +393,39 @@ class Conversations(object):
         return grpc.experimental.unary_unary(request, target, '/ondewo.csi.Conversations/CheckUpstreamHealth',
             google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
             ondewo_dot_csi_dot_conversation__pb2.CheckUpstreamHealthResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def GetControlStream(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/ondewo.csi.Conversations/GetControlStream',
+            ondewo_dot_csi_dot_conversation__pb2.ControlStreamRequest.SerializeToString,
+            ondewo_dot_csi_dot_conversation__pb2.ControlStreamResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def SetControlStatus(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ondewo.csi.Conversations/SetControlStatus',
+            ondewo_dot_csi_dot_conversation__pb2.SetControlStatusRequest.SerializeToString,
+            ondewo_dot_csi_dot_conversation__pb2.SetControlStatusResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
