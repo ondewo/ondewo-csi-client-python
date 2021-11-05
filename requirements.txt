@@ -4,9 +4,8 @@ grpcio-tools==1.31.0
 mypy-protobuf==1.20
 ondewo-logging>=2.0.3
 ondewo-nlu-client>=2.0.0
-# TODO(fpovolny): uncomment the pypi requirements after client is released
-# ondewo-s2t-client>=2.0.0
-git+https://github.com/ondewo/ondewo-s2t-client-python.git@develop#egg=ondewo-s2t-client
+ondewo-s2t-client>=1.5.2
+# ondewo-sip-client>=2.2.1
 git+https://github.com/ondewo/ondewo-sip-client-python.git@release/3.0.0#egg=ondewo-sip-client
 ondewo-t2s-client>=1.5.0
 setuptools~=52.0.0
