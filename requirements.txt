@@ -8,6 +8,6 @@ mypy-protobuf==3.00
 ondewo-logging>=2.0.3
 git+https://github.com/ondewo/ondewo-nlu-client-python.git@new_grpcio_version#egg=ondewo-nlu-client
 # ondewo-s2t-client>=1.5.2
-git+https://github.com/ondewo/ondewo-sip-client-python.git@release/3.0.0#egg=ondewo-sip-client
+git+https://github.com/ondewo/ondewo-sip-client-python.git@new_grpcio_version#egg=ondewo-sip-client
 # ondewo-t2s-client>=1.5.0
 setuptools~=56.2.0
