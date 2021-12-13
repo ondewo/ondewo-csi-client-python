@@ -3,7 +3,7 @@ googleapis-common-protos==1.5.10
 grpcio==1.42.0
 grpcio-reflection==1.42.0
 grpcio-tools==1.42.0
-mypy-protobuf==1.20
+mypy-protobuf==3.00
 
 ondewo-logging>=2.0.3
 git+https://github.com/ondewo/ondewo-nlu-client-python.git@new_grpcio_version#egg=ondewo-nlu-client
