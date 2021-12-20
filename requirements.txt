@@ -9,7 +9,7 @@ ondewo-logging>=2.0.3
 
 setuptools~=56.2.0
 
-git+https://github.com/ondewo/ondewo-nlu-client-python.git@2.3.1#egg=ondewo-nlu-client
+git+https://github.com/ondewo/ondewo-nlu-client-python.git@2.3.2#egg=ondewo-nlu-client
 git+https://github.com/ondewo/ondewo-s2t-client-python.git@2.0.0#egg=ondewo-s2t-client
 git+https://github.com/ondewo/ondewo-t2s-client-python.git@2.0.0#egg=ondewo-t2s-client
 git+https://github.com/ondewo/ondewo-sip-client-python.git@3.1.0#egg=ondewo-sip-client
