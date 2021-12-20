@@ -1,5 +1,11 @@
 # Release History
 *****************
+## Release ONDEWO CSI Python Client 2.0.0
+
+### New Features
+* New client adaptation to new s2t,t2s, and nlu 
+
+*****************
 
 ## Release ONDEWO CSI Python Client 1.0.0
 
