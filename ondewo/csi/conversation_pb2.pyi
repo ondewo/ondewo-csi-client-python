@@ -3,7 +3,6 @@
 isort:skip_file
 """
 import builtins
-import google.protobuf.any_pb2
 import google.protobuf.descriptor
 import google.protobuf.internal.containers
 import google.protobuf.internal.enum_type_wrapper
@@ -67,6 +66,26 @@ update_config = ControlMessageServiceMethod.V(1)
 undo_config = ControlMessageServiceMethod.V(2)
 reset_config = ControlMessageServiceMethod.V(3)
 global___ControlMessageServiceMethod = ControlMessageServiceMethod
+
+
+class ConditionType(_ConditionType, metaclass=_ConditionTypeEnumTypeWrapper):
+    pass
+class _ConditionType:
+    V = typing.NewType('V', builtins.int)
+class _ConditionTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ConditionType.V], builtins.type):
+    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor = ...
+    UNKNOWTYPE = ConditionType.V(0)
+    immediate = ConditionType.V(1)
+    duration = ConditionType.V(2)
+    datetime = ConditionType.V(3)
+    interactions = ConditionType.V(4)
+
+UNKNOWTYPE = ConditionType.V(0)
+immediate = ConditionType.V(1)
+duration = ConditionType.V(2)
+datetime = ConditionType.V(3)
+interactions = ConditionType.V(4)
+global___ConditionType = ConditionType
 
 
 class S2sPipeline(google.protobuf.message.Message):
@@ -378,15 +397,13 @@ class Condition(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor = ...
     TYPE_FIELD_NUMBER: builtins.int
     VALUE_FIELD_NUMBER: builtins.int
-    type: typing.Text = ...
-    @property
-    def value(self) -> google.protobuf.any_pb2.Any: ...
+    type: global___ConditionType.V = ...
+    value: typing.Text = ...
     def __init__(self,
         *,
-        type : typing.Text = ...,
-        value : typing.Optional[google.protobuf.any_pb2.Any] = ...,
+        type : global___ConditionType.V = ...,
+        value : typing.Text = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["value",b"value"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing_extensions.Literal["type",b"type","value",b"value"]) -> None: ...
 global___Condition = Condition
 
