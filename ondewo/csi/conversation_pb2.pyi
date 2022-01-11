@@ -3,6 +3,7 @@
 isort:skip_file
 """
 import builtins
+import google.protobuf.any_pb2
 import google.protobuf.descriptor
 import google.protobuf.internal.containers
 import google.protobuf.internal.enum_type_wrapper
@@ -379,11 +380,11 @@ class Condition(google.protobuf.message.Message):
     VALUE_FIELD_NUMBER: builtins.int
     type: typing.Text = ...
     @property
-    def value(self) -> global___CondtionValueUnion: ...
+    def value(self) -> google.protobuf.any_pb2.Any: ...
     def __init__(self,
         *,
         type : typing.Text = ...,
-        value : typing.Optional[global___CondtionValueUnion] = ...,
+        value : typing.Optional[google.protobuf.any_pb2.Any] = ...,
         ) -> None: ...
     def HasField(self, field_name: typing_extensions.Literal["value",b"value"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing_extensions.Literal["type",b"type","value",b"value"]) -> None: ...
