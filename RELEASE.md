@@ -1,5 +1,14 @@
 # Release History
 *****************
+
+
+## Release ONDEWO CSI Python Client 2.2.0
+
+### New Features
+* Control messages integration
+
+*****************
+
 ## Release ONDEWO CSI Python Client 2.0.0
 
 ### New Features
