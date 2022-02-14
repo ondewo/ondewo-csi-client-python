@@ -1,6 +1,13 @@
 # Release History
 *****************
 
+## Release ONDEWO CSI Python Client 2.4.0
+
+### New Features
+* Sip control messages addition and update sip client to 3.2.0
+
+*****************
+
 ## Release ONDEWO CSI Python Client 2.2.0
 
 ### New Features
