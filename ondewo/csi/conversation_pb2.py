@@ -28,7 +28,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1dondewo/csi/conversation.proto\x12\nondewo.csi\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17google/rpc/status.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x18ondewo/nlu/session.proto\x1a\x1fondewo/t2s/text-to-speech.proto\x1a\x1fondewo/s2t/speech-to-text.proto\x1a\x19google/protobuf/any.proto\"~\n\x0bS2sPipeline\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0fs2t_pipeline_id\x18\x02 \x01(\t\x12\x16\n\x0enlu_project_id\x18\x03 \x01(\t\x12\x19\n\x11nlu_language_code\x18\x04 \x01(\t\x12\x17\n\x0ft2s_pipeline_id\x18\x05 \x01(\t\"\x1b\n\rS2sPipelineId\x12\n\n\x02id\x18\x01 \x01(\t\"\x19\n\x17ListS2sPipelinesRequest\"F\n\x18ListS2sPipelinesResponse\x12*\n\tpipelines\x18\x01 \x03(\x0b\x32\x17.ondewo.csi.S2sPipeline\"\x86\x01\n\x10S2sStreamRequest\x12\x13\n\x0bpipeline_id\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05\x61udio\x18\x03 \x01(\x0c\x12\x15\n\rend_of_stream\x18\x04 \x01(\x08\x12#\n\x1binitial_intent_display_name\x18\x05 \x01(\t\"\xd1\x01\n\x11S2sStreamResponse\x12\x42\n\x16\x64\x65tect_intent_response\x18\x01 \x01(\x0b\x32 .ondewo.nlu.DetectIntentResponseH\x00\x12=\n\x13synthetize_response\x18\x02 \x01(\x0b\x32\x1e.ondewo.t2s.SynthesizeResponseH\x00\x12-\n\x0bsip_trigger\x18\x03 \x01(\x0b\x32\x16.ondewo.csi.SipTriggerH\x00\x42\n\n\x08response\"\xc7\x01\n\nSipTrigger\x12\x33\n\x04type\x18\x01 \x01(\x0e\x32%.ondewo.csi.SipTrigger.SipTriggerType\x12(\n\x07\x63ontent\x18\x02 \x01(\x0b\x32\x17.google.protobuf.Struct\"Z\n\x0eSipTriggerType\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\n\n\x06HANGUP\x10\x01\x12\x12\n\x0eHUMAN_HANDOVER\x10\x02\x12\x0c\n\x08SEND_NOW\x10\x03\x12\t\n\x05PAUSE\x10\x04\"\x95\x01\n\x1b\x43heckUpstreamHealthResponse\x12&\n\ns2t_status\x18\x01 \x01(\x0b\x32\x12.google.rpc.Status\x12&\n\nnlu_status\x18\x02 \x01(\x0b\x32\x12.google.rpc.Status\x12&\n\nt2s_status\x18\x03 \x01(\x0b\x32\x12.google.rpc.Status\"\x16\n\x14\x43ontrolStreamRequest\"J\n\x15\x43ontrolStreamResponse\x12\x31\n\x0e\x63ontrol_status\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\"L\n\x17SetControlStatusRequest\x12\x31\n\x0e\x63ontrol_status\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\"\x88\x01\n\x18SetControlStatusResponse\x12\x35\n\x12old_control_status\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\x12\x35\n\x12new_control_status\x18\x02 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\"\x84\x01\n\x12\x43ondtionValueUnion\x12\x13\n\tint_value\x18\x01 \x01(\x03H\x00\x12\x15\n\x0b\x66loat_value\x18\x02 \x01(\x02H\x00\x12\x34\n\x0e\x64\x61tetime_value\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x42\x0c\n\nUnionOneof\"C\n\tCondition\x12\'\n\x04type\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ConditionType\x12\r\n\x05value\x18\x02 \x01(\t\"\xf5\x01\n\x1f\x43ontrolMessageServiceParameters\x12/\n\nt2s_config\x18\x01 \x01(\x0b\x32\x19.ondewo.t2s.RequestConfigH\x00\x12\x39\n\ns2t_config\x18\x02 \x01(\x0b\x32#.ondewo.s2t.TranscribeRequestConfigH\x00\x12.\n\x0f\x63ondition_start\x18\x03 \x01(\x0b\x32\x15.ondewo.csi.Condition\x12,\n\rcondition_end\x18\x04 \x01(\x0b\x32\x15.ondewo.csi.ConditionB\x08\n\x06\x63onfig\"\xc2\x01\n\x0e\x43ontrolMessage\x12\x36\n\x07service\x18\x01 \x01(\x0e\x32%.ondewo.csi.ControlMessageServiceName\x12\x37\n\x06method\x18\x02 \x01(\x0e\x32\'.ondewo.csi.ControlMessageServiceMethod\x12?\n\nparameters\x18\x03 \x01(\x0b\x32+.ondewo.csi.ControlMessageServiceParameters*+\n\rControlStatus\x12\x06\n\x02OK\x10\x00\x12\x12\n\x0e\x45MERGENCY_STOP\x10\x01*l\n\x19\x43ontrolMessageServiceName\x12\x0f\n\x0bUNKNOWNNAME\x10\x00\x12\x0e\n\nondewo_s2t\x10\x01\x12\x0e\n\nondewo_t2s\x10\x02\x12\x0e\n\nondewo_nlu\x10\x03\x12\x0e\n\nondewo_sip\x10\x04*\xb2\x01\n\x1b\x43ontrolMessageServiceMethod\x12\x11\n\rUNKNOWNMETHOD\x10\x00\x12\x11\n\rupdate_config\x10\x01\x12\x0f\n\x0bundo_config\x10\x02\x12\x10\n\x0creset_config\x10\x03\x12\x0c\n\x08\x65nd_call\x10\x04\x12\x11\n\rtransfer_call\x10\x05\x12\x12\n\x0eplay_wav_files\x10\x06\x12\x08\n\x04mute\x10\x07\x12\x0b\n\x07un_mute\x10\x08*\\\n\rConditionType\x12\x0e\n\nUNKNOWTYPE\x10\x00\x12\r\n\timmediate\x10\x01\x12\x0c\n\x08\x64uration\x10\x02\x12\x0c\n\x08\x64\x61tetime\x10\x03\x12\x10\n\x0cinteractions\x10\x04\x32\xfa\x05\n\rConversations\x12\x46\n\x11\x43reateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12\x46\n\x0eGetS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x17.ondewo.csi.S2sPipeline\"\x00\x12\x46\n\x11UpdateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12H\n\x11\x44\x65leteS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x16.google.protobuf.Empty\"\x00\x12_\n\x10ListS2sPipelines\x12#.ondewo.csi.ListS2sPipelinesRequest\x1a$.ondewo.csi.ListS2sPipelinesResponse\"\x00\x12N\n\tS2sStream\x12\x1c.ondewo.csi.S2sStreamRequest\x1a\x1d.ondewo.csi.S2sStreamResponse\"\x00(\x01\x30\x01\x12X\n\x13\x43heckUpstreamHealth\x12\x16.google.protobuf.Empty\x1a\'.ondewo.csi.CheckUpstreamHealthResponse\"\x00\x12[\n\x10GetControlStream\x12 .ondewo.csi.ControlStreamRequest\x1a!.ondewo.csi.ControlStreamResponse\"\x00\x30\x01\x12_\n\x10SetControlStatus\x12#.ondewo.csi.SetControlStatusRequest\x1a$.ondewo.csi.SetControlStatusResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x1dondewo/csi/conversation.proto\x12\nondewo.csi\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17google/rpc/status.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x18ondewo/nlu/session.proto\x1a\x1fondewo/t2s/text-to-speech.proto\x1a\x1fondewo/s2t/speech-to-text.proto\x1a\x19google/protobuf/any.proto\"~\n\x0bS2sPipeline\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0fs2t_pipeline_id\x18\x02 \x01(\t\x12\x16\n\x0enlu_project_id\x18\x03 \x01(\t\x12\x19\n\x11nlu_language_code\x18\x04 \x01(\t\x12\x17\n\x0ft2s_pipeline_id\x18\x05 \x01(\t\"\x1b\n\rS2sPipelineId\x12\n\n\x02id\x18\x01 \x01(\t\"\x19\n\x17ListS2sPipelinesRequest\"F\n\x18ListS2sPipelinesResponse\x12*\n\tpipelines\x18\x01 \x03(\x0b\x32\x17.ondewo.csi.S2sPipeline\"\x86\x01\n\x10S2sStreamRequest\x12\x13\n\x0bpipeline_id\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05\x61udio\x18\x03 \x01(\x0c\x12\x15\n\rend_of_stream\x18\x04 \x01(\x08\x12#\n\x1binitial_intent_display_name\x18\x05 \x01(\t\"\xd1\x01\n\x11S2sStreamResponse\x12\x42\n\x16\x64\x65tect_intent_response\x18\x01 \x01(\x0b\x32 .ondewo.nlu.DetectIntentResponseH\x00\x12=\n\x13synthetize_response\x18\x02 \x01(\x0b\x32\x1e.ondewo.t2s.SynthesizeResponseH\x00\x12-\n\x0bsip_trigger\x18\x03 \x01(\x0b\x32\x16.ondewo.csi.SipTriggerH\x00\x42\n\n\x08response\"\xc7\x01\n\nSipTrigger\x12\x33\n\x04type\x18\x01 \x01(\x0e\x32%.ondewo.csi.SipTrigger.SipTriggerType\x12(\n\x07\x63ontent\x18\x02 \x01(\x0b\x32\x17.google.protobuf.Struct\"Z\n\x0eSipTriggerType\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\n\n\x06HANGUP\x10\x01\x12\x12\n\x0eHUMAN_HANDOVER\x10\x02\x12\x0c\n\x08SEND_NOW\x10\x03\x12\t\n\x05PAUSE\x10\x04\"\x95\x01\n\x1b\x43heckUpstreamHealthResponse\x12&\n\ns2t_status\x18\x01 \x01(\x0b\x32\x12.google.rpc.Status\x12&\n\nnlu_status\x18\x02 \x01(\x0b\x32\x12.google.rpc.Status\x12&\n\nt2s_status\x18\x03 \x01(\x0b\x32\x12.google.rpc.Status\"\x16\n\x14\x43ontrolStreamRequest\"J\n\x15\x43ontrolStreamResponse\x12\x31\n\x0e\x63ontrol_status\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\"L\n\x17SetControlStatusRequest\x12\x31\n\x0e\x63ontrol_status\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\"\x88\x01\n\x18SetControlStatusResponse\x12\x35\n\x12old_control_status\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\x12\x35\n\x12new_control_status\x18\x02 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\"\x84\x01\n\x12\x43ondtionValueUnion\x12\x13\n\tint_value\x18\x01 \x01(\x03H\x00\x12\x15\n\x0b\x66loat_value\x18\x02 \x01(\x02H\x00\x12\x34\n\x0e\x64\x61tetime_value\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x42\x0c\n\nUnionOneof\"C\n\tCondition\x12\'\n\x04type\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ConditionType\x12\r\n\x05value\x18\x02 \x01(\t\"\xab\x02\n\x1f\x43ontrolMessageServiceParameters\x12/\n\nt2s_config\x18\x01 \x01(\x0b\x32\x19.ondewo.t2s.RequestConfigH\x00\x12\x39\n\ns2t_config\x18\x02 \x01(\x0b\x32#.ondewo.s2t.TranscribeRequestConfigH\x00\x12\x13\n\x0btransfer_id\x18\x03 \x01(\t\x12\x0c\n\x04text\x18\x04 \x01(\t\x12\x11\n\twav_files\x18\x05 \x03(\x0c\x12.\n\x0f\x63ondition_start\x18\x06 \x01(\x0b\x32\x15.ondewo.csi.Condition\x12,\n\rcondition_end\x18\x07 \x01(\x0b\x32\x15.ondewo.csi.ConditionB\x08\n\x06\x63onfig\"\xc2\x01\n\x0e\x43ontrolMessage\x12\x36\n\x07service\x18\x01 \x01(\x0e\x32%.ondewo.csi.ControlMessageServiceName\x12\x37\n\x06method\x18\x02 \x01(\x0e\x32\'.ondewo.csi.ControlMessageServiceMethod\x12?\n\nparameters\x18\x03 \x01(\x0b\x32+.ondewo.csi.ControlMessageServiceParameters*+\n\rControlStatus\x12\x06\n\x02OK\x10\x00\x12\x12\n\x0e\x45MERGENCY_STOP\x10\x01*l\n\x19\x43ontrolMessageServiceName\x12\x0f\n\x0bUNKNOWNNAME\x10\x00\x12\x0e\n\nondewo_s2t\x10\x01\x12\x0e\n\nondewo_t2s\x10\x02\x12\x0e\n\nondewo_nlu\x10\x03\x12\x0e\n\nondewo_sip\x10\x04*\xc1\x01\n\x1b\x43ontrolMessageServiceMethod\x12\x11\n\rUNKNOWNMETHOD\x10\x00\x12\x11\n\rupdate_config\x10\x01\x12\x0f\n\x0bundo_config\x10\x02\x12\x10\n\x0creset_config\x10\x03\x12\x0c\n\x08\x65nd_call\x10\x04\x12\x11\n\rtransfer_call\x10\x05\x12\x12\n\x0eplay_wav_files\x10\x06\x12\r\n\tplay_text\x10\x07\x12\x08\n\x04mute\x10\x08\x12\x0b\n\x07un_mute\x10\t*\\\n\rConditionType\x12\x0e\n\nUNKNOWTYPE\x10\x00\x12\r\n\timmediate\x10\x01\x12\x0c\n\x08\x64uration\x10\x02\x12\x0c\n\x08\x64\x61tetime\x10\x03\x12\x10\n\x0cinteractions\x10\x04\x32\xfa\x05\n\rConversations\x12\x46\n\x11\x43reateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12\x46\n\x0eGetS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x17.ondewo.csi.S2sPipeline\"\x00\x12\x46\n\x11UpdateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12H\n\x11\x44\x65leteS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x16.google.protobuf.Empty\"\x00\x12_\n\x10ListS2sPipelines\x12#.ondewo.csi.ListS2sPipelinesRequest\x1a$.ondewo.csi.ListS2sPipelinesResponse\"\x00\x12N\n\tS2sStream\x12\x1c.ondewo.csi.S2sStreamRequest\x1a\x1d.ondewo.csi.S2sStreamResponse\"\x00(\x01\x30\x01\x12X\n\x13\x43heckUpstreamHealth\x12\x16.google.protobuf.Empty\x1a\'.ondewo.csi.CheckUpstreamHealthResponse\"\x00\x12[\n\x10GetControlStream\x12 .ondewo.csi.ControlStreamRequest\x1a!.ondewo.csi.ControlStreamResponse\"\x00\x30\x01\x12_\n\x10SetControlStatus\x12#.ondewo.csi.SetControlStatusRequest\x1a$.ondewo.csi.SetControlStatusResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,google_dot_rpc_dot_status__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,ondewo_dot_nlu_dot_session__pb2.DESCRIPTOR,ondewo_dot_t2s_dot_text__to__speech__pb2.DESCRIPTOR,ondewo_dot_s2t_dot_speech__to__text__pb2.DESCRIPTOR,google_dot_protobuf_dot_any__pb2.DESCRIPTOR,])
 
@@ -52,8 +52,8 @@ _CONTROLSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2206,
-  serialized_end=2249,
+  serialized_start=2260,
+  serialized_end=2303,
 )
 _sym_db.RegisterEnumDescriptor(_CONTROLSTATUS)
 
@@ -93,8 +93,8 @@ _CONTROLMESSAGESERVICENAME = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2251,
-  serialized_end=2359,
+  serialized_start=2305,
+  serialized_end=2413,
 )
 _sym_db.RegisterEnumDescriptor(_CONTROLMESSAGESERVICENAME)
 
@@ -142,20 +142,25 @@ _CONTROLMESSAGESERVICEMETHOD = _descriptor.EnumDescriptor(
       type=None,
       create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
-      name='mute', index=7, number=7,
+      name='play_text', index=7, number=7,
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
-      name='un_mute', index=8, number=8,
+      name='mute', index=8, number=8,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='un_mute', index=9, number=9,
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2362,
-  serialized_end=2540,
+  serialized_start=2416,
+  serialized_end=2609,
 )
 _sym_db.RegisterEnumDescriptor(_CONTROLMESSAGESERVICEMETHOD)
 
@@ -195,8 +200,8 @@ _CONDITIONTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2542,
-  serialized_end=2634,
+  serialized_start=2611,
+  serialized_end=2703,
 )
 _sym_db.RegisterEnumDescriptor(_CONDITIONTYPE)
 
@@ -215,8 +220,9 @@ reset_config = 3
 end_call = 4
 transfer_call = 5
 play_wav_files = 6
-mute = 7
-un_mute = 8
+play_text = 7
+mute = 8
+un_mute = 9
 UNKNOWTYPE = 0
 immediate = 1
 duration = 2
@@ -852,15 +858,36 @@ _CONTROLMESSAGESERVICEPARAMETERS = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='condition_start', full_name='ondewo.csi.ControlMessageServiceParameters.condition_start', index=2,
-      number=3, type=11, cpp_type=10, label=1,
+      name='transfer_id', full_name='ondewo.csi.ControlMessageServiceParameters.transfer_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='text', full_name='ondewo.csi.ControlMessageServiceParameters.text', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='wav_files', full_name='ondewo.csi.ControlMessageServiceParameters.wav_files', index=4,
+      number=5, type=12, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='condition_start', full_name='ondewo.csi.ControlMessageServiceParameters.condition_start', index=5,
+      number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='condition_end', full_name='ondewo.csi.ControlMessageServiceParameters.condition_end', index=3,
-      number=4, type=11, cpp_type=10, label=1,
+      name='condition_end', full_name='ondewo.csi.ControlMessageServiceParameters.condition_end', index=6,
+      number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -883,7 +910,7 @@ _CONTROLMESSAGESERVICEPARAMETERS = _descriptor.Descriptor(
     fields=[]),
   ],
   serialized_start=1762,
-  serialized_end=2007,
+  serialized_end=2061,
 )
 
 
@@ -928,8 +955,8 @@ _CONTROLMESSAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2010,
-  serialized_end=2204,
+  serialized_start=2064,
+  serialized_end=2258,
 )
 
 _LISTS2SPIPELINESRESPONSE.fields_by_name['pipelines'].message_type = _S2SPIPELINE
@@ -1122,8 +1149,8 @@ _CONVERSATIONS = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=2637,
-  serialized_end=3399,
+  serialized_start=2706,
+  serialized_end=3468,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateS2sPipeline',

@@ -65,8 +65,9 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     end_call = ControlMessageServiceMethod.V(4)
     transfer_call = ControlMessageServiceMethod.V(5)
     play_wav_files = ControlMessageServiceMethod.V(6)
-    mute = ControlMessageServiceMethod.V(7)
-    un_mute = ControlMessageServiceMethod.V(8)
+    play_text = ControlMessageServiceMethod.V(7)
+    mute = ControlMessageServiceMethod.V(8)
+    un_mute = ControlMessageServiceMethod.V(9)
 
 UNKNOWNMETHOD = ControlMessageServiceMethod.V(0)
 update_config = ControlMessageServiceMethod.V(1)
@@ -75,8 +76,9 @@ reset_config = ControlMessageServiceMethod.V(3)
 end_call = ControlMessageServiceMethod.V(4)
 transfer_call = ControlMessageServiceMethod.V(5)
 play_wav_files = ControlMessageServiceMethod.V(6)
-mute = ControlMessageServiceMethod.V(7)
-un_mute = ControlMessageServiceMethod.V(8)
+play_text = ControlMessageServiceMethod.V(7)
+mute = ControlMessageServiceMethod.V(8)
+un_mute = ControlMessageServiceMethod.V(9)
 global___ControlMessageServiceMethod = ControlMessageServiceMethod
 
 
@@ -423,12 +425,21 @@ class ControlMessageServiceParameters(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor = ...
     T2S_CONFIG_FIELD_NUMBER: builtins.int
     S2T_CONFIG_FIELD_NUMBER: builtins.int
+    TRANSFER_ID_FIELD_NUMBER: builtins.int
+    TEXT_FIELD_NUMBER: builtins.int
+    WAV_FILES_FIELD_NUMBER: builtins.int
     CONDITION_START_FIELD_NUMBER: builtins.int
     CONDITION_END_FIELD_NUMBER: builtins.int
     @property
     def t2s_config(self) -> ondewo.t2s.text_to_speech_pb2.RequestConfig: ...
     @property
     def s2t_config(self) -> ondewo.s2t.speech_to_text_pb2.TranscribeRequestConfig: ...
+    transfer_id: typing.Text = ...
+    """sip params"""
+
+    text: typing.Text = ...
+    @property
+    def wav_files(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.bytes]: ...
     @property
     def condition_start(self) -> global___Condition: ...
     @property
@@ -437,11 +448,14 @@ class ControlMessageServiceParameters(google.protobuf.message.Message):
         *,
         t2s_config : typing.Optional[ondewo.t2s.text_to_speech_pb2.RequestConfig] = ...,
         s2t_config : typing.Optional[ondewo.s2t.speech_to_text_pb2.TranscribeRequestConfig] = ...,
+        transfer_id : typing.Text = ...,
+        text : typing.Text = ...,
+        wav_files : typing.Optional[typing.Iterable[builtins.bytes]] = ...,
         condition_start : typing.Optional[global___Condition] = ...,
         condition_end : typing.Optional[global___Condition] = ...,
         ) -> None: ...
     def HasField(self, field_name: typing_extensions.Literal["condition_end",b"condition_end","condition_start",b"condition_start","config",b"config","s2t_config",b"s2t_config","t2s_config",b"t2s_config"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["condition_end",b"condition_end","condition_start",b"condition_start","config",b"config","s2t_config",b"s2t_config","t2s_config",b"t2s_config"]) -> None: ...
+    def ClearField(self, field_name: typing_extensions.Literal["condition_end",b"condition_end","condition_start",b"condition_start","config",b"config","s2t_config",b"s2t_config","t2s_config",b"t2s_config","text",b"text","transfer_id",b"transfer_id","wav_files",b"wav_files"]) -> None: ...
     def WhichOneof(self, oneof_group: typing_extensions.Literal["config",b"config"]) -> typing.Optional[typing_extensions.Literal["t2s_config","s2t_config"]]: ...
 global___ControlMessageServiceParameters = ControlMessageServiceParameters
 
