@@ -42,11 +42,13 @@ class _ControlMessageServiceNameEnumTypeWrapper(google.protobuf.internal.enum_ty
     ondewo_s2t = ControlMessageServiceName.V(1)
     ondewo_t2s = ControlMessageServiceName.V(2)
     ondewo_nlu = ControlMessageServiceName.V(3)
+    ondewo_sip = ControlMessageServiceName.V(4)
 
 UNKNOWNNAME = ControlMessageServiceName.V(0)
 ondewo_s2t = ControlMessageServiceName.V(1)
 ondewo_t2s = ControlMessageServiceName.V(2)
 ondewo_nlu = ControlMessageServiceName.V(3)
+ondewo_sip = ControlMessageServiceName.V(4)
 global___ControlMessageServiceName = ControlMessageServiceName
 
 
@@ -60,11 +62,21 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     update_config = ControlMessageServiceMethod.V(1)
     undo_config = ControlMessageServiceMethod.V(2)
     reset_config = ControlMessageServiceMethod.V(3)
+    end_call = ControlMessageServiceMethod.V(4)
+    transfer_call = ControlMessageServiceMethod.V(5)
+    play_wav_files = ControlMessageServiceMethod.V(6)
+    mute = ControlMessageServiceMethod.V(7)
+    un_mute = ControlMessageServiceMethod.V(8)
 
 UNKNOWNMETHOD = ControlMessageServiceMethod.V(0)
 update_config = ControlMessageServiceMethod.V(1)
 undo_config = ControlMessageServiceMethod.V(2)
 reset_config = ControlMessageServiceMethod.V(3)
+end_call = ControlMessageServiceMethod.V(4)
+transfer_call = ControlMessageServiceMethod.V(5)
+play_wav_files = ControlMessageServiceMethod.V(6)
+mute = ControlMessageServiceMethod.V(7)
+un_mute = ControlMessageServiceMethod.V(8)
 global___ControlMessageServiceMethod = ControlMessageServiceMethod
 
 
