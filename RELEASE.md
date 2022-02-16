@@ -1,6 +1,13 @@
 # Release History
 *****************
 
+## Release ONDEWO CSI Python Client 2.5.1
+
+### New Features
+* Upgrade to ondewo-nlu-client 2.4.1
+
+*****************
+
 ## Release ONDEWO CSI Python Client 2.5.0
 
 ### New Features
