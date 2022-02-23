@@ -1,6 +1,16 @@
 # Release History
 *****************
 
+## Release ONDEWO CSI Python Client 2.6.0
+
+### New Features
+* Upgrade to ondewo-nlu-client 2.4.2
+* Upgrade toondewo-s2t-client 3.0.0
+* Upgrade toondewo-t2s-client 3.0.1
+* Upgrade toondewo-sip-client 3.2.0
+
+*****************
+
 ## Release ONDEWO CSI Python Client 2.5.1
 
 ### New Features
