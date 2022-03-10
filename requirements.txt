@@ -9,7 +9,7 @@ ondewo-logging>=3.1.0
 
 setuptools~=56.2.0
 
-ondewo-nlu-client>=2.4.2
-ondewo-s2t-client>=3.0.0
+ondewo-nlu-client>=2.5.1
+ondewo-s2t-client>=3.1.0
 ondewo-t2s-client>=3.0.1
 ondewo-sip-client>=3.2.0
