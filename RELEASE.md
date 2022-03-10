@@ -1,6 +1,14 @@
 # Release History
 *****************
 
+## Release ONDEWO CSI Python Client 2.7.0
+
+### New Features
+* Upgrade toondewo-s2t-client 3.1.0
+* Added stop_all_control_messages option 
+
+*****************
+
 ## Release ONDEWO CSI Python Client 2.6.0
 
 ### New Features
