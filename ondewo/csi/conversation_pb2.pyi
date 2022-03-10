@@ -68,6 +68,7 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     play_text = ControlMessageServiceMethod.V(7)
     mute = ControlMessageServiceMethod.V(8)
     un_mute = ControlMessageServiceMethod.V(9)
+    stop_all_control_messages = ControlMessageServiceMethod.V(10)
 
 UNKNOWNMETHOD = ControlMessageServiceMethod.V(0)
 update_config = ControlMessageServiceMethod.V(1)
@@ -79,6 +80,7 @@ play_wav_files = ControlMessageServiceMethod.V(6)
 play_text = ControlMessageServiceMethod.V(7)
 mute = ControlMessageServiceMethod.V(8)
 un_mute = ControlMessageServiceMethod.V(9)
+stop_all_control_messages = ControlMessageServiceMethod.V(10)
 global___ControlMessageServiceMethod = ControlMessageServiceMethod
 
 
