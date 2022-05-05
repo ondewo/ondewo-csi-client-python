@@ -149,3 +149,4 @@ examples/audiofiles/*
 examples/tests/
 
 csi.json
+/tutorials/configs
