@@ -11,7 +11,7 @@ setuptools~=62.6.0
 
 ondewo-nlu-client~=2.8.2
 ondewo-s2t-client~=3.2.0
-ondewo-t2s-client~=4.0.4
+ondewo-t2s-client~=4.1.0
 ondewo-sip-client~=3.2.0
 
 jupyter==1.0.0
