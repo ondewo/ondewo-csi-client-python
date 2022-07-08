@@ -6,7 +6,7 @@
 
 # Choose the submodule version to build ondewo-csi-client-python
 ONDEWO_CSI_API_GIT_BRANCH=tags/1.6.0
-ONDEWO_NLU_API_GIT_BRANCH=tags/2.8.0
+ONDEWO_NLU_API_GIT_BRANCH=tags/2.8.3
 ONDEWO_S2T_API_GIT_BRANCH=tags/3.2.0
 ONDEWO_T2S_API_GIT_BRANCH=tags/4.1.0
 ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/2.0.0
