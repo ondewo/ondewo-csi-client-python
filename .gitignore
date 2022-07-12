@@ -149,3 +149,9 @@ examples/audiofiles/*
 examples/tests/
 
 csi.json
+/tutorials/configs
+
+# ondewo proto generation of submodules
+ondewo/s2t
+ondewo/nlu
+ondewo/t2s
