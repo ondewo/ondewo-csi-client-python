@@ -1,6 +1,15 @@
 # Release History
 *****************
 
+## Release ONDEWO CSI Python Client 2.8.0
+
+### New Features
+* Grpc library upgrades
+* Ondewo client updates
+* Automate proto generation and pypi package creation
+
+*****************
+
 ## Release ONDEWO CSI Python Client 2.7.0
 
 ### New Features
