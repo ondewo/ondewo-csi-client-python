@@ -1,4 +1,4 @@
-# Fully automated build and deploy process for ondewo-t2s-client-python
+# Fully automated build and deploy process for ondewo-csi-client-python
 #
 # Release Process Steps:
 # 1 - Create Release Branch and push
