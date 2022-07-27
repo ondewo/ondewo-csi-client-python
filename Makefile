@@ -1,22 +1,23 @@
 export
 
-# PR BEFORE RELEASE
+# ---------------- BEFORE RELEASE ----------------
 # 1 - Update Version Number
 # 2 - Update RELEASE.md
 # 3 - make update_setup
-#
-# Fully automated build and deploy process for ondewo-nlu-client-python
-# Release Process Steps:
-# 1 - Create Release Branch and push
-# 2 - Create Release Tag and push
-# 3 - GitHub Release
-# 4 - PyPI Release
+# -------------- Release Process Steps --------------
+# 1 - Get Credentials from devops-accounts repo
+# 2 - Create Release Branch and push
+# 3 - Create Release Tag and push
+# 4 - GitHub Release
+# 5 - PyPI Release
+
+########################################################
+# 		Variables
+########################################################
 
 # MUST BE THE SAME AS API in Mayor and Minor Version Number
 # example: API 2.9.0 --> Client 2.9.X
 ONDEWO_CSI_VERSION=2.9.0
-
-# Choose the submodule version to build ondewo-nlu-client-python
 PYPI_USERNAME?=ENTER_HERE_YOUR_PYPI_USERNAME
 PYPI_PASSWORD?=ENTER_HERE_YOUR_PYPI_PASSWORD
 
@@ -26,37 +27,93 @@ GITHUB_GH_TOKEN?=ENTER_YOUR_TOKEN_HERE
 CURRENT_RELEASE_NOTES=`cat RELEASE.md \
 	| sed -n '/Release ONDEWO CSI Python Client ${ONDEWO_CSI_VERSION}/,/\*\*/p'`
 
-
-# Choose repo to release to - Example: "https://github.com/ondewo/ondewo-nlu-client-python"
 GH_REPO="https://github.com/ondewo/ondewo-csi-client-python"
-
 ONDEWO_CSI_API_GIT_BRANCH=release/2.0.0
 ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/2.0.0
-
-# Submodule paths
 ONDEWO_CSI_API_DIR=ondewo-csi-api
 ONDEWO_PROTO_COMPILER_DIR=ondewo-proto-compiler
-
-
-# Specify protos directories
 GOOGLE_API_DIR=${ONDEWO_CSI_API_DIR}/googleapis
 GOOGLE_PROTOS_DIR=${GOOGLE_API_DIR}/google/
 CSI_PROTOS_DIR=${ONDEWO_CSI_API_DIR}/ondewo/
-
-# Utils release docker image environment variables
 IMAGE_UTILS_NAME=ondewo-csi-client-utils-python:${ONDEWO_CSI_VERSION}
-
 .DEFAULT_GOAL := help
+DEVOPS_ACCOUNT_GIT="ondewo-devops-accounts"
+DEVOPS_ACCOUNT_DIR="./${DEVOPS_ACCOUNT_GIT}"
 
-# First comment after target starting with double ## specifies usage
-help:  ## Print usage info about help targets
-	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)|(^##)' Makefile | awk 'BEGIN {FS = ":.*?## "}{printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}' | sed -e 's/\[32m##/[33m/'
+########################################################
+#       ONDEWO Standard Make Targets
+########################################################
 
-# BEFORE "release"
-update_setup: ## Update NLU Version in setup.py
+setup_developer_environment_locally: install_precommit_hooks install_dependencies_locally
+
+install_precommit_hooks: ## Installs pre-commit hooks and sets them up for the ondewo-s2t repo
+	pip install pre-commit
+	pre-commit install
+	pre-commit install --hook-type commit-msg
+
+precommit_hooks_run_all_files: ## Runs all pre-commit hooks on all files and not just the changed ones
+	pre-commit run --all-file
+
+install_dependencies_locally: ## Install dependencies locally
+	pip install -r requirements-dev.txt
+
+flake8:
+	flake8
+
+mypy: ## Run mypy static code checking
+	pre-commit run mypy --all-files
+
+help: ## Print usage info about help targets
+	# (first comment after target starting with double hashes ##)
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+makefile_chapters: ## Shows all sections of Makefile
+	@echo `cat Makefile| grep "########################################################" -A 1 | grep -v "########################################################"`
+
+TEST:
+	@echo ${GITHUB_GH_TOKEN}
+	@echo ${PYPI_USERNAME}
+	@echo ${PYPI_PASSWORD}
+	@echo ${CURRENT_RELEASE_NOTES}
+
+########################################################
+#       Repo Specific Make Targets
+########################################################
+#		Build
+
+update_setup: ## Version in setup.py
 	@sed -i "s/version='[0-9]*.[0-9]*.[0-9]*'/version='${ONDEWO_CSI_VERSION}'/g" setup.py
 	@sed -i "s/version=\"[0-9]*.[0-9]*.[0-9]*\"/version='${ONDEWO_CSI_VERSION}'/g" setup.py
 
+build: clear_package_data prepate_submodules build_compiler generate_all_protos update_setup ## Build source code
+
+build_compiler: ## Build compiler
+	make -C ondewo-proto-compiler/python build
+
+clean_python_api:  ## Clear generated python files
+	find ./ondewo -name \*pb2.py -type f -exec rm -f {} \;
+	find ./ondewo -name \*pb2_grpc.py -type f -exec rm -f {} \;
+	find ./ondewo -name \*.pyi -type f -exec rm -f {} \;
+	rm -rf google
+
+build_utils_docker_image:  ## Build utils docker image
+	docker build -f Dockerfile.utils -t ${IMAGE_UTILS_NAME} .
+
+build_and_release_to_github_via_docker: build build_utils_docker_image release_to_github_via_docker_image  ## Release automation for building and releasing on GitHub via a docker image
+
+build_and_push_to_pypi_via_docker: push_to_pypi_via_docker_image  ## Release automation for building and pushing to pypi via a docker image
+
+generate_all_protos: generate_csi_protos
+
+generate_csi_protos:
+	make -f ondewo-proto-compiler/python/Makefile run \
+		PROTO_DIR=${CSI_PROTOS_DIR} \
+		EXTRA_PROTO_DIR=${GOOGLE_PROTOS_DIR} \
+		TARGET_DIR='ondewo/csi' \
+		OUTPUT_DIR='.'
+
+########################################################
+#		Release
 
 release: create_release_branch create_release_tag build_and_release_to_github_via_docker build_and_push_to_pypi_via_docker ## Automate the entire release process
 	@echo "Release Finished"
@@ -75,13 +132,8 @@ login_to_gh: ## Login to Github CLI with Access Token
 build_gh_release: ## Generate Github Release with CLI
 	gh release create --repo $(GH_REPO) "$(ONDEWO_CSI_VERSION)" -n "$(CURRENT_RELEASE_NOTES)" -t "Release ${ONDEWO_CSI_VERSION}"
 
-
-build_and_push_to_pypi_via_docker: push_to_pypi_via_docker_image  ## Release automation for building and pushing to pypi via a docker image
-
-build_and_release_to_github_via_docker: build build_utils_docker_image release_to_github_via_docker_image  ## Release automation for building and releasing on GitHub via a docker image
-
-
-build: clear_package_data prepate_submodules build_compiler generate_all_protos update_setup ## Build source code
+########################################################
+#		Submodules
 
 prepate_submodules: init_submodules checkout_defined_submodule_versions
 
@@ -100,30 +152,18 @@ checkout_defined_submodule_versions:
 	cd ..
 	@echo "DONE checking out submodules"
 
-build_compiler:
-	make -C ondewo-proto-compiler/python build
+########################################################
+#		PYPI
 
-clean_python_api:  ## Clear generated python files
-	find ./ondewo -name \*pb2.py -type f -exec rm -f {} \;
-	find ./ondewo -name \*pb2_grpc.py -type f -exec rm -f {} \;
-	find ./ondewo -name \*.pyi -type f -exec rm -f {} \;
-	rm -rf google
+build_package: ## Build Pypi package
+	python setup.py sdist bdist_wheel
+	chmod a+rw dist -R
 
-# {{{ PROTOS
-generate_all_protos: generate_csi_protos
+upload_package: ## Upload Pypi package
+	twine upload --verbose -r pypi dist/* -u${PYPI_USERNAME} -p${PYPI_PASSWORD}
 
-generate_csi_protos:
-	make -f ondewo-proto-compiler/python/Makefile run \
-		PROTO_DIR=${CSI_PROTOS_DIR} \
-		EXTRA_PROTO_DIR=${GOOGLE_PROTOS_DIR} \
-		TARGET_DIR='ondewo/csi' \
-		OUTPUT_DIR='.'
-
-# }}}
-
-
-build_utils_docker_image:  ## Build utils docker image
-	docker build -f Dockerfile.utils -t ${IMAGE_UTILS_NAME} .
+clear_package_data: ## Remove Pypi package
+	rm -rf build dist/* ondewo_vtsi_client.egg-info
 
 push_to_pypi_via_docker_image:  ## Push source code to pypi via docker
 	[ -d $(OUTPUT_DIR) ] || mkdir -p $(OUTPUT_DIR)
@@ -137,6 +177,9 @@ push_to_pypi_via_docker_image:  ## Push source code to pypi via docker
 push_to_pypi: build_package upload_package clear_package_data
 	@echo 'YAY - Pushed to pypi : )'
 
+########################################################
+#		GITHUB
+
 push_to_gh: login_to_gh build_gh_release
 	@echo 'Released to Github'
 
@@ -145,15 +188,8 @@ release_to_github_via_docker_image:  ## Release to Github via docker
 		-e GITHUB_GH_TOKEN=${GITHUB_GH_TOKEN} \
 		${IMAGE_UTILS_NAME} make push_to_gh
 
-build_package:
-	python setup.py sdist bdist_wheel
-	chmod a+rw dist -R
-
-upload_package:
-	twine upload --verbose -r pypi dist/* -u${PYPI_USERNAME} -p${PYPI_PASSWORD}
-
-clear_package_data:
-	rm -rf build dist/* ondewo_vtsi_client.egg-info
+########################################################
+#		DEVOPS-ACCOUNTS
 
 ondewo_release: spc clone_devops_accounts run_release_with_devops ## Release with credentials from devops-accounts repo
 	@rm -rf ${DEVOPS_ACCOUNT_GIT}
@@ -161,15 +197,6 @@ ondewo_release: spc clone_devops_accounts run_release_with_devops ## Release wit
 clone_devops_accounts: ## Clones devops-accounts repo
 	if [ -d $(DEVOPS_ACCOUNT_GIT) ]; then rm -Rf $(DEVOPS_ACCOUNT_GIT); fi
 	git clone git@bitbucket.org:ondewo/${DEVOPS_ACCOUNT_GIT}.git
-
-DEVOPS_ACCOUNT_GIT="ondewo-devops-accounts"
-DEVOPS_ACCOUNT_DIR="./${DEVOPS_ACCOUNT_GIT}"
-
-TEST:
-	@echo ${GITHUB_GH_TOKEN}
-	@echo ${PYPI_USERNAME}
-	@echo ${PYPI_PASSWORD}
-	@echo ${CURRENT_RELEASE_NOTES}
 
 run_release_with_devops:
 	$(eval info:= $(shell cat ${DEVOPS_ACCOUNT_DIR}/account_github.env | grep GITHUB_GH & cat ${DEVOPS_ACCOUNT_DIR}/account_pypi.env | grep PYPI_USERNAME & cat ${DEVOPS_ACCOUNT_DIR}/account_pypi.env | grep PYPI_PASSWORD))
