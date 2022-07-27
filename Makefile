@@ -34,26 +34,17 @@ ONDEWO_CSI_API_GIT_BRANCH=release/2.0.0
 ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/2.0.0
 
 # Submodule paths
-ONDEWO_NLU_API_DIR=ondewo-nlu-api
 ONDEWO_CSI_API_DIR=ondewo-csi-api
 ONDEWO_PROTO_COMPILER_DIR=ondewo-proto-compiler
-ONDEWO_S2T_API_DIR=ondewo-s2t-api
-ONDEWO_T2S_API_DIR=ondewo-t2s-api
-ONDEWO_SIP_API_DIR=ondewo-sip-api
-ONDEWO_VTSI_API_DIR=ondewo-vtsi-api
 
 
 # Specify protos directories
-GOOGLE_API_DIR=${ONDEWO_NLU_API_DIR}/googleapis
-NLU_PROTOS_DIR=${ONDEWO_NLU_API_DIR}/ondewo/
+GOOGLE_API_DIR=${ONDEWO_CSI_API_DIR}/googleapis
 GOOGLE_PROTOS_DIR=${GOOGLE_API_DIR}/google/
-S2T_PROTOS_DIR=${ONDEWO_S2T_API_DIR}/ondewo/
-T2S_PROTOS_DIR=${ONDEWO_T2S_API_DIR}/ondewo/
-SIP_PROTOS_DIR=${ONDEWO_SIP_API_DIR}/ondewo/
-VTSI_PROTOS_DIR=${ONDEWO_VTSI_API_DIR}/ondewo/
+CSI_PROTOS_DIR=${ONDEWO_CSI_API_DIR}/ondewo/
 
 # Utils release docker image environment variables
-IMAGE_UTILS_NAME=ondewo-nlu-client-utils-python:${ONDEWO_NLU_VERSION}
+IMAGE_UTILS_NAME=ondewo-csi-client-utils-python:${ONDEWO_CSI_VERSION}
 
 .DEFAULT_GOAL := help
 
@@ -63,20 +54,27 @@ help:  ## Print usage info about help targets
 
 # BEFORE "release"
 update_setup: ## Update NLU Version in setup.py
-	@sed -i "s/version='[0-9]*.[0-9]*.[0-9]*'/version='${ONDEWO_NLU_VERSION}'/g" setup.py
-	@sed -i "s/version=\"[0-9]*.[0-9]*.[0-9]*\"/version='${ONDEWO_NLU_VERSION}'/g" setup.py
+	@sed -i "s/version='[0-9]*.[0-9]*.[0-9]*'/version='${ONDEWO_CSI_VERSION}'/g" setup.py
+	@sed -i "s/version=\"[0-9]*.[0-9]*.[0-9]*\"/version='${ONDEWO_CSI_VERSION}'/g" setup.py
 
 
 release: create_release_branch create_release_tag build_and_release_to_github_via_docker build_and_push_to_pypi_via_docker ## Automate the entire release process
 	@echo "Release Finished"
 
 create_release_branch: ## Create Release Branch and push it to origin
-	git checkout -b "release/${ONDEWO_NLU_VERSION}"
-	git push -u origin "release/${ONDEWO_NLU_VERSION}"
+	git checkout -b "release/${ONDEWO_CSI_VERSION}"
+	git push -u origin "release/${ONDEWO_CSI_VERSION}"
 
 create_release_tag: ## Create Release Tag and push it to origin
-	git tag -a ${ONDEWO_NLU_VERSION} -m "release/${ONDEWO_NLU_VERSION}"
-	git push origin ${ONDEWO_NLU_VERSION}
+	git tag -a ${ONDEWO_CSI_VERSION} -m "release/${ONDEWO_CSI_VERSION}"
+	git push origin ${ONDEWO_CSI_VERSION}
+
+login_to_gh: ## Login to Github CLI with Access Token
+	echo $(GITHUB_GH_TOKEN) | gh auth login -p ssh --with-token
+
+build_gh_release: ## Generate Github Release with CLI
+	gh release create --repo $(GH_REPO) "$(ONDEWO_CSI_VERSION)" -n "$(CURRENT_RELEASE_NOTES)" -t "Release ${ONDEWO_CSI_VERSION}"
+
 
 build_and_push_to_pypi_via_docker: push_to_pypi_via_docker_image  ## Release automation for building and pushing to pypi via a docker image
 
@@ -112,82 +110,17 @@ clean_python_api:  ## Clear generated python files
 	rm -rf google
 
 # {{{ PROTOS
-generate_all_protos: generate_nlu_protos generate_s2t_protos generate_t2s_protos generate_sip_protos generate_vtsi_protos
+generate_all_protos: generate_csi_protos
 
-generate_nlu_protos:
+generate_csi_protos:
 	make -f ondewo-proto-compiler/python/Makefile run \
-		PROTO_DIR=${NLU_PROTOS_DIR} \
+		PROTO_DIR=${CSI_PROTOS_DIR} \
 		EXTRA_PROTO_DIR=${GOOGLE_PROTOS_DIR} \
-		TARGET_DIR='ondewo' \
+		TARGET_DIR='ondewo/csi' \
 		OUTPUT_DIR='.'
 
-generate_s2t_protos:
-	make -f ondewo-proto-compiler/python/Makefile run \
-		PROTO_DIR=${S2T_PROTOS_DIR} \
-		TARGET_DIR='ondewo' \
-		OUTPUT_DIR='.'
-
-generate_t2s_protos:
-	make -f ondewo-proto-compiler/python/Makefile run \
-		PROTO_DIR=${T2S_PROTOS_DIR} \
-		TARGET_DIR='ondewo' \
-		OUTPUT_DIR='.'
-
-generate_sip_protos:
-	make -f ondewo-proto-compiler/python/Makefile run \
-		PROTO_DIR=${SIP_PROTOS_DIR} \
-		TARGET_DIR='ondewo' \
-		OUTPUT_DIR='.'
-
-generate_vtsi_protos:
-	make -f ondewo-proto-compiler/python/Makefile run \
-		PROTO_DIR=${VTSI_PROTOS_DIR} \
-		EXTRA_PROTO_DIR=${GOOGLE_PROTOS_DIR} \
-		TARGET_DIR='ondewo' \
-		OUTPUT_DIR='.'
 # }}}
 
-#VTSI proto Preparation{{{
-
-copy_proto_files_all_submodules: copy_proto_files_for_google_api copy_proto_files_for_ondewo_nlu_api copy_proto_files_for_ondewo_s2t_api copy_proto_files_for_ondewo_t2s_api copy_proto_files_for_ondewo_sip_api
-
-copy_proto_files_for_google_api:
-	@echo "START copying googleapis protos from submodules to build folder ..."
-	-mkdir -p ${ONDEWO_VTSI_API_DIR}/google/api
-	-mkdir -p ${ONDEWO_VTSI_API_DIR}/google/longrunning
-	-mkdir -p ${ONDEWO_VTSI_API_DIR}/google/rpc
-	-mkdir -p ${ONDEWO_VTSI_API_DIR}/google/type
-	cp ${GOOGLE_PROTOS_DIR}/api/annotations.proto ${ONDEWO_VTSI_API_DIR}/google/api/
-	cp ${GOOGLE_PROTOS_DIR}/api/http.proto ${ONDEWO_VTSI_API_DIR}/google/api/
-	cp ${GOOGLE_PROTOS_DIR}/type/latlng.proto ${ONDEWO_VTSI_API_DIR}/google/type/
-	cp ${GOOGLE_PROTOS_DIR}/rpc/status.proto ${ONDEWO_VTSI_API_DIR}/google/rpc/
-	cp ${GOOGLE_PROTOS_DIR}/longrunning/operations.proto ${ONDEWO_VTSI_API_DIR}/google/longrunning/
-	@echo "DONE copying googleapis protos from submodules to build folder."
-
-copy_proto_files_for_ondewo_nlu_api:
-	@echo "START copying ondewo-nlu protos from submodules to build folder ..."
-	-mkdir -p ${ONDEWO_VTSI_API_DIR}/ondewo/nlu/
-	cp ${NLU_PROTOS_DIR}/nlu/context.proto ${ONDEWO_VTSI_API_DIR}/ondewo/nlu/
-	@echo "DONE copying ondewo-nlu protos from submodules to build folder."
-
-copy_proto_files_for_ondewo_s2t_api:
-	@echo "START copying ondewo-s2t protos from submodules to build folder ..."
-	-mkdir -p ${ONDEWO_VTSI_API_DIR}/ondewo/s2t/
-	cp ${S2T_PROTOS_DIR}/s2t/speech-to-text.proto ${ONDEWO_VTSI_API_DIR}/ondewo/s2t/
-	@echo "DONE copying ondewo-s2t protos from submodules to build folder."
-
-copy_proto_files_for_ondewo_t2s_api:
-	@echo "START copying ondewo-t2s protos from submodules to build folder ..."
-	-mkdir -p ${ONDEWO_VTSI_API_DIR}/ondewo/t2s/
-	cp ${T2S_PROTOS_DIR}/t2s/text-to-speech.proto ${ONDEWO_VTSI_API_DIR}/ondewo/t2s/
-	@echo "DONE copying ondewo-t2s protos from submodules to build folder."
-
-copy_proto_files_for_ondewo_sip_api:
-	@echo "START copying ondewo-sip protos from submodules to build folder ..."
-	-mkdir -p ${ONDEWO_VTSI_API_DIR}/ondewo/sip/
-	cp ${SIP_PROTOS_DIR}/sip/sip.proto ${ONDEWO_VTSI_API_DIR}/ondewo/sip/
-	@echo "DONE copying ondewo-sip protos from submodules to build folder."
-#}}}
 
 build_utils_docker_image:  ## Build utils docker image
 	docker build -f Dockerfile.utils -t ${IMAGE_UTILS_NAME} .
@@ -243,9 +176,9 @@ run_release_with_devops:
 	make release $(info)
 
 spc: ## Checks if the Release Branch, Tag and Pypi version already exist
-	$(eval filtered_branches:= $(shell git branch --all | grep "release/${ONDEWO_NLU_VERSION}"))
-	$(eval filtered_tags:= $(shell git tag --list | grep "${ONDEWO_NLU_VERSION}"))
+	$(eval filtered_branches:= $(shell git branch --all | grep "release/${ONDEWO_CSI_VERSION}"))
+	$(eval filtered_tags:= $(shell git tag --list | grep "${ONDEWO_CSI_VERSION}"))
 	$(eval setuppy_version:= $(shell cat setup.py | grep "version"))
 	@if test "$(filtered_branches)" != ""; then echo "-- Test 1: Branch exists!!" & exit 1; else echo "-- Test 1: Branch is fine";fi
 	@if test "$(filtered_tags)" != ""; then echo "-- Test 2: Tag exists!!" & exit 1; else echo "-- Test 2: Tag is fine";fi
-	@if test "$(setuppy_version)" != "version='${ONDEWO_NLU_VERSION}',"; then echo "-- Test 3: Setup.py not updated!!" & exit 1; else echo "-- Test 3: Setup.py is fine";fi
+	@if test "$(setuppy_version)" != "version='${ONDEWO_CSI_VERSION}',"; then echo "-- Test 3: Setup.py not updated!!" & exit 1; else echo "-- Test 3: Setup.py is fine";fi

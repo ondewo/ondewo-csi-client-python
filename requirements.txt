@@ -9,10 +9,10 @@ ondewo-logging>=3.1.0
 
 setuptools~=62.6.0
 
-ondewo-nlu-client==2.8.5
-ondewo-s2t-client==3.2.0
-ondewo-t2s-client==4.1.0
-ondewo-sip-client==3.3.0
+ondewo-nlu-client==2.9.0
+ondewo-s2t-client==3.3.0
+ondewo-t2s-client==4.2.0
+ondewo-sip-client==3.4.0
 
 jupyter==1.0.0
 SoundFile==0.10.3.post1
