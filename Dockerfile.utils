@@ -39,6 +39,22 @@ COPY README.md .
 
 COPY RELEASE.md .
 
+COPY .flake8 .
+
+COPY .isort.cfg .
+
+COPY .pre-commit-config.yaml .
+
+COPY CONTRIBUTING.md .
+
+COPY LICENSE .
+
+COPY MANIFEST.in .
+
+COPY mypy.ini .
+
+COPY examples .
+
 COPY ondewo ondewo
 
 # run the container forever

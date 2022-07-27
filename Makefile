@@ -163,7 +163,7 @@ upload_package: ## Upload Pypi package
 	twine upload --verbose -r pypi dist/* -u${PYPI_USERNAME} -p${PYPI_PASSWORD}
 
 clear_package_data: ## Remove Pypi package
-	rm -rf build dist/* ondewo_vtsi_client.egg-info
+	rm -rf build dist/* ondewo_csi_client.egg-info
 
 push_to_pypi_via_docker_image:  ## Push source code to pypi via docker
 	[ -d $(OUTPUT_DIR) ] || mkdir -p $(OUTPUT_DIR)
@@ -176,6 +176,20 @@ push_to_pypi_via_docker_image:  ## Push source code to pypi via docker
 
 push_to_pypi: build_package upload_package clear_package_data
 	@echo 'YAY - Pushed to pypi : )'
+
+show_pypi: build_package
+	tar xvfz dist/ondewo-csi-client-${ONDEWO_CSI_VERSION}.tar.gz
+	tree ondewo-csi-client-${ONDEWO_CSI_VERSION}
+	cat ondewo-csi-client-${ONDEWO_CSI_VERSION}/ondewo_csi_client.egg-info/requires.txt
+
+show_pypi_via_docker_image: build_utils_docker_image ## Push source code to pypi via docker
+	[ -d $(OUTPUT_DIR) ] || mkdir -p $(OUTPUT_DIR)
+	docker run --rm \
+		-v ${shell pwd}/dist:/home/ondewo/dist \
+		-e PYPI_USERNAME=${PYPI_USERNAME} \
+		-e PYPI_PASSWORD=${PYPI_PASSWORD} \
+		${IMAGE_UTILS_NAME} make show_pypi
+	rm -rf dist
 
 ########################################################
 #		GITHUB
