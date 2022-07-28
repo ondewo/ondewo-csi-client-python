@@ -1,3 +1,5 @@
+jupyter
 mypy
+mypy-protobuf
 pre-commit
 pytest
