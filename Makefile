@@ -5,8 +5,8 @@
 # Step 3: Execute "make build_and_push_to_pypi_via_docker"
 
 # Choose the submodule version to build ondewo-csi-client-python
-ONDEWO_CSI_API_GIT_BRANCH=tags/1.6.0
-ONDEWO_NLU_API_GIT_BRANCH=tags/2.8.3
+ONDEWO_CSI_API_GIT_BRANCH=extend_nlu_control_messages
+ONDEWO_NLU_API_GIT_BRANCH=tags/2.9.0
 ONDEWO_S2T_API_GIT_BRANCH=tags/3.2.0
 ONDEWO_T2S_API_GIT_BRANCH=tags/4.1.0
 ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/2.0.0

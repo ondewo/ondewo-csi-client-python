@@ -70,6 +70,12 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     mute: _ControlMessageServiceMethod.ValueType  # 8
     un_mute: _ControlMessageServiceMethod.ValueType  # 9
     stop_all_control_messages: _ControlMessageServiceMethod.ValueType  # 10
+    train_agent: _ControlMessageServiceMethod.ValueType  # 11
+    cancel_train_agent: _ControlMessageServiceMethod.ValueType  # 12
+    delete_session: _ControlMessageServiceMethod.ValueType  # 13
+    delete_all_contexts: _ControlMessageServiceMethod.ValueType  # 14
+    create_context: _ControlMessageServiceMethod.ValueType  # 15
+    update_context: _ControlMessageServiceMethod.ValueType  # 16
 class ControlMessageServiceMethod(_ControlMessageServiceMethod, metaclass=_ControlMessageServiceMethodEnumTypeWrapper):
     pass
 
@@ -84,6 +90,12 @@ play_text: ControlMessageServiceMethod.ValueType  # 7
 mute: ControlMessageServiceMethod.ValueType  # 8
 un_mute: ControlMessageServiceMethod.ValueType  # 9
 stop_all_control_messages: ControlMessageServiceMethod.ValueType  # 10
+train_agent: ControlMessageServiceMethod.ValueType  # 11
+cancel_train_agent: ControlMessageServiceMethod.ValueType  # 12
+delete_session: ControlMessageServiceMethod.ValueType  # 13
+delete_all_contexts: ControlMessageServiceMethod.ValueType  # 14
+create_context: ControlMessageServiceMethod.ValueType  # 15
+update_context: ControlMessageServiceMethod.ValueType  # 16
 global___ControlMessageServiceMethod = ControlMessageServiceMethod
 
 
