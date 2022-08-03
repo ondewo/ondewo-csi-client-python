@@ -22,7 +22,7 @@
 
 ### New Features
 * Upgrade toondewo-s2t-client 3.1.0
-* Added stop_all_control_messages option 
+* Added stop_all_control_messages option
 
 *****************
 
@@ -75,7 +75,7 @@
 ## Release ONDEWO CSI Python Client 2.0.0
 
 ### New Features
-* New client adaptation to new s2t,t2s, and nlu 
+* New client adaptation to new s2t,t2s, and nlu
 
 *****************
 

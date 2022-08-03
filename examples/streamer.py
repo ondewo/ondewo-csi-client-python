@@ -53,11 +53,11 @@ class StreamerInInterface(metaclass=ABCMeta):
 
     @abstractmethod
     def create_s2s_request(
-        self,
-        pipeline_id: str,
-        session_id: Optional[str] = None,
-        save_to_disk: bool = False,
-        initial_intent_display_name: Optional[str] = None,
+            self,
+            pipeline_id: str,
+            session_id: Optional[str] = None,
+            save_to_disk: bool = False,
+            initial_intent_display_name: Optional[str] = None,
     ) -> Iterator[S2sStreamRequest]:
         pass
 
@@ -121,17 +121,18 @@ class PyAudioStreamerIn(StreamerInInterface):
         self.pyaudio_object.terminate()
 
     def create_s2s_request(
-        self,
-        pipeline_id: str,
-        session_id: Optional[str] = None,
-        save_to_disk: bool = False,
-        initial_intent_display_name: Optional[str] = None,
+            self,
+            pipeline_id: str,
+            session_id: Optional[str] = None,
+            save_to_disk: bool = False,
+            initial_intent_display_name: Optional[str] = None,
     ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
         yield S2sStreamRequest(
             pipeline_id=pipeline_id,
             session_id=session_id or str(uuid.uuid4()),
-            initial_intent_display_name=initial_intent_display_name,
+            initial_intent_display_name=initial_intent_display_name,  # type: ignore[arg-type]
+            # In the proto its optional
         )
 
         count = 0
@@ -202,7 +203,7 @@ class PySoundIoStreamerOut(StreamerOutInterface):
                 # if the response is still being played: calculate the length in bytes, overwrite the output
                 # data with the portion of the response, increase the index and return
                 num_bytes = length * SAMPLEWIDTH * MONO
-                data[:] = self.response[self.idx : self.idx + num_bytes]  # noqa:
+                data[:] = self.response[self.idx: self.idx + num_bytes]  # noqa:
                 self.idx += num_bytes
                 return
 
@@ -263,17 +264,18 @@ class PySoundIoStreamerIn(StreamerInInterface):
         pass
 
     def create_s2s_request(
-        self,
-        pipeline_id: str,
-        session_id: Optional[str] = None,
-        save_to_disk: bool = False,
-        initial_intent_display_name: Optional[str] = None,
+            self,
+            pipeline_id: str,
+            session_id: Optional[str] = None,
+            save_to_disk: bool = False,
+            initial_intent_display_name: Optional[str] = None,
     ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
         yield S2sStreamRequest(
             pipeline_id=pipeline_id,
             session_id=session_id or str(uuid.uuid4()),
-            initial_intent_display_name=initial_intent_display_name,
+            initial_intent_display_name=initial_intent_display_name,  # type: ignore[arg-type]
+            # In the proto its optional
         )
 
         if save_to_disk:
@@ -294,7 +296,7 @@ class PySoundIoStreamerIn(StreamerInInterface):
             time.sleep(0.1)
 
     def create_intent_request(
-        self, cai_project: str, cai_session: str
+            self, cai_project: str, cai_session: str
     ) -> Iterator[StreamingDetectIntentRequest]:
         count = 0
         data_save = bytes()
@@ -319,7 +321,7 @@ class PySoundIoStreamerIn(StreamerInInterface):
             time.sleep(0.1)
 
     def create_pysoundio_streaming_request(
-        self, pipeline_id: str
+            self, pipeline_id: str
     ) -> Iterator[speech_to_text_pb2.TranscribeStreamRequest]:
 
         count = 0

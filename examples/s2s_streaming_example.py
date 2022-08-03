@@ -43,16 +43,17 @@ def get_streaming_audio(audio_path: str) -> Iterator[bytes]:
 
 
 def create_streaming_request(
-    audio_stream: Iterator[bytes],
-    pipeline_id: str = "pizza",
-    session_id: Optional[str] = None,
-    initial_intent_display_name: Optional[str] = None,
+        audio_stream: Iterator[bytes],
+        pipeline_id: str = "pizza",
+        session_id: Optional[str] = None,
+        initial_intent_display_name: Optional[str] = None,
 ) -> Iterator[S2sStreamRequest]:
     # create an initial request with session id specified
     yield S2sStreamRequest(
         pipeline_id=pipeline_id,
         session_id=session_id or str(uuid4()),
-        initial_intent_display_name=initial_intent_display_name,
+        initial_intent_display_name=initial_intent_display_name,  # type: ignore[arg-type]
+        # In the proto its optional
     )
     for i, chunk in enumerate(audio_stream):
         yield S2sStreamRequest(audio=chunk)

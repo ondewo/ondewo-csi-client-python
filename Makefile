@@ -28,7 +28,7 @@ CURRENT_RELEASE_NOTES=`cat RELEASE.md \
 	| sed -n '/Release ONDEWO CSI Python Client ${ONDEWO_CSI_VERSION}/,/\*\*/p'`
 
 GH_REPO="https://github.com/ondewo/ondewo-csi-client-python"
-ONDEWO_CSI_API_GIT_BRANCH=release/2.0.0
+ONDEWO_CSI_API_GIT_BRANCH=release/2.1.0
 ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/2.0.0
 ONDEWO_CSI_API_DIR=ondewo-csi-api
 ONDEWO_PROTO_COMPILER_DIR=ondewo-proto-compiler
@@ -46,7 +46,7 @@ DEVOPS_ACCOUNT_DIR="./${DEVOPS_ACCOUNT_GIT}"
 
 setup_developer_environment_locally: install_precommit_hooks install_dependencies_locally
 
-install_precommit_hooks: ## Installs pre-commit hooks and sets them up for the ondewo-s2t repo
+install_precommit_hooks: ## Installs pre-commit hooks and sets them up for the ondewo-csi-client repo
 	pip install pre-commit
 	pre-commit install
 	pre-commit install --hook-type commit-msg
@@ -58,7 +58,7 @@ install_dependencies_locally: ## Install dependencies locally
 	pip install -r requirements-dev.txt
 
 flake8:
-	flake8
+	flake8 --exclude 'ondewo'
 
 mypy: ## Run mypy static code checking
 	pre-commit run mypy --all-files
@@ -141,15 +141,13 @@ init_submodules:
 	git submodule update --init --recursive
 
 install: init_submodules
-	pip install -e .
+	pip install -r requirements.txt
 
 checkout_defined_submodule_versions:
 	@echo "START checking out submodules ..."
 	git -C ${ONDEWO_CSI_API_DIR} fetch --all
 	git -C ${ONDEWO_CSI_API_DIR} checkout ${ONDEWO_CSI_API_GIT_BRANCH}
-	cd ${ONDEWO_CSI_API_DIR}
 	make -C ${ONDEWO_CSI_API_DIR} build
-	cd ..
 	@echo "DONE checking out submodules"
 
 ########################################################
