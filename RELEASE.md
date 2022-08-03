@@ -1,6 +1,17 @@
 # Release History
 *****************
 
+## Release ONDEWO CSI Python Client 2.9.0
+
+### Improvements
+* [[OND211-2039]](https://ondewo.atlassian.net/browse/OND211-2039) - Added pre-commit hooks and adjusted files to them
+* Upgraded to CSI API Version 2.0.0
+
+### New Features
+* [[OND211-2039]](https://ondewo.atlassian.net/browse/OND211-2039) - Release Automation
+
+*****************
+
 ## Release ONDEWO CSI Python Client 2.8.0
 
 ### New Features
@@ -14,7 +25,7 @@
 
 ### New Features
 * Upgrade toondewo-s2t-client 3.1.0
-* Added stop_all_control_messages option 
+* Added stop_all_control_messages option
 
 *****************
 
@@ -67,7 +78,7 @@
 ## Release ONDEWO CSI Python Client 2.0.0
 
 ### New Features
-* New client adaptation to new s2t,t2s, and nlu 
+* New client adaptation to new s2t,t2s, and nlu
 
 *****************
 
