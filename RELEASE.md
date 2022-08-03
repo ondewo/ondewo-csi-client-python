@@ -3,9 +3,12 @@
 
 ## Release ONDEWO CSI Python Client 2.9.0
 
-### New Features
-* [[OND211-2039]](https://ondewo.atlassian.net/browse/OND211-2039) - Improved automated release process
+### Improvements
+* [[OND211-2039]](https://ondewo.atlassian.net/browse/OND211-2039) - Added pre-commit hooks and adjusted files to them
 * Upgraded to CSI API Version 2.0.0
+
+### New Features
+* [[OND211-2039]](https://ondewo.atlassian.net/browse/OND211-2039) - Release Automation
 
 *****************
 
