@@ -10,6 +10,7 @@ import google.protobuf.message
 import google.protobuf.struct_pb2
 import google.protobuf.timestamp_pb2
 import google.rpc.status_pb2
+import ondewo.nlu.context_pb2
 import ondewo.nlu.session_pb2
 import ondewo.s2t.speech_to_text_pb2
 import ondewo.t2s.text_to_speech_pb2
@@ -70,12 +71,6 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     mute: _ControlMessageServiceMethod.ValueType  # 8
     un_mute: _ControlMessageServiceMethod.ValueType  # 9
     stop_all_control_messages: _ControlMessageServiceMethod.ValueType  # 10
-    train_agent: _ControlMessageServiceMethod.ValueType  # 11
-    cancel_train_agent: _ControlMessageServiceMethod.ValueType  # 12
-    delete_session: _ControlMessageServiceMethod.ValueType  # 13
-    delete_all_contexts: _ControlMessageServiceMethod.ValueType  # 14
-    create_context: _ControlMessageServiceMethod.ValueType  # 15
-    update_context: _ControlMessageServiceMethod.ValueType  # 16
 class ControlMessageServiceMethod(_ControlMessageServiceMethod, metaclass=_ControlMessageServiceMethodEnumTypeWrapper):
     pass
 
@@ -90,12 +85,6 @@ play_text: ControlMessageServiceMethod.ValueType  # 7
 mute: ControlMessageServiceMethod.ValueType  # 8
 un_mute: ControlMessageServiceMethod.ValueType  # 9
 stop_all_control_messages: ControlMessageServiceMethod.ValueType  # 10
-train_agent: ControlMessageServiceMethod.ValueType  # 11
-cancel_train_agent: ControlMessageServiceMethod.ValueType  # 12
-delete_session: ControlMessageServiceMethod.ValueType  # 13
-delete_all_contexts: ControlMessageServiceMethod.ValueType  # 14
-create_context: ControlMessageServiceMethod.ValueType  # 15
-update_context: ControlMessageServiceMethod.ValueType  # 16
 global___ControlMessageServiceMethod = ControlMessageServiceMethod
 
 
@@ -445,8 +434,11 @@ class ControlMessageServiceParameters(google.protobuf.message.Message):
     T2S_CONFIG_FIELD_NUMBER: builtins.int
     S2T_CONFIG_FIELD_NUMBER: builtins.int
     TRANSFER_ID_FIELD_NUMBER: builtins.int
-    TEXT_FIELD_NUMBER: builtins.int
     WAV_FILES_FIELD_NUMBER: builtins.int
+    TEXT_FIELD_NUMBER: builtins.int
+    CONTEXT_FIELD_NUMBER: builtins.int
+    SESSION_ID_FIELD_NUMBER: builtins.int
+    CONTEXT_NAME_FIELD_NUMBER: builtins.int
     CONDITION_START_FIELD_NUMBER: builtins.int
     CONDITION_END_FIELD_NUMBER: builtins.int
     @property
@@ -456,9 +448,17 @@ class ControlMessageServiceParameters(google.protobuf.message.Message):
     transfer_id: typing.Text
     """sip params"""
 
-    text: typing.Text
     @property
     def wav_files(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.bytes]: ...
+    text: typing.Text
+    """sip and nlu common params"""
+
+    @property
+    def context(self) -> ondewo.nlu.context_pb2.Context:
+        """nlu params"""
+        pass
+    session_id: typing.Text
+    context_name: typing.Text
     @property
     def condition_start(self) -> global___Condition: ...
     @property
@@ -468,13 +468,16 @@ class ControlMessageServiceParameters(google.protobuf.message.Message):
         t2s_config: typing.Optional[ondewo.t2s.text_to_speech_pb2.RequestConfig] = ...,
         s2t_config: typing.Optional[ondewo.s2t.speech_to_text_pb2.TranscribeRequestConfig] = ...,
         transfer_id: typing.Text = ...,
-        text: typing.Text = ...,
         wav_files: typing.Optional[typing.Iterable[builtins.bytes]] = ...,
+        text: typing.Text = ...,
+        context: typing.Optional[ondewo.nlu.context_pb2.Context] = ...,
+        session_id: typing.Text = ...,
+        context_name: typing.Text = ...,
         condition_start: typing.Optional[global___Condition] = ...,
         condition_end: typing.Optional[global___Condition] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["condition_end",b"condition_end","condition_start",b"condition_start","config",b"config","s2t_config",b"s2t_config","t2s_config",b"t2s_config"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["condition_end",b"condition_end","condition_start",b"condition_start","config",b"config","s2t_config",b"s2t_config","t2s_config",b"t2s_config","text",b"text","transfer_id",b"transfer_id","wav_files",b"wav_files"]) -> None: ...
+    def HasField(self, field_name: typing_extensions.Literal["condition_end",b"condition_end","condition_start",b"condition_start","config",b"config","context",b"context","s2t_config",b"s2t_config","t2s_config",b"t2s_config"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["condition_end",b"condition_end","condition_start",b"condition_start","config",b"config","context",b"context","context_name",b"context_name","s2t_config",b"s2t_config","session_id",b"session_id","t2s_config",b"t2s_config","text",b"text","transfer_id",b"transfer_id","wav_files",b"wav_files"]) -> None: ...
     def WhichOneof(self, oneof_group: typing_extensions.Literal["config",b"config"]) -> typing.Optional[typing_extensions.Literal["t2s_config","s2t_config"]]: ...
 global___ControlMessageServiceParameters = ControlMessageServiceParameters
 
