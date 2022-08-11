@@ -1,6 +1,13 @@
 # Release History
 *****************
 
+## Release ONDEWO CSI Python Client 2.11.0
+
+### New Features
+* * Upgraded to CSI API Version 2.3.1
+
+*****************
+
 ## Release ONDEWO CSI Python Client 2.10.0
 
 ### New Features

@@ -17,7 +17,7 @@ export
 
 # MUST BE THE SAME AS API in Mayor and Minor Version Number
 # example: API 2.9.0 --> Client 2.9.X
-ONDEWO_CSI_VERSION=2.10.0
+ONDEWO_CSI_VERSION=2.11.0
 PYPI_USERNAME?=ENTER_HERE_YOUR_PYPI_USERNAME
 PYPI_PASSWORD?=ENTER_HERE_YOUR_PYPI_PASSWORD
 
@@ -28,7 +28,7 @@ CURRENT_RELEASE_NOTES=`cat RELEASE.md \
 	| sed -n '/Release ONDEWO CSI Python Client ${ONDEWO_CSI_VERSION}/,/\*\*/p'`
 
 GH_REPO="https://github.com/ondewo/ondewo-csi-client-python"
-ONDEWO_CSI_API_GIT_BRANCH=release/2.3.0
+ONDEWO_CSI_API_GIT_BRANCH=release/2.3.1
 ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/2.0.0
 ONDEWO_CSI_API_DIR=ondewo-csi-api
 ONDEWO_PROTO_COMPILER_DIR=ondewo-proto-compiler
