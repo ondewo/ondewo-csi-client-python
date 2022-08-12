@@ -8,4 +8,4 @@ ondewo-logging>=3.2.5
 setuptools>=59.5.0
 SoundFile>=0.10.3.post1
 pyaudio>=0.2.11
-pysoundio>=1.1.0
+pysoundio==1.1.0
