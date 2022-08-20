@@ -3,7 +3,7 @@
 
 *****************
 
-## Release ONDEWO CSI Python Client 2.12.0
+## Release ONDEWO CSI Python Client 2.11.1
 
 ### New Features
 * * Upgraded pyaudio>=0.2.12, pysoundio>=2.0.0 and grpc.*>=1.47.0
