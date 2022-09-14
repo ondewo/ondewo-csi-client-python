@@ -56,6 +56,7 @@ precommit_hooks_run_all_files: ## Runs all pre-commit hooks on all files and not
 
 install_dependencies_locally: ## Install dependencies locally
 	pip install -r requirements-dev.txt
+	pip install -r requirements.txt
 
 flake8:
 	flake8 --exclude 'ondewo'
@@ -74,7 +75,7 @@ TEST:
 	@echo ${GITHUB_GH_TOKEN}
 	@echo ${PYPI_USERNAME}
 	@echo ${PYPI_PASSWORD}
-	@echo ${CURRENT_RELEASE_NOTES}
+	@echo "\n${CURRENT_RELEASE_NOTES}"
 
 check_build: ## Checks if all built proto-code is there
 	@rm -rf build_check.txt
@@ -113,9 +114,9 @@ clean_python_api:  ## Clear generated python files
 build_utils_docker_image:  ## Build utils docker image
 	docker build -f Dockerfile.utils -t ${IMAGE_UTILS_NAME} .
 
-build_and_release_to_github_via_docker: build build_utils_docker_image release_to_github_via_docker_image  ## Release automation for building and releasing on GitHub via a docker image
+release_to_github_via_docker: build_utils_docker_image release_to_github_via_docker_image  ## Release automation for building and releasing on GitHub via a docker image
 
-build_and_push_to_pypi_via_docker: push_to_pypi_via_docker_image  ## Release automation for building and pushing to pypi via a docker image
+push_to_pypi_via_docker: push_to_pypi_via_docker_image  ## Release automation for building and pushing to pypi via a docker image
 
 generate_all_protos: generate_csi_protos
 
@@ -126,10 +127,38 @@ generate_csi_protos:
 		TARGET_DIR='ondewo/csi' \
 		OUTPUT_DIR='.'
 
+setup_conda_env: ## Checks for CONDA Environment
+	@echo "\n START SETTING UP CONDA ENV \n"
+	@conda env list | grep -q ondewo-nlu-client-python \
+	&& make release || ( echo "\n CONDA ENV FOR REPO DOESNT EXIST \n" \
+	&& make create_conda_env)
+
+create_conda_env: ##Creates CONDA Environment
+	conda create -y --name ondewo-nlu-client-python python=3.8
+	/bin/bash -c 'source `conda info --base`/bin/activate ondewo-nlu-client-python; make setup_developer_environment_locally && echo "\n PRECOMMIT INSTALLED \n"'
+	make release
+
 ########################################################
 #		Release
 
-release: create_release_branch create_release_tag build_and_release_to_github_via_docker build_and_push_to_pypi_via_docker ## Automate the entire release process
+release: ## Automate the entire release process
+	@echo "Start Release"
+	make build
+	/bin/bash -c 'source `conda info --base`/bin/activate ondewo-csi-client-python; make precommit_hooks_run_all_files || echo "PRECOMMIT FOUND SOMETHING"'
+	git status
+	make check_build
+	git add ondewo
+	git add Makefile
+	git add RELEASE.md
+	git add setup.py
+	git add ${ONDEWO_PROTO_COMPILER_DIR}
+	git status
+	git commit -m "PREPARING FOR RELEASE ${ONDEWO_CSI_VERSION}"
+	git push
+	make create_release_branch
+	make create_release_tag
+	make release_to_github_via_docker
+	make push_to_pypi_via_docker
 	@echo "Release Finished"
 
 create_release_branch: ## Create Release Branch and push it to origin
@@ -226,7 +255,7 @@ clone_devops_accounts: ## Clones devops-accounts repo
 
 run_release_with_devops:
 	$(eval info:= $(shell cat ${DEVOPS_ACCOUNT_DIR}/account_github.env | grep GITHUB_GH & cat ${DEVOPS_ACCOUNT_DIR}/account_pypi.env | grep PYPI_USERNAME & cat ${DEVOPS_ACCOUNT_DIR}/account_pypi.env | grep PYPI_PASSWORD))
-	make release $(info)
+	@echo ${CONDA_PREFIX} | grep -q nlu-client-python && make release $(info) || (make setup_conda_env $(info))
 
 spc: ## Checks if the Release Branch, Tag and Pypi version already exist
 	$(eval filtered_branches:= $(shell git branch --all | grep "release/${ONDEWO_CSI_VERSION}"))
