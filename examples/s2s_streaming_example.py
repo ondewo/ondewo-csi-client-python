@@ -61,7 +61,7 @@ def create_streaming_request(
     yield S2sStreamRequest(end_of_stream=True)
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Streaming example.")
     parser.add_argument("--config", type=str)
     parser.add_argument("--secure", default=False, action="store_true")

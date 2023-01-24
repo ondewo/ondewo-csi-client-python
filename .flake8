@@ -1,2 +1,10 @@
 [flake8]
-max-line-length = 110
+ignore = C901
+max-complexity = 10
+max-line-length = 120
+exclude =
+    # No need to traverse our git directory
+    .git,
+    ondewo/csi/conversation_pb2.py
+    ondewo/csi/conversation_pb2.pyi
+    ondewo/csi/conversation_pb2_grpc.py

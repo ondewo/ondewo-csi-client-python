@@ -24,7 +24,7 @@ from ondewo.csi.client.client_config import ClientConfig
 from ondewo.csi.client.services.conversations import Conversations
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="Healthcheck example.")
     parser.add_argument("--config", type=str, required=True)
     parser.add_argument("--secure", default=False, action="store_true")

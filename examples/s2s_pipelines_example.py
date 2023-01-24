@@ -29,7 +29,7 @@ from ondewo.csi.conversation_pb2 import (
 )
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="S2S pipeline handling example.")
     parser.add_argument("--config", type=str)
     parser.add_argument("--secure", default=False, action="store_true")
