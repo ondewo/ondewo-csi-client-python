@@ -1,4 +1,4 @@
-import setuptools
+from setuptools import setup, find_packages
 
 with open("README.md", "r") as f:
     long_description = f.read()
@@ -14,24 +14,32 @@ with open("requirements.txt") as f:
             req_str = req
         requires.append(req_str)
 
-setuptools.setup(
+setup(
     name="ondewo-csi-client",
     version='3.0.0',
     author="ONDEWO GbmH",
-    author_email="info@ondewo.com",
+    author_email="office@ondewo.com",
     description="exposes the ondewo-csi endpoints in a user-friendly way",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/ondewo/ondewo-csi-client-python",
     packages=[
-        np for np in filter(lambda n: n.startswith("ondewo.") or n == "ondewo", setuptools.find_packages())
+        np
+        for np in filter(
+            lambda n: n.startswith('ondewo.') or n == 'ondewo',
+            find_packages()
+        )
     ],
+    include_package_data=True,
+    package_data={
+        'ondewo.csi': ['py.typed', '*.pyi'],
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
         "Development Status :: 3 - Alpha",
         "Topic :: Software Development :: Libraries",
     ],
-    python_requires=">=2.7, !=3.0.1",
+    python_requires='>=3',
     install_requires=requires,
 )
