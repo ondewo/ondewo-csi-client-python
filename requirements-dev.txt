@@ -5,3 +5,6 @@ mypy-protobuf
 pre-commit
 pytest
 flake8
+SoundFile>=0.10.3.post1
+pyaudio>=0.2.12
+pysoundio>=1.1.0
