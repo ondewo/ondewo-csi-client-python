@@ -27,6 +27,8 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+ondewo-sip-csi-python.zip
+ondewo-devops-accounts/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
