@@ -17,7 +17,7 @@ export
 
 # MUST BE THE SAME AS API in Mayor and Minor Version Number
 # example: API 2.9.0 --> Client 2.9.X
-ONDEWO_CSI_VERSION = 3.0.0
+ONDEWO_CSI_VERSION = 3.0.1
 PYPI_USERNAME?=ENTER_HERE_YOUR_PYPI_USERNAME
 PYPI_PASSWORD?=ENTER_HERE_YOUR_PYPI_PASSWORD
 
@@ -44,7 +44,7 @@ DEVOPS_ACCOUNT_DIR="./${DEVOPS_ACCOUNT_GIT}"
 #       ONDEWO Standard Make Targets
 ########################################################
 
-setup_developer_environment_locally: install_precommit_hooks install_dependencies_locally
+setup_developer_environment_locally: install_precommit_hooks prepate_submodules install_dependencies_locally
 
 install_precommit_hooks: ## Installs pre-commit hooks and sets them up for the ondewo-csi-client repo
 	-pip install pre-commit
