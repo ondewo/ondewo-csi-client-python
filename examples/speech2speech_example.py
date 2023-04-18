@@ -85,7 +85,7 @@ def main(
             print(f"INTENT {i}: {query_result.query_text} -> {query_result.intent.display_name}")
             i += 1
             j = 0
-        elif response.HasField("synthetize_response"):
+        elif response.HasField("synthesize_response"):
             t2s_response: SynthesizeResponse = response.synthetize_response
             print(f"RESPONSE \t{j}: {t2s_response.text}")
             j += 1
