@@ -28,7 +28,7 @@ CURRENT_RELEASE_NOTES=`cat RELEASE.md \
 	| sed -n '/Release ONDEWO CSI Python Client ${ONDEWO_CSI_VERSION}/,/\*\*/p'`
 
 GH_REPO="https://github.com/ondewo/ondewo-csi-client-python"
-ONDEWO_CSI_API_GIT_BRANCH=release/2.3.1
+ONDEWO_CSI_API_GIT_BRANCH=release/3.1.0
 ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/4.2.0
 ONDEWO_CSI_API_DIR=ondewo-csi-api
 ONDEWO_PROTO_COMPILER_DIR=ondewo-proto-compiler
@@ -44,7 +44,7 @@ DEVOPS_ACCOUNT_DIR="./${DEVOPS_ACCOUNT_GIT}"
 #       ONDEWO Standard Make Targets
 ########################################################
 
-setup_developer_environment_locally: install_precommit_hooks prepate_submodules install_dependencies_locally
+setup_developer_environment_locally: install_precommit_hooks prepare_submodules install_dependencies_locally
 
 install_precommit_hooks: ## Installs pre-commit hooks and sets them up for the ondewo-csi-client repo
 	-pip install pre-commit
@@ -102,7 +102,7 @@ update_setup: ## Version in setup.py
 	@sed -i "s/version='[0-9]*.[0-9]*.[0-9]*'/version='${ONDEWO_CSI_VERSION}'/g" setup.py
 	@sed -i "s/version=\"[0-9]*.[0-9]*.[0-9]*\"/version='${ONDEWO_CSI_VERSION}'/g" setup.py
 
-build: clear_package_data prepate_submodules build_compiler generate_all_protos update_setup ## Build source code
+build: clear_package_data prepare_submodules build_compiler generate_all_protos update_setup ## Build source code
 
 build_compiler: ## Build compiler
 	make -C ondewo-proto-compiler/python build
@@ -183,7 +183,7 @@ build_gh_release: ## Generate Github Release with CLI
 ########################################################
 #		Submodules
 
-prepate_submodules: init_submodules checkout_defined_submodule_versions
+prepare_submodules: init_submodules checkout_defined_submodule_versions
 
 init_submodules:
 	git submodule update --init --recursive
