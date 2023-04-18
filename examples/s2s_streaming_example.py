@@ -97,10 +97,10 @@ def main() -> None:
             i += 1
             j = 0
         elif response.HasField("synthesize_response"):
-            t2s_response: SynthesizeResponse = response.synthetize_response
+            t2s_response: SynthesizeResponse = response.synthesize_response
             print(f"\t{j}: {t2s_response.text}")
             with open(f"ondewo/csi/examples/audiofiles/response_{i}-{j}.wav", "wb") as f:
-                f.write(response.synthetize_response.audio)
+                f.write(response.synthesize_response.audio)
 
             j += 1
 

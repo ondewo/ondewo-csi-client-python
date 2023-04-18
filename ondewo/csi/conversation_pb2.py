@@ -24,7 +24,7 @@ from ondewo.nlu import context_pb2 as ondewo_dot_nlu_dot_context__pb2
 from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dondewo/csi/conversation.proto\x12\nondewo.csi\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17google/rpc/status.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x18ondewo/nlu/session.proto\x1a\x1fondewo/t2s/text-to-speech.proto\x1a\x1fondewo/s2t/speech-to-text.proto\x1a\x18ondewo/nlu/context.proto\x1a\x19google/protobuf/any.proto\"~\n\x0bS2sPipeline\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0fs2t_pipeline_id\x18\x02 \x01(\t\x12\x16\n\x0enlu_project_id\x18\x03 \x01(\t\x12\x19\n\x11nlu_language_code\x18\x04 \x01(\t\x12\x17\n\x0ft2s_pipeline_id\x18\x05 \x01(\t\"\x1b\n\rS2sPipelineId\x12\n\n\x02id\x18\x01 \x01(\t\"\x19\n\x17ListS2sPipelinesRequest\"F\n\x18ListS2sPipelinesResponse\x12*\n\tpipelines\x18\x01 \x03(\x0b\x32\x17.ondewo.csi.S2sPipeline\"\x86\x01\n\x10S2sStreamRequest\x12\x13\n\x0bpipeline_id\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05\x61udio\x18\x03 \x01(\x0c\x12\x15\n\rend_of_stream\x18\x04 \x01(\x08\x12#\n\x1binitial_intent_display_name\x18\x05 \x01(\t\"\xd1\x01\n\x11S2sStreamResponse\x12\x42\n\x16\x64\x65tect_intent_response\x18\x01 \x01(\x0b\x32 .ondewo.nlu.DetectIntentResponseH\x00\x12=\n\x13synthetize_response\x18\x02 \x01(\x0b\x32\x1e.ondewo.t2s.SynthesizeResponseH\x00\x12-\n\x0bsip_trigger\x18\x03 \x01(\x0b\x32\x16.ondewo.csi.SipTriggerH\x00\x42\n\n\x08response\"\xc7\x01\n\nSipTrigger\x12\x33\n\x04type\x18\x01 \x01(\x0e\x32%.ondewo.csi.SipTrigger.SipTriggerType\x12(\n\x07\x63ontent\x18\x02 \x01(\x0b\x32\x17.google.protobuf.Struct\"Z\n\x0eSipTriggerType\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\n\n\x06HANGUP\x10\x01\x12\x12\n\x0eHUMAN_HANDOVER\x10\x02\x12\x0c\n\x08SEND_NOW\x10\x03\x12\t\n\x05PAUSE\x10\x04\"\x95\x01\n\x1b\x43heckUpstreamHealthResponse\x12&\n\ns2t_status\x18\x01 \x01(\x0b\x32\x12.google.rpc.Status\x12&\n\nnlu_status\x18\x02 \x01(\x0b\x32\x12.google.rpc.Status\x12&\n\nt2s_status\x18\x03 \x01(\x0b\x32\x12.google.rpc.Status\"\x16\n\x14\x43ontrolStreamRequest\"J\n\x15\x43ontrolStreamResponse\x12\x31\n\x0e\x63ontrol_status\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\"L\n\x17SetControlStatusRequest\x12\x31\n\x0e\x63ontrol_status\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\"\x88\x01\n\x18SetControlStatusResponse\x12\x35\n\x12old_control_status\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\x12\x35\n\x12new_control_status\x18\x02 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\"\x84\x01\n\x12\x43ondtionValueUnion\x12\x13\n\tint_value\x18\x01 \x01(\x03H\x00\x12\x15\n\x0b\x66loat_value\x18\x02 \x01(\x02H\x00\x12\x34\n\x0e\x64\x61tetime_value\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.TimestampH\x00\x42\x0c\n\nUnionOneof\"C\n\tCondition\x12\'\n\x04type\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ConditionType\x12\r\n\x05value\x18\x02 \x01(\t\"\xfb\x02\n\x1f\x43ontrolMessageServiceParameters\x12/\n\nt2s_config\x18\x01 \x01(\x0b\x32\x19.ondewo.t2s.RequestConfigH\x00\x12\x39\n\ns2t_config\x18\x02 \x01(\x0b\x32#.ondewo.s2t.TranscribeRequestConfigH\x00\x12\x13\n\x0btransfer_id\x18\x03 \x01(\t\x12\x11\n\twav_files\x18\x04 \x03(\x0c\x12\x0c\n\x04text\x18\x05 \x01(\t\x12$\n\x07\x63ontext\x18\x06 \x01(\x0b\x32\x13.ondewo.nlu.Context\x12\x12\n\nsession_id\x18\x07 \x01(\t\x12\x14\n\x0c\x63ontext_name\x18\x08 \x01(\t\x12.\n\x0f\x63ondition_start\x18\t \x01(\x0b\x32\x15.ondewo.csi.Condition\x12,\n\rcondition_end\x18\n \x01(\x0b\x32\x15.ondewo.csi.ConditionB\x08\n\x06\x63onfig\"\xc2\x01\n\x0e\x43ontrolMessage\x12\x36\n\x07service\x18\x01 \x01(\x0e\x32%.ondewo.csi.ControlMessageServiceName\x12\x37\n\x06method\x18\x02 \x01(\x0e\x32\'.ondewo.csi.ControlMessageServiceMethod\x12?\n\nparameters\x18\x03 \x01(\x0b\x32+.ondewo.csi.ControlMessageServiceParameters*+\n\rControlStatus\x12\x06\n\x02OK\x10\x00\x12\x12\n\x0e\x45MERGENCY_STOP\x10\x01*l\n\x19\x43ontrolMessageServiceName\x12\x0f\n\x0bUNKNOWNNAME\x10\x00\x12\x0e\n\nondewo_s2t\x10\x01\x12\x0e\n\nondewo_t2s\x10\x02\x12\x0e\n\nondewo_nlu\x10\x03\x12\x0e\n\nondewo_sip\x10\x04*\x85\x03\n\x1b\x43ontrolMessageServiceMethod\x12\x11\n\rUNKNOWNMETHOD\x10\x00\x12\x11\n\rupdate_config\x10\x01\x12\x0f\n\x0bundo_config\x10\x02\x12\x10\n\x0creset_config\x10\x03\x12\x0c\n\x08\x65nd_call\x10\x04\x12\x11\n\rtransfer_call\x10\x05\x12\x12\n\x0eplay_wav_files\x10\x06\x12\r\n\tplay_text\x10\x07\x12\x08\n\x04mute\x10\x08\x12\x0b\n\x07un_mute\x10\t\x12\x1d\n\x19stop_all_control_messages\x10\n\x12\x0f\n\x0btrain_agent\x10\x0b\x12\x16\n\x12\x63\x61ncel_train_agent\x10\x0c\x12\x12\n\x0e\x64\x65lete_session\x10\r\x12\x17\n\x13\x64\x65lete_all_contexts\x10\x0e\x12\x12\n\x0e\x63reate_context\x10\x0f\x12\x12\n\x0eupdate_context\x10\x10\x12\x12\n\x0e\x64\x65lete_context\x10\x11\x12\x11\n\rdetect_intent\x10\x12*\\\n\rConditionType\x12\x0e\n\nUNKNOWTYPE\x10\x00\x12\r\n\timmediate\x10\x01\x12\x0c\n\x08\x64uration\x10\x02\x12\x0c\n\x08\x64\x61tetime\x10\x03\x12\x10\n\x0cinteractions\x10\x04\x32\xfa\x05\n\rConversations\x12\x46\n\x11\x43reateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12\x46\n\x0eGetS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x17.ondewo.csi.S2sPipeline\"\x00\x12\x46\n\x11UpdateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12H\n\x11\x44\x65leteS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x16.google.protobuf.Empty\"\x00\x12_\n\x10ListS2sPipelines\x12#.ondewo.csi.ListS2sPipelinesRequest\x1a$.ondewo.csi.ListS2sPipelinesResponse\"\x00\x12N\n\tS2sStream\x12\x1c.ondewo.csi.S2sStreamRequest\x1a\x1d.ondewo.csi.S2sStreamResponse\"\x00(\x01\x30\x01\x12X\n\x13\x43heckUpstreamHealth\x12\x16.google.protobuf.Empty\x1a\'.ondewo.csi.CheckUpstreamHealthResponse\"\x00\x12[\n\x10GetControlStream\x12 .ondewo.csi.ControlStreamRequest\x1a!.ondewo.csi.ControlStreamResponse\"\x00\x30\x01\x12_\n\x10SetControlStatus\x12#.ondewo.csi.SetControlStatusRequest\x1a$.ondewo.csi.SetControlStatusResponse\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dondewo/csi/conversation.proto\x12\nondewo.csi\x1a\x1bgoogle/protobuf/empty.proto\x1a\x17google/rpc/status.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x18ondewo/nlu/session.proto\x1a\x1fondewo/t2s/text-to-speech.proto\x1a\x1fondewo/s2t/speech-to-text.proto\x1a\x18ondewo/nlu/context.proto\x1a\x19google/protobuf/any.proto\"~\n\x0bS2sPipeline\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0fs2t_pipeline_id\x18\x02 \x01(\t\x12\x16\n\x0enlu_project_id\x18\x03 \x01(\t\x12\x19\n\x11nlu_language_code\x18\x04 \x01(\t\x12\x17\n\x0ft2s_pipeline_id\x18\x05 \x01(\t\"\x1b\n\rS2sPipelineId\x12\n\n\x02id\x18\x01 \x01(\t\"\x19\n\x17ListS2sPipelinesRequest\"F\n\x18ListS2sPipelinesResponse\x12*\n\tpipelines\x18\x01 \x03(\x0b\x32\x17.ondewo.csi.S2sPipeline\"\x86\x01\n\x10S2sStreamRequest\x12\x13\n\x0bpipeline_id\x18\x01 \x01(\t\x12\x12\n\nsession_id\x18\x02 \x01(\t\x12\r\n\x05\x61udio\x18\x03 \x01(\x0c\x12\x15\n\rend_of_stream\x18\x04 \x01(\x08\x12#\n\x1binitial_intent_display_name\x18\x05 \x01(\t\"\xd1\x01\n\x11S2sStreamResponse\x12\x42\n\x16\x64\x65tect_intent_response\x18\x01 \x01(\x0b\x32 .ondewo.nlu.DetectIntentResponseH\x00\x12=\n\x13synthesize_response\x18\x02 \x01(\x0b\x32\x1e.ondewo.t2s.SynthesizeResponseH\x00\x12-\n\x0bsip_trigger\x18\x03 \x01(\x0b\x32\x16.ondewo.csi.SipTriggerH\x00\x42\n\n\x08response\"\xc7\x01\n\nSipTrigger\x12\x33\n\x04type\x18\x01 \x01(\x0e\x32%.ondewo.csi.SipTrigger.SipTriggerType\x12(\n\x07\x63ontent\x18\x02 \x01(\x0b\x32\x17.google.protobuf.Struct\"Z\n\x0eSipTriggerType\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\n\n\x06HANGUP\x10\x01\x12\x12\n\x0eHUMAN_HANDOVER\x10\x02\x12\x0c\n\x08SEND_NOW\x10\x03\x12\t\n\x05PAUSE\x10\x04\"\x95\x01\n\x1b\x43heckUpstreamHealthResponse\x12&\n\ns2t_status\x18\x01 \x01(\x0b\x32\x12.google.rpc.Status\x12&\n\nnlu_status\x18\x02 \x01(\x0b\x32\x12.google.rpc.Status\x12&\n\nt2s_status\x18\x03 \x01(\x0b\x32\x12.google.rpc.Status\"\x16\n\x14\x43ontrolStreamRequest\"J\n\x15\x43ontrolStreamResponse\x12\x31\n\x0e\x63ontrol_status\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\"L\n\x17SetControlStatusRequest\x12\x31\n\x0e\x63ontrol_status\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\"\x88\x01\n\x18SetControlStatusResponse\x12\x35\n\x12old_control_status\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\x12\x35\n\x12new_control_status\x18\x02 \x01(\x0e\x32\x19.ondewo.csi.ControlStatus\"C\n\tCondition\x12\'\n\x04type\x18\x01 \x01(\x0e\x32\x19.ondewo.csi.ConditionType\x12\r\n\x05value\x18\x02 \x01(\t\"\xfb\x02\n\x1f\x43ontrolMessageServiceParameters\x12/\n\nt2s_config\x18\x01 \x01(\x0b\x32\x19.ondewo.t2s.RequestConfigH\x00\x12\x39\n\ns2t_config\x18\x02 \x01(\x0b\x32#.ondewo.s2t.TranscribeRequestConfigH\x00\x12\x13\n\x0btransfer_id\x18\x03 \x01(\t\x12\x11\n\twav_files\x18\x04 \x03(\x0c\x12\x0c\n\x04text\x18\x05 \x01(\t\x12$\n\x07\x63ontext\x18\x06 \x01(\x0b\x32\x13.ondewo.nlu.Context\x12\x12\n\nsession_id\x18\x07 \x01(\t\x12\x14\n\x0c\x63ontext_name\x18\x08 \x01(\t\x12.\n\x0f\x63ondition_start\x18\t \x01(\x0b\x32\x15.ondewo.csi.Condition\x12,\n\rcondition_end\x18\n \x01(\x0b\x32\x15.ondewo.csi.ConditionB\x08\n\x06\x63onfig\"\xc2\x01\n\x0e\x43ontrolMessage\x12\x36\n\x07service\x18\x01 \x01(\x0e\x32%.ondewo.csi.ControlMessageServiceName\x12\x37\n\x06method\x18\x02 \x01(\x0e\x32\'.ondewo.csi.ControlMessageServiceMethod\x12?\n\nparameters\x18\x03 \x01(\x0b\x32+.ondewo.csi.ControlMessageServiceParameters*+\n\rControlStatus\x12\x06\n\x02OK\x10\x00\x12\x12\n\x0e\x45MERGENCY_STOP\x10\x01*l\n\x19\x43ontrolMessageServiceName\x12\x0f\n\x0bUNKNOWNNAME\x10\x00\x12\x0e\n\nondewo_s2t\x10\x01\x12\x0e\n\nondewo_t2s\x10\x02\x12\x0e\n\nondewo_nlu\x10\x03\x12\x0e\n\nondewo_sip\x10\x04*\x85\x03\n\x1b\x43ontrolMessageServiceMethod\x12\x11\n\rUNKNOWNMETHOD\x10\x00\x12\x11\n\rupdate_config\x10\x01\x12\x0f\n\x0bundo_config\x10\x02\x12\x10\n\x0creset_config\x10\x03\x12\x0c\n\x08\x65nd_call\x10\x04\x12\x11\n\rtransfer_call\x10\x05\x12\x12\n\x0eplay_wav_files\x10\x06\x12\r\n\tplay_text\x10\x07\x12\x08\n\x04mute\x10\x08\x12\x0b\n\x07un_mute\x10\t\x12\x1d\n\x19stop_all_control_messages\x10\n\x12\x0f\n\x0btrain_agent\x10\x0b\x12\x16\n\x12\x63\x61ncel_train_agent\x10\x0c\x12\x12\n\x0e\x64\x65lete_session\x10\r\x12\x17\n\x13\x64\x65lete_all_contexts\x10\x0e\x12\x12\n\x0e\x63reate_context\x10\x0f\x12\x12\n\x0eupdate_context\x10\x10\x12\x12\n\x0e\x64\x65lete_context\x10\x11\x12\x11\n\rdetect_intent\x10\x12*\\\n\rConditionType\x12\x0e\n\nUNKNOWTYPE\x10\x00\x12\r\n\timmediate\x10\x01\x12\x0c\n\x08\x64uration\x10\x02\x12\x0c\n\x08\x64\x61tetime\x10\x03\x12\x10\n\x0cinteractions\x10\x04\x32\xfa\x05\n\rConversations\x12\x46\n\x11\x43reateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12\x46\n\x0eGetS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x17.ondewo.csi.S2sPipeline\"\x00\x12\x46\n\x11UpdateS2sPipeline\x12\x17.ondewo.csi.S2sPipeline\x1a\x16.google.protobuf.Empty\"\x00\x12H\n\x11\x44\x65leteS2sPipeline\x12\x19.ondewo.csi.S2sPipelineId\x1a\x16.google.protobuf.Empty\"\x00\x12_\n\x10ListS2sPipelines\x12#.ondewo.csi.ListS2sPipelinesRequest\x1a$.ondewo.csi.ListS2sPipelinesResponse\"\x00\x12N\n\tS2sStream\x12\x1c.ondewo.csi.S2sStreamRequest\x1a\x1d.ondewo.csi.S2sStreamResponse\"\x00(\x01\x30\x01\x12X\n\x13\x43heckUpstreamHealth\x12\x16.google.protobuf.Empty\x1a\'.ondewo.csi.CheckUpstreamHealthResponse\"\x00\x12[\n\x10GetControlStream\x12 .ondewo.csi.ControlStreamRequest\x1a!.ondewo.csi.ControlStreamResponse\"\x00\x30\x01\x12_\n\x10SetControlStatus\x12#.ondewo.csi.SetControlStatusRequest\x1a$.ondewo.csi.SetControlStatusResponse\"\x00\x62\x06proto3')
 
 _CONTROLSTATUS = DESCRIPTOR.enum_types_by_name['ControlStatus']
 ControlStatus = enum_type_wrapper.EnumTypeWrapper(_CONTROLSTATUS)
@@ -79,7 +79,6 @@ _CONTROLSTREAMREQUEST = DESCRIPTOR.message_types_by_name['ControlStreamRequest']
 _CONTROLSTREAMRESPONSE = DESCRIPTOR.message_types_by_name['ControlStreamResponse']
 _SETCONTROLSTATUSREQUEST = DESCRIPTOR.message_types_by_name['SetControlStatusRequest']
 _SETCONTROLSTATUSRESPONSE = DESCRIPTOR.message_types_by_name['SetControlStatusResponse']
-_CONDTIONVALUEUNION = DESCRIPTOR.message_types_by_name['CondtionValueUnion']
 _CONDITION = DESCRIPTOR.message_types_by_name['Condition']
 _CONTROLMESSAGESERVICEPARAMETERS = DESCRIPTOR.message_types_by_name['ControlMessageServiceParameters']
 _CONTROLMESSAGE = DESCRIPTOR.message_types_by_name['ControlMessage']
@@ -168,13 +167,6 @@ SetControlStatusResponse = _reflection.GeneratedProtocolMessageType('SetControlS
   })
 _sym_db.RegisterMessage(SetControlStatusResponse)
 
-CondtionValueUnion = _reflection.GeneratedProtocolMessageType('CondtionValueUnion', (_message.Message,), {
-  'DESCRIPTOR' : _CONDTIONVALUEUNION,
-  '__module__' : 'ondewo.csi.conversation_pb2'
-  # @@protoc_insertion_point(class_scope:ondewo.csi.CondtionValueUnion)
-  })
-_sym_db.RegisterMessage(CondtionValueUnion)
-
 Condition = _reflection.GeneratedProtocolMessageType('Condition', (_message.Message,), {
   'DESCRIPTOR' : _CONDITION,
   '__module__' : 'ondewo.csi.conversation_pb2'
@@ -200,14 +192,14 @@ _CONVERSATIONS = DESCRIPTOR.services_by_name['Conversations']
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _CONTROLSTATUS._serialized_start=2366
-  _CONTROLSTATUS._serialized_end=2409
-  _CONTROLMESSAGESERVICENAME._serialized_start=2411
-  _CONTROLMESSAGESERVICENAME._serialized_end=2519
-  _CONTROLMESSAGESERVICEMETHOD._serialized_start=2522
-  _CONTROLMESSAGESERVICEMETHOD._serialized_end=2911
-  _CONDITIONTYPE._serialized_start=2913
-  _CONDITIONTYPE._serialized_end=3005
+  _CONTROLSTATUS._serialized_start=2231
+  _CONTROLSTATUS._serialized_end=2274
+  _CONTROLMESSAGESERVICENAME._serialized_start=2276
+  _CONTROLMESSAGESERVICENAME._serialized_end=2384
+  _CONTROLMESSAGESERVICEMETHOD._serialized_start=2387
+  _CONTROLMESSAGESERVICEMETHOD._serialized_end=2776
+  _CONDITIONTYPE._serialized_start=2778
+  _CONDITIONTYPE._serialized_end=2870
   _S2SPIPELINE._serialized_start=307
   _S2SPIPELINE._serialized_end=433
   _S2SPIPELINEID._serialized_start=435
@@ -234,14 +226,12 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _SETCONTROLSTATUSREQUEST._serialized_end=1442
   _SETCONTROLSTATUSRESPONSE._serialized_start=1445
   _SETCONTROLSTATUSRESPONSE._serialized_end=1581
-  _CONDTIONVALUEUNION._serialized_start=1584
-  _CONDTIONVALUEUNION._serialized_end=1716
-  _CONDITION._serialized_start=1718
-  _CONDITION._serialized_end=1785
-  _CONTROLMESSAGESERVICEPARAMETERS._serialized_start=1788
-  _CONTROLMESSAGESERVICEPARAMETERS._serialized_end=2167
-  _CONTROLMESSAGE._serialized_start=2170
-  _CONTROLMESSAGE._serialized_end=2364
-  _CONVERSATIONS._serialized_start=3008
-  _CONVERSATIONS._serialized_end=3770
+  _CONDITION._serialized_start=1583
+  _CONDITION._serialized_end=1650
+  _CONTROLMESSAGESERVICEPARAMETERS._serialized_start=1653
+  _CONTROLMESSAGESERVICEPARAMETERS._serialized_end=2032
+  _CONTROLMESSAGE._serialized_start=2035
+  _CONTROLMESSAGE._serialized_end=2229
+  _CONVERSATIONS._serialized_start=2873
+  _CONVERSATIONS._serialized_end=3635
 # @@protoc_insertion_point(module_scope)

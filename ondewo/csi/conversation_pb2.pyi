@@ -8,7 +8,6 @@ import google.protobuf.internal.containers
 import google.protobuf.internal.enum_type_wrapper
 import google.protobuf.message
 import google.protobuf.struct_pb2
-import google.protobuf.timestamp_pb2
 import google.rpc.status_pb2
 import ondewo.nlu.context_pb2
 import ondewo.nlu.session_pb2
@@ -25,12 +24,21 @@ class _ControlStatus:
 class _ControlStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ControlStatus.ValueType], builtins.type):
     DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
     OK: _ControlStatus.ValueType  # 0
+    """Status that control stream is ok"""
+
     EMERGENCY_STOP: _ControlStatus.ValueType  # 1
+    """Status that control stream needs to stop immediately"""
+
 class ControlStatus(_ControlStatus, metaclass=_ControlStatusEnumTypeWrapper):
+    """Control status"""
     pass
 
 OK: ControlStatus.ValueType  # 0
+"""Status that control stream is ok"""
+
 EMERGENCY_STOP: ControlStatus.ValueType  # 1
+"""Status that control stream needs to stop immediately"""
+
 global___ControlStatus = ControlStatus
 
 
@@ -40,18 +48,39 @@ class _ControlMessageServiceName:
 class _ControlMessageServiceNameEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ControlMessageServiceName.ValueType], builtins.type):
     DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
     UNKNOWNNAME: _ControlMessageServiceName.ValueType  # 0
+    """Unknown control message service name"""
+
     ondewo_s2t: _ControlMessageServiceName.ValueType  # 1
+    """Speech-2-Text control message service name"""
+
     ondewo_t2s: _ControlMessageServiceName.ValueType  # 2
+    """Text-2-Speech control message service name"""
+
     ondewo_nlu: _ControlMessageServiceName.ValueType  # 3
+    """NLU control message service name"""
+
     ondewo_sip: _ControlMessageServiceName.ValueType  # 4
+    """SIP control message service name"""
+
 class ControlMessageServiceName(_ControlMessageServiceName, metaclass=_ControlMessageServiceNameEnumTypeWrapper):
+    """Control message services"""
     pass
 
 UNKNOWNNAME: ControlMessageServiceName.ValueType  # 0
+"""Unknown control message service name"""
+
 ondewo_s2t: ControlMessageServiceName.ValueType  # 1
+"""Speech-2-Text control message service name"""
+
 ondewo_t2s: ControlMessageServiceName.ValueType  # 2
+"""Text-2-Speech control message service name"""
+
 ondewo_nlu: ControlMessageServiceName.ValueType  # 3
+"""NLU control message service name"""
+
 ondewo_sip: ControlMessageServiceName.ValueType  # 4
+"""SIP control message service name"""
+
 global___ControlMessageServiceName = ControlMessageServiceName
 
 
@@ -61,50 +90,897 @@ class _ControlMessageServiceMethod:
 class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ControlMessageServiceMethod.ValueType], builtins.type):
     DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
     UNKNOWNMETHOD: _ControlMessageServiceMethod.ValueType  # 0
+    """Unknown method (default)"""
+
     update_config: _ControlMessageServiceMethod.ValueType  # 1
+    """CSI: update configuration
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_s2t",
+       "method": "update_config",
+       "parameters": [
+           {
+               // Speech2TextConfig object
+               “s2tPipelineId” : “s2t_pipeline_german_1”,
+               “languageModelName” : “language_model_german”
+           },
+           {
+                // condition_start object => should take effect immediately
+                "type": "immediate",
+                “value”: “0”
+           },
+           {
+                // condition_end object - s2t config will be changed back to
+                // last valid configuration after 10 interactions of user with
+                // the AI agent
+                "type": "interactions",
+    	           "value": 10
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     undo_config: _ControlMessageServiceMethod.ValueType  # 2
+    """CSI: undo previous configuration update
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_s2t",
+       "method": "undo_config",
+       "parameters": [
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+    	          // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     reset_config: _ControlMessageServiceMethod.ValueType  # 3
+    """CSI: reset configuration to default
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_s2t",
+       "method": "reset_config",
+       "parameters": [
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     end_call: _ControlMessageServiceMethod.ValueType  # 4
+    """SIP: end conversation / hang up call
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_sip",
+       "method": "end_call",
+       "parameters": [
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     transfer_call: _ControlMessageServiceMethod.ValueType  # 5
+    """SIP: transfer call
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_sip",
+       "method": "transfer_call",
+       "parameters": [
+           {
+    	 	      "transfer_id": "+43123456789@127.0.0.10:5060",
+           },
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     play_wav_files: _ControlMessageServiceMethod.ValueType  # 6
+    """SIP: play wav files on the call
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_sip",
+       "method": "  "play_wav_files",
+       "parameters": [
+           {
+    	 	      "wav_files":  [
+                   <bytes_of_file_1>,
+                   <bytes_of_file_2>,
+                   <bytes_of_file_3>,
+               ]
+           },
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     play_text: _ControlMessageServiceMethod.ValueType  # 7
+    """SIP: play a certain text on the phone based on Text-2-Speech synthesis
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_sip",
+       "method": "play_text",
+       "parameters": [
+           {
+    	 	      "text": "Welcome from ONDEWO AI Agent! How are you today?",
+           },
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     mute: _ControlMessageServiceMethod.ValueType  # 8
+    """SIP: mute microphone
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_sip",
+       "method": "mute",
+       "parameters": [
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     un_mute: _ControlMessageServiceMethod.ValueType  # 9
+    """SIP: unmute microphone
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_sip",
+       "method": "un_mute",
+       "parameters": [
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     stop_all_control_messages: _ControlMessageServiceMethod.ValueType  # 10
+    """CSI: stop the execution of all running and scheduled control messages
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "",    <= empty string since it is for all services / no specific service
+       "method": "stop_all_control_messages",
+       "parameters": [
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     train_agent: _ControlMessageServiceMethod.ValueType  # 11
-    """nlu control messages"""
+    """NLU: train agent
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_nlu",
+       "method": "train_agent",
+       "parameters": [
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
 
     cancel_train_agent: _ControlMessageServiceMethod.ValueType  # 12
+    """NLU: cancel the ongoing agent
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_nlu",
+       "method": "cancel_train_agent",
+       "parameters": [
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     delete_session: _ControlMessageServiceMethod.ValueType  # 13
+    """NLU: delete session all all session-related information
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_nlu",
+       "method": "delete_session",
+       "parameters": [
+           {
+    	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
+           },
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     delete_all_contexts: _ControlMessageServiceMethod.ValueType  # 14
+    """NLU: delete all context information in the current session
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_nlu",
+       "method": "delete_all_contexts",
+       "parameters": [
+           {
+    	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
+           },
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     create_context: _ControlMessageServiceMethod.ValueType  # 15
+    """NLU: create a context based on the provided contextual information in the current session
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_nlu",
+       "method": "create_context",
+       "parameters": [
+           {
+    	 	      "context": {           <== <NLU Context Object as JSON object>
+                   name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ssea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
+                   ...,
+               }
+           },
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     update_context: _ControlMessageServiceMethod.ValueType  # 16
+    """NLU: update an existing context based on the provided contextual information in the current session
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_nlu",
+       "method": "update_context",
+       "parameters": [
+           {
+    	 	      "context": {           <== <NLU Context Object as JSON object>
+                   name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ssea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
+                   ...,
+               }
+           },
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     delete_context: _ControlMessageServiceMethod.ValueType  # 17
+    """NLU: delete an existing context including all contextual information in the current session
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+       "service": "ondewo_nlu",
+       "method": "delete_context",
+       "parameters": [
+           {
+    	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
+    	 	      "context_name": "78ea1a20-0784-442b-93c0-eb9e2469420e",
+           },
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
     detect_intent: _ControlMessageServiceMethod.ValueType  # 18
+    """NLU: execute a detect intent request based on the provided information in the current session
+    {
+       "service": "ondewo_nlu",
+       "method": "detect_intent",
+       "parameters": [
+           {
+    	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
+    	 	      "text": "Are you an artificial intelligence?",
+           },
+           {
+    	 	      // condition_start object
+           },
+           {
+    	 	      // condition_end object (OPTIONAL) - for permanent change
+               // no condition_end needs to be supplied i.e.
+    		      // this parameter is missing or empty “{}”
+           },
+       ]
+    }
+    </code></pre>
+    """
+
 class ControlMessageServiceMethod(_ControlMessageServiceMethod, metaclass=_ControlMessageServiceMethodEnumTypeWrapper):
+    """Control message methods to control services during a conversation"""
     pass
 
 UNKNOWNMETHOD: ControlMessageServiceMethod.ValueType  # 0
+"""Unknown method (default)"""
+
 update_config: ControlMessageServiceMethod.ValueType  # 1
+"""CSI: update configuration
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_s2t",
+   "method": "update_config",
+   "parameters": [
+       {
+           // Speech2TextConfig object
+           “s2tPipelineId” : “s2t_pipeline_german_1”,
+           “languageModelName” : “language_model_german”
+       },
+       {
+            // condition_start object => should take effect immediately
+            "type": "immediate",
+            “value”: “0”
+       },
+       {
+            // condition_end object - s2t config will be changed back to
+            // last valid configuration after 10 interactions of user with
+            // the AI agent
+            "type": "interactions",
+	           "value": 10
+       },
+   ]
+}
+</code></pre>
+"""
+
 undo_config: ControlMessageServiceMethod.ValueType  # 2
+"""CSI: undo previous configuration update
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_s2t",
+   "method": "undo_config",
+   "parameters": [
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+	          // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 reset_config: ControlMessageServiceMethod.ValueType  # 3
+"""CSI: reset configuration to default
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_s2t",
+   "method": "reset_config",
+   "parameters": [
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 end_call: ControlMessageServiceMethod.ValueType  # 4
+"""SIP: end conversation / hang up call
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_sip",
+   "method": "end_call",
+   "parameters": [
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 transfer_call: ControlMessageServiceMethod.ValueType  # 5
+"""SIP: transfer call
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_sip",
+   "method": "transfer_call",
+   "parameters": [
+       {
+	 	      "transfer_id": "+43123456789@127.0.0.10:5060",
+       },
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 play_wav_files: ControlMessageServiceMethod.ValueType  # 6
+"""SIP: play wav files on the call
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_sip",
+   "method": "  "play_wav_files",
+   "parameters": [
+       {
+	 	      "wav_files":  [
+               <bytes_of_file_1>,
+               <bytes_of_file_2>,
+               <bytes_of_file_3>,
+           ]
+       },
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 play_text: ControlMessageServiceMethod.ValueType  # 7
+"""SIP: play a certain text on the phone based on Text-2-Speech synthesis
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_sip",
+   "method": "play_text",
+   "parameters": [
+       {
+	 	      "text": "Welcome from ONDEWO AI Agent! How are you today?",
+       },
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 mute: ControlMessageServiceMethod.ValueType  # 8
+"""SIP: mute microphone
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_sip",
+   "method": "mute",
+   "parameters": [
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 un_mute: ControlMessageServiceMethod.ValueType  # 9
+"""SIP: unmute microphone
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_sip",
+   "method": "un_mute",
+   "parameters": [
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 stop_all_control_messages: ControlMessageServiceMethod.ValueType  # 10
+"""CSI: stop the execution of all running and scheduled control messages
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "",    <= empty string since it is for all services / no specific service
+   "method": "stop_all_control_messages",
+   "parameters": [
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 train_agent: ControlMessageServiceMethod.ValueType  # 11
-"""nlu control messages"""
+"""NLU: train agent
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_nlu",
+   "method": "train_agent",
+   "parameters": [
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
 
 cancel_train_agent: ControlMessageServiceMethod.ValueType  # 12
+"""NLU: cancel the ongoing agent
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_nlu",
+   "method": "cancel_train_agent",
+   "parameters": [
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 delete_session: ControlMessageServiceMethod.ValueType  # 13
+"""NLU: delete session all all session-related information
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_nlu",
+   "method": "delete_session",
+   "parameters": [
+       {
+	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
+       },
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 delete_all_contexts: ControlMessageServiceMethod.ValueType  # 14
+"""NLU: delete all context information in the current session
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_nlu",
+   "method": "delete_all_contexts",
+   "parameters": [
+       {
+	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
+       },
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 create_context: ControlMessageServiceMethod.ValueType  # 15
+"""NLU: create a context based on the provided contextual information in the current session
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_nlu",
+   "method": "create_context",
+   "parameters": [
+       {
+	 	      "context": {           <== <NLU Context Object as JSON object>
+               name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ssea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
+               ...,
+           }
+       },
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 update_context: ControlMessageServiceMethod.ValueType  # 16
+"""NLU: update an existing context based on the provided contextual information in the current session
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_nlu",
+   "method": "update_context",
+   "parameters": [
+       {
+	 	      "context": {           <== <NLU Context Object as JSON object>
+               name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ssea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
+               ...,
+           }
+       },
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 delete_context: ControlMessageServiceMethod.ValueType  # 17
+"""NLU: delete an existing context including all contextual information in the current session
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
+{
+   "service": "ondewo_nlu",
+   "method": "delete_context",
+   "parameters": [
+       {
+	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
+	 	      "context_name": "78ea1a20-0784-442b-93c0-eb9e2469420e",
+       },
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 detect_intent: ControlMessageServiceMethod.ValueType  # 18
+"""NLU: execute a detect intent request based on the provided information in the current session
+{
+   "service": "ondewo_nlu",
+   "method": "detect_intent",
+   "parameters": [
+       {
+	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
+	 	      "text": "Are you an artificial intelligence?",
+       },
+       {
+	 	      // condition_start object
+       },
+       {
+	 	      // condition_end object (OPTIONAL) - for permanent change
+           // no condition_end needs to be supplied i.e.
+		      // this parameter is missing or empty “{}”
+       },
+   ]
+}
+</code></pre>
+"""
+
 global___ControlMessageServiceMethod = ControlMessageServiceMethod
 
 
@@ -114,18 +990,55 @@ class _ConditionType:
 class _ConditionTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ConditionType.ValueType], builtins.type):
     DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
     UNKNOWTYPE: _ConditionType.ValueType  # 0
+    """Unknown type"""
+
     immediate: _ConditionType.ValueType  # 1
+    """Immediate execution of the control message
+    Example value need be given as a string in the format: <pre><code>value="5"</code></pre>
+    """
+
     duration: _ConditionType.ValueType  # 2
+    """Duration in number of seconds after a control message should be executed,
+    Example value need be given as a string in the format: <pre><code>value="10"</code></pre>
+    """
+
     datetime: _ConditionType.ValueType  # 3
+    """Date and time when a control message should be executed,
+    Example value need be given as a string in the format: <pre><code>value="2021-12-23T13:45:00.000Z"</code></pre>
+    """
+
     interactions: _ConditionType.ValueType  # 4
+    """Number of interactions of the user with an ONDEWO AI agent after a control message should be executed
+    Example value need be given as a string in the format: <pre><code>value="4"</code></pre>
+    """
+
 class ConditionType(_ConditionType, metaclass=_ConditionTypeEnumTypeWrapper):
+    """Type of condition that need to be satisfied to execute a control message"""
     pass
 
 UNKNOWTYPE: ConditionType.ValueType  # 0
+"""Unknown type"""
+
 immediate: ConditionType.ValueType  # 1
+"""Immediate execution of the control message
+Example value need be given as a string in the format: <pre><code>value="5"</code></pre>
+"""
+
 duration: ConditionType.ValueType  # 2
+"""Duration in number of seconds after a control message should be executed,
+Example value need be given as a string in the format: <pre><code>value="10"</code></pre>
+"""
+
 datetime: ConditionType.ValueType  # 3
+"""Date and time when a control message should be executed,
+Example value need be given as a string in the format: <pre><code>value="2021-12-23T13:45:00.000Z"</code></pre>
+"""
+
 interactions: ConditionType.ValueType  # 4
+"""Number of interactions of the user with an ONDEWO AI agent after a control message should be executed
+Example value need be given as a string in the format: <pre><code>value="4"</code></pre>
+"""
+
 global___ConditionType = ConditionType
 
 
@@ -229,14 +1142,14 @@ class S2sStreamRequest(google.protobuf.message.Message):
     """
 
     audio: builtins.bytes
-    """Optional. The input audio content to be recognized."""
+    """Optional. The input audio content to be recognized.
 
-    end_of_stream: builtins.bool
-    """If `true`, the recognizer will not return
+    If `true`, the recognizer will not return
     any further hypotheses about this piece of the audio. May only be populated
     for `event_type` = `RECOGNITION_EVENT_TRANSCRIPT`.
     """
 
+    end_of_stream: builtins.bool
     initial_intent_display_name: typing.Text
     """Optional. Intent display name to trigger in NLU system in the beginning of the conversation."""
 
@@ -256,27 +1169,27 @@ class S2sStreamResponse(google.protobuf.message.Message):
     `S2sStream` method.
 
     A response message is returned for each utterance of the input stream. It contains the full response from NLU system
-    in `detect_intent_response` or the full T2S response in `synthetize_response`.
+    in `detect_intent_response` or the full T2S response in `synthesize_response`.
     Multiple response messages can be returned in order:
 
     1.  The first response message for an input utterance contains response from NLU system `detect_intent_response`
         with detected intent and N fulfillment messages (N >= 0).
 
     2.  The next N response messages contain for each fulfillment message one of the following:
-         a. T2S response `synthetize_response` with synthetized audio
+         a. T2S response `synthesize_response` with synthetized audio
          b. SIP trigger message `sip_trigger` with SIP trigger extracted from the fulfillment message
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     DETECT_INTENT_RESPONSE_FIELD_NUMBER: builtins.int
-    SYNTHETIZE_RESPONSE_FIELD_NUMBER: builtins.int
+    SYNTHESIZE_RESPONSE_FIELD_NUMBER: builtins.int
     SIP_TRIGGER_FIELD_NUMBER: builtins.int
     @property
     def detect_intent_response(self) -> ondewo.nlu.session_pb2.DetectIntentResponse:
-        """full NLU response"""
+        """full NLU detect intent response"""
         pass
     @property
-    def synthetize_response(self) -> ondewo.t2s.text_to_speech_pb2.SynthesizeResponse:
-        """full T2S response"""
+    def synthesize_response(self) -> ondewo.t2s.text_to_speech_pb2.SynthesizeResponse:
+        """full T2S synthesize response"""
         pass
     @property
     def sip_trigger(self) -> global___SipTrigger:
@@ -285,12 +1198,12 @@ class S2sStreamResponse(google.protobuf.message.Message):
     def __init__(self,
         *,
         detect_intent_response: typing.Optional[ondewo.nlu.session_pb2.DetectIntentResponse] = ...,
-        synthetize_response: typing.Optional[ondewo.t2s.text_to_speech_pb2.SynthesizeResponse] = ...,
+        synthesize_response: typing.Optional[ondewo.t2s.text_to_speech_pb2.SynthesizeResponse] = ...,
         sip_trigger: typing.Optional[global___SipTrigger] = ...,
         ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["detect_intent_response",b"detect_intent_response","response",b"response","sip_trigger",b"sip_trigger","synthetize_response",b"synthetize_response"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["detect_intent_response",b"detect_intent_response","response",b"response","sip_trigger",b"sip_trigger","synthetize_response",b"synthetize_response"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing_extensions.Literal["response",b"response"]) -> typing.Optional[typing_extensions.Literal["detect_intent_response","synthetize_response","sip_trigger"]]: ...
+    def HasField(self, field_name: typing_extensions.Literal["detect_intent_response",b"detect_intent_response","response",b"response","sip_trigger",b"sip_trigger","synthesize_response",b"synthesize_response"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing_extensions.Literal["detect_intent_response",b"detect_intent_response","response",b"response","sip_trigger",b"sip_trigger","synthesize_response",b"synthesize_response"]) -> None: ...
+    def WhichOneof(self, oneof_group: typing_extensions.Literal["response",b"response"]) -> typing.Optional[typing_extensions.Literal["detect_intent_response","synthesize_response","sip_trigger"]]: ...
 global___S2sStreamResponse = S2sStreamResponse
 
 class SipTrigger(google.protobuf.message.Message):
@@ -353,16 +1266,23 @@ class SipTrigger(google.protobuf.message.Message):
 global___SipTrigger = SipTrigger
 
 class CheckUpstreamHealthResponse(google.protobuf.message.Message):
+    """Health checks"""
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     S2T_STATUS_FIELD_NUMBER: builtins.int
     NLU_STATUS_FIELD_NUMBER: builtins.int
     T2S_STATUS_FIELD_NUMBER: builtins.int
     @property
-    def s2t_status(self) -> google.rpc.status_pb2.Status: ...
+    def s2t_status(self) -> google.rpc.status_pb2.Status:
+        """Health checks for Speech-2-Text"""
+        pass
     @property
-    def nlu_status(self) -> google.rpc.status_pb2.Status: ...
+    def nlu_status(self) -> google.rpc.status_pb2.Status:
+        """Health checks for NLU"""
+        pass
     @property
-    def t2s_status(self) -> google.rpc.status_pb2.Status: ...
+    def t2s_status(self) -> google.rpc.status_pb2.Status:
+        """Health checks for Text-2-Speech"""
+        pass
     def __init__(self,
         *,
         s2t_status: typing.Optional[google.rpc.status_pb2.Status] = ...,
@@ -374,15 +1294,19 @@ class CheckUpstreamHealthResponse(google.protobuf.message.Message):
 global___CheckUpstreamHealthResponse = CheckUpstreamHealthResponse
 
 class ControlStreamRequest(google.protobuf.message.Message):
+    """Control stream message"""
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     def __init__(self,
         ) -> None: ...
 global___ControlStreamRequest = ControlStreamRequest
 
 class ControlStreamResponse(google.protobuf.message.Message):
+    """Control stream response message"""
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     CONTROL_STATUS_FIELD_NUMBER: builtins.int
     control_status: global___ControlStatus.ValueType
+    """Control status"""
+
     def __init__(self,
         *,
         control_status: global___ControlStatus.ValueType = ...,
@@ -391,9 +1315,12 @@ class ControlStreamResponse(google.protobuf.message.Message):
 global___ControlStreamResponse = ControlStreamResponse
 
 class SetControlStatusRequest(google.protobuf.message.Message):
+    """Request to set control status"""
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     CONTROL_STATUS_FIELD_NUMBER: builtins.int
     control_status: global___ControlStatus.ValueType
+    """Control status"""
+
     def __init__(self,
         *,
         control_status: global___ControlStatus.ValueType = ...,
@@ -402,11 +1329,16 @@ class SetControlStatusRequest(google.protobuf.message.Message):
 global___SetControlStatusRequest = SetControlStatusRequest
 
 class SetControlStatusResponse(google.protobuf.message.Message):
+    """Response of setting the control status with the old and new status objects"""
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     OLD_CONTROL_STATUS_FIELD_NUMBER: builtins.int
     NEW_CONTROL_STATUS_FIELD_NUMBER: builtins.int
     old_control_status: global___ControlStatus.ValueType
+    """Previous 'old' control status"""
+
     new_control_status: global___ControlStatus.ValueType
+    """Current 'new' control status"""
+
     def __init__(self,
         *,
         old_control_status: global___ControlStatus.ValueType = ...,
@@ -415,32 +1347,53 @@ class SetControlStatusResponse(google.protobuf.message.Message):
     def ClearField(self, field_name: typing_extensions.Literal["new_control_status",b"new_control_status","old_control_status",b"old_control_status"]) -> None: ...
 global___SetControlStatusResponse = SetControlStatusResponse
 
-class CondtionValueUnion(google.protobuf.message.Message):
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
-    INT_VALUE_FIELD_NUMBER: builtins.int
-    FLOAT_VALUE_FIELD_NUMBER: builtins.int
-    DATETIME_VALUE_FIELD_NUMBER: builtins.int
-    int_value: builtins.int
-    float_value: builtins.float
-    @property
-    def datetime_value(self) -> google.protobuf.timestamp_pb2.Timestamp: ...
-    def __init__(self,
-        *,
-        int_value: builtins.int = ...,
-        float_value: builtins.float = ...,
-        datetime_value: typing.Optional[google.protobuf.timestamp_pb2.Timestamp] = ...,
-        ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["UnionOneof",b"UnionOneof","datetime_value",b"datetime_value","float_value",b"float_value","int_value",b"int_value"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["UnionOneof",b"UnionOneof","datetime_value",b"datetime_value","float_value",b"float_value","int_value",b"int_value"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing_extensions.Literal["UnionOneof",b"UnionOneof"]) -> typing.Optional[typing_extensions.Literal["int_value","float_value","datetime_value"]]: ...
-global___CondtionValueUnion = CondtionValueUnion
-
 class Condition(google.protobuf.message.Message):
+    """A condition message with its type and value
+
+    A Condition can be of various types.
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    immediate execution
+    {
+       "type": "immediate"
+    }
+    </code></pre>
+
+    number of interactions of the user with the AI agent
+    <pre><code>
+    {
+       "type": "interactions",
+       "value": “10”
+    }
+    </code></pre>
+
+     number of seconds
+    <pre><code>
+    {
+       "type": "duration",
+       "value": “3600”
+    }
+    </code></pre>
+
+     at a specific date and time
+    <pre><code>
+    {
+       "type": "datetime",
+       "value": "2021-12-23T13:45:00.000Z"
+    }
+    </code></pre>
+    """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     TYPE_FIELD_NUMBER: builtins.int
     VALUE_FIELD_NUMBER: builtins.int
     type: global___ConditionType.ValueType
+    """Condition type"""
+
     value: typing.Text
+    """Value of the condition.
+    Examples of conditions values based on the condition type are given in the <pre>ConditionType</pre> documentation
+    """
+
     def __init__(self,
         *,
         type: global___ConditionType.ValueType = ...,
@@ -450,6 +1403,7 @@ class Condition(google.protobuf.message.Message):
 global___Condition = Condition
 
 class ControlMessageServiceParameters(google.protobuf.message.Message):
+    """Parameters of the control message passed to the service specified in the control message"""
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     T2S_CONFIG_FIELD_NUMBER: builtins.int
     S2T_CONFIG_FIELD_NUMBER: builtins.int
@@ -462,27 +1416,41 @@ class ControlMessageServiceParameters(google.protobuf.message.Message):
     CONDITION_START_FIELD_NUMBER: builtins.int
     CONDITION_END_FIELD_NUMBER: builtins.int
     @property
-    def t2s_config(self) -> ondewo.t2s.text_to_speech_pb2.RequestConfig: ...
+    def t2s_config(self) -> ondewo.t2s.text_to_speech_pb2.RequestConfig:
+        """Text-2-Speech: configuration to control the synthesis of a text into audio"""
+        pass
     @property
-    def s2t_config(self) -> ondewo.s2t.speech_to_text_pb2.TranscribeRequestConfig: ...
+    def s2t_config(self) -> ondewo.s2t.speech_to_text_pb2.TranscribeRequestConfig:
+        """Speech-2-Text: configuration to control the recognition of text based on human voice audio"""
+        pass
     transfer_id: typing.Text
-    """sip params"""
+    """SIP: callee id to transfer call to"""
 
     @property
-    def wav_files(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.bytes]: ...
+    def wav_files(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.bytes]:
+        """SIP: bytes of audio files to play to a caller"""
+        pass
     text: typing.Text
-    """sip and nlu common params"""
+    """text, e.g. for NLU detect intent response or Text-2-Speech voice synthesis"""
 
     @property
     def context(self) -> ondewo.nlu.context_pb2.Context:
-        """nlu params"""
+        """NLU: context for creating, updating or deleting contextual information from a NLU session"""
         pass
     session_id: typing.Text
+    """NLU: the session id of a NLU session"""
+
     context_name: typing.Text
+    """NLU: the name of the context of a NLU session"""
+
     @property
-    def condition_start(self) -> global___Condition: ...
+    def condition_start(self) -> global___Condition:
+        """CSI: the condition that defines when a control message should be executed"""
+        pass
     @property
-    def condition_end(self) -> global___Condition: ...
+    def condition_end(self) -> global___Condition:
+        """CSI: the condition that defines when a control message should stop its execution"""
+        pass
     def __init__(self,
         *,
         t2s_config: typing.Optional[ondewo.t2s.text_to_speech_pb2.RequestConfig] = ...,
@@ -502,14 +1470,49 @@ class ControlMessageServiceParameters(google.protobuf.message.Message):
 global___ControlMessageServiceParameters = ControlMessageServiceParameters
 
 class ControlMessage(google.protobuf.message.Message):
+    """A control message
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
+    {
+      "service": "<SERVICE_NAME>", 			// e.g. ondewo_s2t
+      "method": "<SERVICE_CONTROL_METHOD>", 	// e.g. update_config
+      "parameters": [
+          // primitive data types and JSON objects are possible
+          1,
+          1.0,
+          -2.0,
+          “string”,
+          true,
+      	 {
+              // parameter JSON object
+          },
+          {
+              // Condition start object
+          },
+          {
+              // Condition end object [optional]
+          },
+       ]
+    }
+    </code></pre>
+    """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
     SERVICE_FIELD_NUMBER: builtins.int
     METHOD_FIELD_NUMBER: builtins.int
     PARAMETERS_FIELD_NUMBER: builtins.int
     service: global___ControlMessageServiceName.ValueType
+    """Service to control.
+    Valid service names are:'ondewo_nlu', 'ondewo_t2s', 'ondewo_s2t', 'ondewo_sip' and 'ondewo_csi'
+    """
+
     method: global___ControlMessageServiceMethod.ValueType
+    """Method to invoke on the service"""
+
     @property
-    def parameters(self) -> global___ControlMessageServiceParameters: ...
+    def parameters(self) -> global___ControlMessageServiceParameters:
+        """Parameters to use to invoke the method of the service"""
+        pass
     def __init__(self,
         *,
         service: global___ControlMessageServiceName.ValueType = ...,

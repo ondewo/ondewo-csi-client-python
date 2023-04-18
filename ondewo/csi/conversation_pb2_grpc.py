@@ -207,13 +207,15 @@ class ConversationsServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetControlStream(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Get the control stream to control sip, t2s, s2t etc. during a conversation
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def SetControlStatus(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Send a message on the control stream to control sip, t2s, s2t etc. during a conversation
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')

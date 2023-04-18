@@ -86,12 +86,12 @@ def main(
             i += 1
             j = 0
         elif response.HasField("synthesize_response"):
-            t2s_response: SynthesizeResponse = response.synthetize_response
+            t2s_response: SynthesizeResponse = response.synthesize_response
             print(f"RESPONSE \t{j}: {t2s_response.text}")
             j += 1
             streamer.mute = True
             logger_console.debug("muted")
-            player.play(response.synthetize_response.audio)
+            player.play(response.synthesize_response.audio)
             # playing the audio is a bit delayed, so still wait.
             time.sleep(0.2)
             streamer.mute = False
