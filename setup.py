@@ -27,7 +27,7 @@ requires: List[str] = read_requirements('requirements.txt')
 
 setup(
     name="ondewo-csi-client",
-    version='3.1.0',
+    version='3.1.1',
     author="ONDEWO GbmH",
     author_email="office@ondewo.com",
     description="Provides endpoints and messages for gRPC communication to the ONDEWO CSI server",
