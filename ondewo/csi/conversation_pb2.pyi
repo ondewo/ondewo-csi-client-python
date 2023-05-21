@@ -439,7 +439,7 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
        "parameters": [
            {
     	 	      "context": {           <== <NLU Context Object as JSON object>
-                   name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ssea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
+                   name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ss2ea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
                    ...,
                }
            },
@@ -467,7 +467,7 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
        "parameters": [
            {
     	 	      "context": {           <== <NLU Context Object as JSON object>
-                   name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ssea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
+                   name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/2dea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
                    ...,
                }
            },
@@ -887,7 +887,7 @@ create_context: ControlMessageServiceMethod.ValueType  # 15
    "parameters": [
        {
 	 	      "context": {           <== <NLU Context Object as JSON object>
-               name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ssea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
+               name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ss2ea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
                ...,
            }
        },
@@ -915,7 +915,7 @@ update_context: ControlMessageServiceMethod.ValueType  # 16
    "parameters": [
        {
 	 	      "context": {           <== <NLU Context Object as JSON object>
-               name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ssea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
+               name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/2dea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
                ...,
            }
        },
@@ -1059,7 +1059,7 @@ class S2sPipeline(google.protobuf.message.Message):
     """Required. S2T pipeline ID, e.g. "german_general" """
 
     nlu_project_id: typing.Text
-    """Required. NLU project ID, usually a hash, e.g. "ae33586b-afda-494a-aa73-1af0589cfc56"."""
+    """Required. NLU project ID, usually a hash, e.g. "ae33586b-x2s2-494a-aa73-1af0589cfc56"."""
 
     nlu_language_code: typing.Text
     """Required. Language code present in the corresponding NLU project, e.g. "de"."""
@@ -1176,7 +1176,7 @@ class S2sStreamResponse(google.protobuf.message.Message):
         with detected intent and N fulfillment messages (N >= 0).
 
     2.  The next N response messages contain for each fulfillment message one of the following:
-         a. T2S response `synthesize_response` with synthetized audio
+         a. T2S response `synthesize_response` with synthesized audio
          b. SIP trigger message `sip_trigger` with SIP trigger extracted from the fulfillment message
     """
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
