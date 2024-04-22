@@ -1,6 +1,13 @@
 # Release History
 
 *****************
+## Release ONDEWO CSI Python Client 4.0.0
+
+### Improvements
+ * Tracking API Version [4.0.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/4.0.0) ( [Documentation](https://ondewo.github.io/ondewo-csi-api/) )
+
+
+*****************
 ## Release ONDEWO CSI Python Client 3.2.0
 
 ### Improvements
