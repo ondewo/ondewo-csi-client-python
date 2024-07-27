@@ -2,7 +2,7 @@
 jupyter
 mypy
 mypy-protobuf
-pre-commit
+# pre-commit # Do not add this here
 pytest
 flake8
 SoundFile>=0.10.3.post1
