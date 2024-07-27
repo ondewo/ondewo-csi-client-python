@@ -1,26 +1,28 @@
-#!/usr/bin/env python
-# coding: utf-8
+# Copyright 2021-2024 ONDEWO GmbH
 #
-# Copyright 2021 ONDEWO GmbH
-#
-# Licensed under the Apache License, Version 2.0 (the License);
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an AS IS BASIS,
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import logging
 import queue
 import time
 import uuid
-from abc import ABCMeta, abstractmethod
-from typing import Iterator, Optional
+from abc import (
+    ABCMeta,
+    abstractmethod,
+)
+from typing import (
+    Iterator,
+    Optional,
+)
 
 from ondewo.logging.logger import logger_console
 from ondewo.nlu.session_pb2 import (
@@ -53,11 +55,11 @@ class StreamerInInterface(metaclass=ABCMeta):
 
     @abstractmethod
     def create_s2s_request(
-            self,
-            pipeline_id: str,
-            session_id: Optional[str] = None,
-            save_to_disk: bool = False,
-            initial_intent_display_name: Optional[str] = None,
+        self,
+        pipeline_id: str,
+        session_id: Optional[str] = None,
+        save_to_disk: bool = False,
+        initial_intent_display_name: Optional[str] = None,
     ) -> Iterator[S2sStreamRequest]:
         pass
 
@@ -121,11 +123,11 @@ class PyAudioStreamerIn(StreamerInInterface):
         self.pyaudio_object.terminate()
 
     def create_s2s_request(
-            self,
-            pipeline_id: str,
-            session_id: Optional[str] = None,
-            save_to_disk: bool = False,
-            initial_intent_display_name: Optional[str] = None,
+        self,
+        pipeline_id: str,
+        session_id: Optional[str] = None,
+        save_to_disk: bool = False,
+        initial_intent_display_name: Optional[str] = None,
     ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
         yield S2sStreamRequest(
@@ -264,11 +266,11 @@ class PySoundIoStreamerIn(StreamerInInterface):
         pass
 
     def create_s2s_request(
-            self,
-            pipeline_id: str,
-            session_id: Optional[str] = None,
-            save_to_disk: bool = False,
-            initial_intent_display_name: Optional[str] = None,
+        self,
+        pipeline_id: str,
+        session_id: Optional[str] = None,
+        save_to_disk: bool = False,
+        initial_intent_display_name: Optional[str] = None,
     ) -> Iterator[S2sStreamRequest]:
         # create an initial request with session id specified
         yield S2sStreamRequest(
@@ -296,7 +298,7 @@ class PySoundIoStreamerIn(StreamerInInterface):
             time.sleep(0.1)
 
     def create_intent_request(
-            self, cai_project: str, cai_session: str
+        self, cai_project: str, cai_session: str
     ) -> Iterator[StreamingDetectIntentRequest]:
         count = 0
         data_save = bytes()
@@ -321,7 +323,7 @@ class PySoundIoStreamerIn(StreamerInInterface):
             time.sleep(0.1)
 
     def create_pysoundio_streaming_request(
-            self, pipeline_id: str
+        self, pipeline_id: str
     ) -> Iterator[speech_to_text_pb2.TranscribeStreamRequest]:
 
         count = 0

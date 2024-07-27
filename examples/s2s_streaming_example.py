@@ -1,24 +1,24 @@
-#!/usr/bin/env python
-# coding: utf-8
-# Copyright 2021 ONDEWO GmbH
+# Copyright 2021-2024 ONDEWO GmbH
 #
-# Licensed under the Apache License, Version 2.0 (the License);
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an AS IS BASIS,
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import argparse
 import time
 import uuid
 import wave
-from typing import Iterator, Optional
+from typing import (
+    Iterator,
+    Optional,
+)
 from uuid import uuid4
 
 from ondewo.nlu.session_pb2 import QueryResult
@@ -43,10 +43,10 @@ def get_streaming_audio(audio_path: str) -> Iterator[bytes]:
 
 
 def create_streaming_request(
-        audio_stream: Iterator[bytes],
-        pipeline_id: str = "pizza",
-        session_id: Optional[str] = None,
-        initial_intent_display_name: Optional[str] = None,
+    audio_stream: Iterator[bytes],
+    pipeline_id: str = "pizza",
+    session_id: Optional[str] = None,
+    initial_intent_display_name: Optional[str] = None,
 ) -> Iterator[S2sStreamRequest]:
     # create an initial request with session id specified
     yield S2sStreamRequest(
