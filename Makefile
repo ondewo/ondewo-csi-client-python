@@ -28,7 +28,7 @@ CURRENT_RELEASE_NOTES=`cat RELEASE.md \
 	| sed -n '/Release ONDEWO CSI Python Client ${ONDEWO_CSI_VERSION}/,/\*\*/p'`
 
 GH_REPO="https://github.com/ondewo/ondewo-csi-client-python"
-ONDEWO_CSI_API_GIT_BRANCH=tags/4.0.0
+ONDEWO_CSI_API_GIT_BRANCH=master
 ONDEWO_PROTO_COMPILER_GIT_BRANCH=master
 ONDEWO_CSI_API_DIR=ondewo-csi-api
 ONDEWO_PROTO_COMPILER_DIR=ondewo-proto-compiler
