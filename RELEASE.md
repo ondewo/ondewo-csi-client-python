@@ -1,4 +1,9 @@
 # Release History
+*****************
+## Release ONDEWO CSI Python Client 4.0.1
+
+### Improvements
+ * Added functionality to pass grpc options to grpc clients based on [ONDEWO CLIENT UTILS PYTHON 2.0.0](https://github.com/ondewo/ondewo-client-utils-python/releases/tag/2.0.0)
 
 *****************
 ## Release ONDEWO CSI Python Client 4.0.0
