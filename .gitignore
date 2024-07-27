@@ -147,15 +147,7 @@ cython_debug/
 **/__pycache__/**
 *grpc.json
 
-
-
-# config
-examples/configs/
-examples/audiofiles/*
-examples/tests/
-
 csi.json
-/tutorials/configs
 
 # ondewo proto generation of submodules
 ondewo/s2t
