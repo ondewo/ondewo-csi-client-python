@@ -166,11 +166,11 @@ release: ## Automate the entire release process
 	@echo "Release Finished"
 
 create_release_branch: ## Create Release Branch and push it to origin
-	git checkout -b "release/${ONDEWO_CSI_VERSION}"
+	-git checkout -b "release/${ONDEWO_CSI_VERSION}"
 	git push -u origin "release/${ONDEWO_CSI_VERSION}"
 
 create_release_tag: ## Create Release Tag and push it to origin
-	git tag -a ${ONDEWO_CSI_VERSION} -m "release/${ONDEWO_CSI_VERSION}"
+	-git tag -a ${ONDEWO_CSI_VERSION} -m "release/${ONDEWO_CSI_VERSION}"
 	git push origin ${ONDEWO_CSI_VERSION}
 
 login_to_gh: ## Login to Github CLI with Access Token
