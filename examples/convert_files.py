@@ -18,9 +18,10 @@ RATE: int = 16000
 SAMPWIDTH: int = 2
 
 
-def convert_file(file):
+def convert_file(file: str) -> None:
     with open(f"audiofiles/{file}.raw", "rb") as fi:
         data = fi.read()
+
     with wave.open(f"audiofiles/{file}.wav", "w") as wf:
         wf.setnchannels(MONO)
         wf.setframerate(RATE)

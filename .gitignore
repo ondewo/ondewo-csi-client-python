@@ -1,11 +1,15 @@
 # release automation
 ondewo-devops-accounts
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
-*$py.class
+**/__pycache__/**
 .vscode
 .idea
+.isort.cfg
+.mypy_cache
+*.py[cod]
+*$py.class
 
 # C extensions
 *.so
@@ -143,8 +147,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-.idea
-**/__pycache__/**
 *grpc.json
 
 csi.json

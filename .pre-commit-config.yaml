@@ -1,7 +1,7 @@
 #############################################################################################
 # pre-commit is a "framework for managing and maintaining multi-language pre-commit hooks"  #
 # see https://pre-commit.com/#intro for an introduction to pre-commit                       #
-#                                                                                            #
+#                                                                                           #
 # - pre-commit hooks are run on staged files just before a commit or a push                 #
 # - to run a given hook on any file at any time, run the following on the command line:     #
 #    pre-commit run <HOOK_ID> --files <FILE1> <FILE2> ..., e.g.,                            #
@@ -14,8 +14,9 @@ fail_fast: false
 # "fail_fast: false" means pre-commit continues to run hooks after the first failure
 
 repos:
+
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.11.0
+    rev: v1.13.0
     hooks:
       - id: mypy  # Run mypy type checker; note: runs with flag --missing-imports
         exclude: ondewo
@@ -46,7 +47,7 @@ repos:
           )
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-added-large-files  # Prevent giant files from being committed
         args: [ maxkb=1024 ]
@@ -69,10 +70,9 @@ repos:
         files: 'requirements/requirements.*\.txt$'
 
   - repo: https://github.com/pycqa/flake8
-    rev: 7.1.0
+    rev: 7.1.1
     hooks:
       - id: flake8
-  #                exclude: ondewo
 
   - repo: https://github.com/milin/giticket
     rev: v1.4

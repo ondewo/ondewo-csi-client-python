@@ -87,7 +87,7 @@ class PyAudioStreamerOut(StreamerOutInterface):
             output=True,
         )
 
-    def play(self, data):
+    def play(self, data: bytes) -> None:
         global PLAYING
         PLAYING = True
         self.stream.write(data[WAV_HEADER_LENGTH:])
@@ -180,6 +180,7 @@ class PyAudioStreamerIn(StreamerInInterface):
 
 
 class PySoundIoStreamerOut(StreamerOutInterface):
+
     def __init__(self, device_id: Optional[int] = None) -> None:
         import pysoundio
 
@@ -198,7 +199,7 @@ class PySoundIoStreamerOut(StreamerOutInterface):
             write_callback=self.callback,
         )
 
-    def callback(self, data, length):
+    def callback(self, data: list, length: int) -> None:
         if self.response is not None:
             # if we are currently playing a response
             if self.idx <= len(self.response):
@@ -262,7 +263,7 @@ class PySoundIoStreamerIn(StreamerInInterface):
         # logger_console.debug(f'input {len(data)} bytes')
         self.buffer.put(data)
 
-    def close(self):
+    def close(self) -> None:
         pass
 
     def create_s2s_request(
