@@ -15,6 +15,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
+
 import builtins
 import collections.abc
 import google.protobuf.descriptor
@@ -47,6 +48,8 @@ class _ControlStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._
     """Status that control stream is ok"""
     EMERGENCY_STOP: _ControlStatus.ValueType  # 1
     """Status that control stream needs to stop immediately"""
+    VAD_START_OF_SPEECH: _ControlStatus.ValueType  # 2
+    """Status that voice activity detection detected start of speech"""
 
 class ControlStatus(_ControlStatus, metaclass=_ControlStatusEnumTypeWrapper):
     """Control status"""
@@ -55,6 +58,8 @@ OK: ControlStatus.ValueType  # 0
 """Status that control stream is ok"""
 EMERGENCY_STOP: ControlStatus.ValueType  # 1
 """Status that control stream needs to stop immediately"""
+VAD_START_OF_SPEECH: ControlStatus.ValueType  # 2
+"""Status that voice activity detection detected start of speech"""
 global___ControlStatus = ControlStatus
 
 class _ControlMessageServiceName:
@@ -73,6 +78,12 @@ class _ControlMessageServiceNameEnumTypeWrapper(google.protobuf.internal.enum_ty
     """NLU control message service name"""
     ondewo_sip: _ControlMessageServiceName.ValueType  # 4
     """SIP control message service name"""
+    ondewo_vtsi: _ControlMessageServiceName.ValueType  # 5
+    """VTSI control message service name"""
+    ondewo_csi: _ControlMessageServiceName.ValueType  # 6
+    """CSI control message service name"""
+    ondewo_survey: _ControlMessageServiceName.ValueType  # 7
+    """Survey control message service name"""
 
 class ControlMessageServiceName(_ControlMessageServiceName, metaclass=_ControlMessageServiceNameEnumTypeWrapper):
     """Control message services"""
@@ -87,6 +98,12 @@ ondewo_nlu: ControlMessageServiceName.ValueType  # 3
 """NLU control message service name"""
 ondewo_sip: ControlMessageServiceName.ValueType  # 4
 """SIP control message service name"""
+ondewo_vtsi: ControlMessageServiceName.ValueType  # 5
+"""VTSI control message service name"""
+ondewo_csi: ControlMessageServiceName.ValueType  # 6
+"""CSI control message service name"""
+ondewo_survey: ControlMessageServiceName.ValueType  # 7
+"""Survey control message service name"""
 global___ControlMessageServiceName = ControlMessageServiceName
 
 class _ControlMessageServiceMethod:
@@ -999,7 +1016,7 @@ Example value need be given as a string in the format: <pre><code>value="4"</cod
 """
 global___ConditionType = ConditionType
 
-@typing_extensions.final
+@typing.final
 class S2sPipeline(google.protobuf.message.Message):
     """The top-level message sent by client to `CreateS2sPipeline` and `UpdateS2sPipeline` endpoints and received from
     `GetS2sPipeline` endpoint.
@@ -1031,11 +1048,11 @@ class S2sPipeline(google.protobuf.message.Message):
         nlu_language_code: builtins.str = ...,
         t2s_pipeline_id: builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["id", b"id", "nlu_language_code", b"nlu_language_code", "nlu_project_id", b"nlu_project_id", "s2t_pipeline_id", b"s2t_pipeline_id", "t2s_pipeline_id", b"t2s_pipeline_id"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["id", b"id", "nlu_language_code", b"nlu_language_code", "nlu_project_id", b"nlu_project_id", "s2t_pipeline_id", b"s2t_pipeline_id", "t2s_pipeline_id", b"t2s_pipeline_id"]) -> None: ...
 
 global___S2sPipeline = S2sPipeline
 
-@typing_extensions.final
+@typing.final
 class S2sPipelineId(google.protobuf.message.Message):
     """The top-level message sent by client to `GetS2sPipeline` and `DeleteS2sPipeline` endpoints."""
 
@@ -1049,11 +1066,11 @@ class S2sPipelineId(google.protobuf.message.Message):
         *,
         id: builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["id", b"id"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["id", b"id"]) -> None: ...
 
 global___S2sPipelineId = S2sPipelineId
 
-@typing_extensions.final
+@typing.final
 class ListS2sPipelinesRequest(google.protobuf.message.Message):
     """The top-level message sent by client to `ListS2sPipelines` endpoint. Currently without arguments.
     TODO: add filtering options
@@ -1067,7 +1084,7 @@ class ListS2sPipelinesRequest(google.protobuf.message.Message):
 
 global___ListS2sPipelinesRequest = ListS2sPipelinesRequest
 
-@typing_extensions.final
+@typing.final
 class ListS2sPipelinesResponse(google.protobuf.message.Message):
     """The top-level message received from `ListS2sPipelines` endpoint."""
 
@@ -1077,16 +1094,17 @@ class ListS2sPipelinesResponse(google.protobuf.message.Message):
     @property
     def pipelines(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___S2sPipeline]:
         """Collection of S2S pipelines of the server."""
+
     def __init__(
         self,
         *,
         pipelines: collections.abc.Iterable[global___S2sPipeline] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["pipelines", b"pipelines"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["pipelines", b"pipelines"]) -> None: ...
 
 global___ListS2sPipelinesResponse = ListS2sPipelinesResponse
 
-@typing_extensions.final
+@typing.final
 class S2sStreamRequest(google.protobuf.message.Message):
     """The top-level message sent by the client to the
     `S2sStream` method.
@@ -1131,11 +1149,11 @@ class S2sStreamRequest(google.protobuf.message.Message):
         end_of_stream: builtins.bool = ...,
         initial_intent_display_name: builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["audio", b"audio", "end_of_stream", b"end_of_stream", "initial_intent_display_name", b"initial_intent_display_name", "pipeline_id", b"pipeline_id", "session_id", b"session_id"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["audio", b"audio", "end_of_stream", b"end_of_stream", "initial_intent_display_name", b"initial_intent_display_name", "pipeline_id", b"pipeline_id", "session_id", b"session_id"]) -> None: ...
 
 global___S2sStreamRequest = S2sStreamRequest
 
-@typing_extensions.final
+@typing.final
 class S2sStreamResponse(google.protobuf.message.Message):
     """The top-level message returned from the
     `S2sStream` method.
@@ -1160,12 +1178,15 @@ class S2sStreamResponse(google.protobuf.message.Message):
     @property
     def detect_intent_response(self) -> ondewo.nlu.session_pb2.DetectIntentResponse:
         """full NLU detect intent response"""
+
     @property
     def synthesize_response(self) -> ondewo.t2s.text_to_speech_pb2.SynthesizeResponse:
         """full T2S synthesize response"""
+
     @property
     def sip_trigger(self) -> global___SipTrigger:
         """SIP trigger message"""
+
     def __init__(
         self,
         *,
@@ -1173,13 +1194,13 @@ class S2sStreamResponse(google.protobuf.message.Message):
         synthesize_response: ondewo.t2s.text_to_speech_pb2.SynthesizeResponse | None = ...,
         sip_trigger: global___SipTrigger | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["detect_intent_response", b"detect_intent_response", "response", b"response", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["detect_intent_response", b"detect_intent_response", "response", b"response", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing_extensions.Literal["response", b"response"]) -> typing_extensions.Literal["detect_intent_response", "synthesize_response", "sip_trigger"] | None: ...
+    def HasField(self, field_name: typing.Literal["detect_intent_response", b"detect_intent_response", "response", b"response", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["detect_intent_response", b"detect_intent_response", "response", b"response", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response"]) -> None: ...
+    def WhichOneof(self, oneof_group: typing.Literal["response", b"response"]) -> typing.Literal["detect_intent_response", "synthesize_response", "sip_trigger"] | None: ...
 
 global___S2sStreamResponse = S2sStreamResponse
 
-@typing_extensions.final
+@typing.final
 class SipTrigger(google.protobuf.message.Message):
     """SIP trigger message"""
 
@@ -1222,18 +1243,19 @@ class SipTrigger(google.protobuf.message.Message):
     @property
     def content(self) -> google.protobuf.struct_pb2.Struct:
         """extra parameters for the trigger"""
+
     def __init__(
         self,
         *,
         type: global___SipTrigger.SipTriggerType.ValueType = ...,
         content: google.protobuf.struct_pb2.Struct | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["content", b"content"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["content", b"content", "type", b"type"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["content", b"content"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["content", b"content", "type", b"type"]) -> None: ...
 
 global___SipTrigger = SipTrigger
 
-@typing_extensions.final
+@typing.final
 class CheckUpstreamHealthResponse(google.protobuf.message.Message):
     """Health checks"""
 
@@ -1245,12 +1267,15 @@ class CheckUpstreamHealthResponse(google.protobuf.message.Message):
     @property
     def s2t_status(self) -> google.rpc.status_pb2.Status:
         """Health checks for Speech-2-Text"""
+
     @property
     def nlu_status(self) -> google.rpc.status_pb2.Status:
         """Health checks for NLU"""
+
     @property
     def t2s_status(self) -> google.rpc.status_pb2.Status:
         """Health checks for Text-2-Speech"""
+
     def __init__(
         self,
         *,
@@ -1258,12 +1283,12 @@ class CheckUpstreamHealthResponse(google.protobuf.message.Message):
         nlu_status: google.rpc.status_pb2.Status | None = ...,
         t2s_status: google.rpc.status_pb2.Status | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["nlu_status", b"nlu_status", "s2t_status", b"s2t_status", "t2s_status", b"t2s_status"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["nlu_status", b"nlu_status", "s2t_status", b"s2t_status", "t2s_status", b"t2s_status"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["nlu_status", b"nlu_status", "s2t_status", b"s2t_status", "t2s_status", b"t2s_status"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["nlu_status", b"nlu_status", "s2t_status", b"s2t_status", "t2s_status", b"t2s_status"]) -> None: ...
 
 global___CheckUpstreamHealthResponse = CheckUpstreamHealthResponse
 
-@typing_extensions.final
+@typing.final
 class ControlStreamRequest(google.protobuf.message.Message):
     """Control stream message"""
 
@@ -1275,7 +1300,7 @@ class ControlStreamRequest(google.protobuf.message.Message):
 
 global___ControlStreamRequest = ControlStreamRequest
 
-@typing_extensions.final
+@typing.final
 class ControlStreamResponse(google.protobuf.message.Message):
     """Control stream response message"""
 
@@ -1289,11 +1314,11 @@ class ControlStreamResponse(google.protobuf.message.Message):
         *,
         control_status: global___ControlStatus.ValueType = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["control_status", b"control_status"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["control_status", b"control_status"]) -> None: ...
 
 global___ControlStreamResponse = ControlStreamResponse
 
-@typing_extensions.final
+@typing.final
 class SetControlStatusRequest(google.protobuf.message.Message):
     """Request to set control status"""
 
@@ -1307,11 +1332,11 @@ class SetControlStatusRequest(google.protobuf.message.Message):
         *,
         control_status: global___ControlStatus.ValueType = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["control_status", b"control_status"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["control_status", b"control_status"]) -> None: ...
 
 global___SetControlStatusRequest = SetControlStatusRequest
 
-@typing_extensions.final
+@typing.final
 class SetControlStatusResponse(google.protobuf.message.Message):
     """Response of setting the control status with the old and new status objects"""
 
@@ -1329,11 +1354,11 @@ class SetControlStatusResponse(google.protobuf.message.Message):
         old_control_status: global___ControlStatus.ValueType = ...,
         new_control_status: global___ControlStatus.ValueType = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["new_control_status", b"new_control_status", "old_control_status", b"old_control_status"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["new_control_status", b"new_control_status", "old_control_status", b"old_control_status"]) -> None: ...
 
 global___SetControlStatusResponse = SetControlStatusResponse
 
-@typing_extensions.final
+@typing.final
 class Condition(google.protobuf.message.Message):
     """A condition message with its type and value
 
@@ -1387,11 +1412,11 @@ class Condition(google.protobuf.message.Message):
         type: global___ConditionType.ValueType = ...,
         value: builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing_extensions.Literal["type", b"type", "value", b"value"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["type", b"type", "value", b"value"]) -> None: ...
 
 global___Condition = Condition
 
-@typing_extensions.final
+@typing.final
 class ControlMessageServiceParameters(google.protobuf.message.Message):
     """Parameters of the control message passed to the service specified in the control message"""
 
@@ -1407,32 +1432,38 @@ class ControlMessageServiceParameters(google.protobuf.message.Message):
     CONTEXT_NAME_FIELD_NUMBER: builtins.int
     CONDITION_START_FIELD_NUMBER: builtins.int
     CONDITION_END_FIELD_NUMBER: builtins.int
-    @property
-    def t2s_config(self) -> ondewo.t2s.text_to_speech_pb2.RequestConfig:
-        """Text-2-Speech: configuration to control the synthesis of a text into audio"""
-    @property
-    def s2t_config(self) -> ondewo.s2t.speech_to_text_pb2.TranscribeRequestConfig:
-        """Speech-2-Text: configuration to control the recognition of text based on human voice audio"""
     transfer_id: builtins.str
     """SIP: callee id to transfer call to"""
-    @property
-    def wav_files(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.bytes]:
-        """SIP: bytes of audio files to play to a caller"""
     text: builtins.str
     """text, e.g. for NLU detect intent response or Text-2-Speech voice synthesis"""
-    @property
-    def context(self) -> ondewo.nlu.context_pb2.Context:
-        """NLU: context for creating, updating or deleting contextual information from a NLU session"""
     session_id: builtins.str
     """NLU: the session id of a NLU session"""
     context_name: builtins.str
     """NLU: the name of the context of a NLU session"""
     @property
+    def t2s_config(self) -> ondewo.t2s.text_to_speech_pb2.RequestConfig:
+        """Text-2-Speech: configuration to control the synthesis of a text into audio"""
+
+    @property
+    def s2t_config(self) -> ondewo.s2t.speech_to_text_pb2.TranscribeRequestConfig:
+        """Speech-2-Text: configuration to control the recognition of text based on human voice audio"""
+
+    @property
+    def wav_files(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.bytes]:
+        """SIP: bytes of audio files to play to a caller"""
+
+    @property
+    def context(self) -> ondewo.nlu.context_pb2.Context:
+        """NLU: context for creating, updating or deleting contextual information from a NLU session"""
+
+    @property
     def condition_start(self) -> global___Condition:
         """CSI: the condition that defines when a control message should be executed"""
+
     @property
     def condition_end(self) -> global___Condition:
         """CSI: the condition that defines when a control message should stop its execution"""
+
     def __init__(
         self,
         *,
@@ -1447,13 +1478,13 @@ class ControlMessageServiceParameters(google.protobuf.message.Message):
         condition_start: global___Condition | None = ...,
         condition_end: global___Condition | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["condition_end", b"condition_end", "condition_start", b"condition_start", "config", b"config", "context", b"context", "s2t_config", b"s2t_config", "t2s_config", b"t2s_config"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["condition_end", b"condition_end", "condition_start", b"condition_start", "config", b"config", "context", b"context", "context_name", b"context_name", "s2t_config", b"s2t_config", "session_id", b"session_id", "t2s_config", b"t2s_config", "text", b"text", "transfer_id", b"transfer_id", "wav_files", b"wav_files"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing_extensions.Literal["config", b"config"]) -> typing_extensions.Literal["t2s_config", "s2t_config"] | None: ...
+    def HasField(self, field_name: typing.Literal["condition_end", b"condition_end", "condition_start", b"condition_start", "config", b"config", "context", b"context", "s2t_config", b"s2t_config", "t2s_config", b"t2s_config"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["condition_end", b"condition_end", "condition_start", b"condition_start", "config", b"config", "context", b"context", "context_name", b"context_name", "s2t_config", b"s2t_config", "session_id", b"session_id", "t2s_config", b"t2s_config", "text", b"text", "transfer_id", b"transfer_id", "wav_files", b"wav_files"]) -> None: ...
+    def WhichOneof(self, oneof_group: typing.Literal["config", b"config"]) -> typing.Literal["t2s_config", "s2t_config"] | None: ...
 
 global___ControlMessageServiceParameters = ControlMessageServiceParameters
 
-@typing_extensions.final
+@typing.final
 class ControlMessage(google.protobuf.message.Message):
     """A control message
 
@@ -1497,6 +1528,7 @@ class ControlMessage(google.protobuf.message.Message):
     @property
     def parameters(self) -> global___ControlMessageServiceParameters:
         """Parameters to use to invoke the method of the service"""
+
     def __init__(
         self,
         *,
@@ -1504,7 +1536,7 @@ class ControlMessage(google.protobuf.message.Message):
         method: global___ControlMessageServiceMethod.ValueType = ...,
         parameters: global___ControlMessageServiceParameters | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing_extensions.Literal["parameters", b"parameters"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing_extensions.Literal["method", b"method", "parameters", b"parameters", "service", b"service"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["parameters", b"parameters"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["method", b"method", "parameters", b"parameters", "service", b"service"]) -> None: ...
 
 global___ControlMessage = ControlMessage
