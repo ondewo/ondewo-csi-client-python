@@ -27,7 +27,7 @@ requires: List[str] = read_requirements('requirements.txt')
 
 setup(
     name="ondewo-csi-client",
-    version='5.0.0',
+    version='5.1.0',
     author="ONDEWO GmbH",
     author_email="office@ondewo.com",
     description="ONDEWO Communication System Integration (CSI) Client library for Python",
