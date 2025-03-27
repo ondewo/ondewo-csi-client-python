@@ -18,16 +18,16 @@ from typing import (
     Tuple,
 )
 
-from ondewo.utils.base_client import BaseClient
-from ondewo.utils.base_client_config import BaseClientConfig
+from ondewo.utils.async_base_client import AsyncBaseClient
 
-from ondewo.csi.client.services.conversations import Conversations
-from ondewo.csi.client.services_container import ServicesContainer
+from ondewo.csi.client.async_services_container import AsyncServicesContainer
+from ondewo.csi.client.client_config import BaseClientConfig
+from ondewo.csi.client.services.async_conversations import Conversations
 
 
-class Client(BaseClient):
+class AsyncClient(AsyncBaseClient):
     """
-    The core python client for interacting with ONDEWO S2T services.
+    The core asynchronous Python client for interacting with ONDEWO s2t services.
     """
 
     def _initialize_services(
@@ -37,17 +37,14 @@ class Client(BaseClient):
         options: Optional[Set[Tuple[str, Any]]] = None,
     ) -> None:
         """
-
-        Initialize the service clients and lLogin with the current config and set up the services in self.services
+        Initialize the asynchronous service clients, login with the current config,
+        and set up the services in self.services.
 
         Args:
-            config (BaseClientConfig):
-                Configuration for the client.
-            use_secure_channel (bool):
-                Whether to use a secure gRPC channel.
-            options (Optional[Set[Tuple[str, Any]]]):
-                Additional options for the gRPC channel.
+            config (ClientConfig): Configuration for the client.
+            use_secure_channel (bool): Whether to use a secure gRPC channel.
+            options (Optional[Set[Tuple[str, Any]]]): Additional options for the gRPC channel.
         """
-        self.services: ServicesContainer = ServicesContainer(
+        self.services: AsyncServicesContainer = AsyncServicesContainer(
             conversations=Conversations(config=config, use_secure_channel=use_secure_channel, options=options),
         )

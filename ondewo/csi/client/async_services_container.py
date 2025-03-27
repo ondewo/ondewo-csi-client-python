@@ -11,22 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import wave
 
-MONO: int = 1
-RATE: int = 16000
-SAMPWIDTH: int = 2
+from dataclasses import dataclass
 
+from ondewo.utils.base_service_container import BaseServicesContainer
 
-def convert_file(file: str) -> None:
-    with open(f"audiofiles/{file}.raw", "rb") as fi:
-        data = fi.read()
-
-    with wave.open(f"audiofiles/{file}.wav", "w") as wf:
-        wf.setnchannels(MONO)
-        wf.setframerate(RATE)
-        wf.setsampwidth(SAMPWIDTH)
-        wf.writeframes(data)
+from ondewo.csi.client.services.async_conversations import Conversations
 
 
-convert_file("test")
+@dataclass
+class AsyncServicesContainer(BaseServicesContainer):
+    conversations: Conversations

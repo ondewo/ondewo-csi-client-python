@@ -108,7 +108,7 @@ update_setup: ## Update Version in setup.py
 	@sed -i "s/version='[0-9]*.[0-9]*.[0-9]*'/version='${ONDEWO_CSI_VERSION}'/g" setup.py
 	@sed -i "s/version=\"[0-9]*.[0-9]*.[0-9]*\"/version='${ONDEWO_CSI_VERSION}'/g" setup.py
 
-build: clear_package_data prepare_submodules build_compiler generate_all_protos update_setup ## Build source code
+build: clear_package_data prepare_submodules build_compiler generate_all_protos create_async_services update_setup ## Build source code
 
 build_compiler: ## Build compiler
 	make -C ondewo-proto-compiler/python build
@@ -147,6 +147,28 @@ create_conda_env: ##Creates CONDA Environment
 	conda create -y --name ondewo-csi-client-python python=3.9
 	/bin/bash -c 'source `conda info --base`/bin/activate ondewo-csi-client-python; make setup_developer_environment_locally && echo "\n PRECOMMIT INSTALLED \n"'
 	make release
+
+create_async_services: ## Create async services for all synchronous services
+	@find ondewo -type d -name "services" ! -path "*/.*/*" | while read -r dir; do \
+	    for file in "$$dir"/*.py; do \
+	        filename=$$(basename -- "$$file"); \
+	        case "$$filename" in \
+	            "__init__.py"|async_*) continue ;; \
+	        esac; \
+	        cp "$$file" "$$dir/async_$$filename"; \
+	    done; \
+	    for file in "$$dir"/async_*.py; do \
+	        sed -i -E \
+	            -e '/def stub/b' -e 's/^([[:space:]]*)def /\1async def /g' \
+	            -e 's/self\.stub/await self.stub/g' \
+	            -e 's/\(BaseServicesInterface\)/\(AsyncBaseServicesInterface\)/g' \
+	            -e 's/base_services_interface/async_base_services_interface/g' \
+	            -e 's/import BaseServicesInterface/import AsyncBaseServicesInterface/g' \
+	            "$$file"; \
+	    done; \
+	done
+	-make precommit_hooks_run_all_files
+	make precommit_hooks_run_all_files
 
 ########################################################
 #		Release

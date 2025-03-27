@@ -1,10 +1,10 @@
 dataclasses-json
 google-api-core
 googleapis-common-protos
+grpcio
 grpcio-reflection
 grpcio-tools
-grpcio
 numpy
-ondewo-client-utils
+ondewo-client-utils>=3.1.0
 ondewo-logging
 setuptools
