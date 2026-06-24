@@ -240,6 +240,22 @@ def test_get_access_token_before_login_raises() -> None:
     assert "Not logged in" in str(exc_info.value)
 
 
+def test_refresh_without_refresh_token_raises() -> None:
+    # A login response that carries an access_token but NO refresh_token, with expires_in=0
+    # so the access token is immediately stale: the next get_access_token() drives into
+    # _refresh() while the stored refresh_token is still empty, hitting the guard.
+    transport = FakeTransport([{"access_token": "jwt-no-refresh", "expires_in": 0}])
+    manager = _sync_manager(transport)
+    manager.login()
+
+    with pytest.raises(KeycloakAuthError) as exc_info:
+        manager.get_access_token()
+
+    assert "No refresh token available" in str(exc_info.value)
+    # The guard fires before any refresh request is sent (only the login call hit the transport).
+    assert len(transport.requests) == 1
+
+
 def test_login_response_without_access_token_raises() -> None:
     transport = FakeTransport([{"error": "invalid_grant", "error_description": "bad creds"}])
     manager = _sync_manager(transport)
@@ -328,6 +344,29 @@ async def test_async_token_expiration_in_s_zero_stops_refresh() -> None:
     await manager.login()
     with pytest.raises(KeycloakAuthError):
         await manager.get_access_token()
+
+
+@pytest.mark.asyncio
+async def test_async_refresh_without_refresh_token_raises() -> None:
+    # Async mirror of test_refresh_without_refresh_token_raises: login yields an access_token
+    # but no refresh_token (expires_in=0 => immediately stale), so get_access_token() drives
+    # into _refresh() while the stored refresh_token is empty, hitting the guard.
+    transport = FakeTransport([{"access_token": "jwt-no-refresh", "expires_in": 0}])
+    manager = AsyncKeycloakTokenManager(
+        keycloak_url=KEYCLOAK_URL,
+        realm=REALM,
+        client_id=CLIENT_ID,
+        username=USERNAME,
+        password=PASSWORD,
+        transport=transport.async_,
+    )
+
+    await manager.login()
+    with pytest.raises(KeycloakAuthError) as exc_info:
+        await manager.get_access_token()
+
+    assert "No refresh token available" in str(exc_info.value)
+    assert len(transport.requests) == 1
 
 
 # --------------------------------------------------------------------------------------- #
