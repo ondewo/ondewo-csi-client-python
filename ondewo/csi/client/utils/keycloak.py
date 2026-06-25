@@ -176,6 +176,28 @@ class _KeycloakManagerBase:
         password: str,
         token_expiration_in_s: Optional[int] = None,
     ) -> None:
+        """
+        Validate the credentials and resolve the token endpoint.
+
+        Args:
+            keycloak_url (str):
+                Base Keycloak URL (e.g. ``"https://keycloak.ondewo.com/auth"``).
+            realm (str):
+                Realm name.
+            client_id (str):
+                Public ROPC client id (no secret, Q1).
+            username (str):
+                Technical-user username/email.
+            password (str):
+                Technical-user password.
+            token_expiration_in_s (Optional[int]):
+                Upper bound on the auto-refresh lifetime (see module docstring).
+
+        Raises:
+            ValueError:
+                If any of ``keycloak_url``/``realm``/``client_id``/``username``/``password``
+                is empty.
+        """
         if not (keycloak_url and realm and client_id and username and password):
             raise ValueError(
                 "KeycloakTokenManager requires non-empty keycloak_url, realm, client_id, username and password."
@@ -200,10 +222,24 @@ class _KeycloakManagerBase:
             self._state.refresh_deadline = time.monotonic() + self._token_expiration_in_s
 
     def _require_logged_in(self) -> None:
+        """
+        Assert that :meth:`login` has succeeded.
+
+        Raises:
+            KeycloakAuthError:
+                If no successful login has been recorded yet.
+        """
         if not self._state.logged_in:
             raise KeycloakAuthError("Not logged in: call login() before requesting authorization metadata.")
 
     def _require_refresh_window(self) -> None:
+        """
+        Assert that the ``token_expiration_in_s`` auto-refresh window is still open.
+
+        Raises:
+            KeycloakAuthError:
+                If the configured ``token_expiration_in_s`` has elapsed.
+        """
         if not self._state.refresh_window_open():
             raise KeycloakAuthError(
                 "token_expiration_in_s elapsed: the auto-refresh window is closed, a fresh login() is required."
