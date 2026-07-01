@@ -111,14 +111,17 @@ It will generate a `_pb2.py`, `_pb2.pyi` and `_pb2_grpc.py` file for every `.pro
 
 ## Examples
 
-The `/examples` folder provides a possible implementation of this library. To run an example, simple execute it like any other python file. To specify the server and credentials, you need to provide an environment file with the following variables:
+The `/examples` folder provides a possible implementation of this library. To run an example, simply execute it like any other python file. Most examples load a JSON `ClientConfig` (see `examples/configs/`); `keycloak_auth_example.py` instead builds the config inline from environment variables. Authentication uses the Keycloak headless offline-token flow: the client logs in once and sends the auto-refreshed access token as `Authorization: Bearer <jwt>` on every RPC (the legacy `http_token` / `cai-token` HTTP-Basic login has been removed). The config fields are:
 
 - host `// The hostname of the Server - e.g. 127.0.0.1`
 - port `// Port of the Server - e.g. 6600`
-- user_name `// Username - same as you would use in AIM`
-- password `// Password of the user`
-- http_token `// Token to allow access through`
-- grpc_cert `// gRPC Certificate of the server`
+- grpc_cert `// gRPC Certificate of the server (optional; omit for an insecure channel)`
+- keycloak_url `// Base URL of the Keycloak server - e.g. https://keycloak.ondewo.com/auth`
+- realm `// Keycloak realm that owns the SDK client and the user`
+- client_id `// Public Keycloak client id used for the ROPC grant (no client secret)`
+- username `// Username (email) of the 2FA-exempt technical user; user_name is accepted as a legacy alias`
+- password `// Password of the technical user`
+- token_expiration_in_s `// Optional upper bound (seconds) on how long auto-refresh keeps renewing the token`
 
 ## Automatic Release Process
 
