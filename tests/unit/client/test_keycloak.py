@@ -205,7 +205,7 @@ class TestLogin:
         assert 'client_secret' not in login_call
 
     def test_authorization_metadata_is_bearer(self) -> None:
-        """`authorization_metadata()` returns the `('authorization', 'Bearer <token>')` tuple."""
+        """`authorization_metadata()` returns the `('Authorization', 'Bearer <token>')` tuple."""
         transport: FakeTransport = FakeTransport([FakeResponse(200, _token_body('acc-1', 'off-1', 300))])
 
         provider: KeycloakTokenProvider = _build_provider(transport)

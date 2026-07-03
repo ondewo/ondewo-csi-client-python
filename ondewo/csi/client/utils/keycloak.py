@@ -331,7 +331,7 @@ class KeycloakTokenProvider:
 
         Returns:
             Tuple[str, str]:
-                ``('authorization', 'Bearer <access_token>')`` with a token that is valid
+                ``('Authorization', 'Bearer <access_token>')`` with a token that is valid
                 for at least :data:`_EXPIRY_LEEWAY_S` more seconds (when within the
                 ``token_expiration_in_s`` window).
         """
