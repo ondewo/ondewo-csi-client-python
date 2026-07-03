@@ -337,7 +337,7 @@ class KeycloakTokenProvider:
         """
         with self._lock:
             self._refresh_if_within_window(now=self._time_fn())
-            return ('authorization', f'Bearer {self._access_token}')
+            return ('Authorization', f'Bearer {self._access_token}')
 
     def bearer_metadata(self) -> List[Tuple[str, str]]:
         """

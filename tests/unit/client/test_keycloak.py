@@ -211,7 +211,7 @@ class TestLogin:
         provider: KeycloakTokenProvider = _build_provider(transport)
 
         key, value = provider.authorization_metadata()
-        assert key == 'authorization'
+        assert key == 'Authorization'
         assert value == 'Bearer acc-1'
 
     def test_bearer_metadata_shape(self) -> None:
@@ -221,7 +221,7 @@ class TestLogin:
         provider: KeycloakTokenProvider = _build_provider(transport)
 
         metadata: List[Tuple[str, str]] = provider.bearer_metadata()
-        assert metadata == [('authorization', 'Bearer acc-1')]
+        assert metadata == [('Authorization', 'Bearer acc-1')]
 
     def test_login_failure_raises(self) -> None:
         """A non-2xx login response raises `KeycloakAuthenticationError`."""
