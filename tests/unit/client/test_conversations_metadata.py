@@ -49,7 +49,7 @@ CLIENT_ID: str = 'ondewo-nlu-cai-sdk-public'
 USERNAME: str = 'tech-user@example.com'
 PASSWORD: str = 's3cr3t'
 TOKEN: str = 'header.payload.signature'
-BEARER_METADATA: List[Tuple[str, str]] = [('Authorization', f'Bearer {TOKEN}')]
+BEARER_METADATA: List[Tuple[str, str]] = [('authorization', f'Bearer {TOKEN}')]
 
 
 class _FakeProvider:
