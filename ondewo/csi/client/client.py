@@ -27,7 +27,7 @@ from ondewo.csi.client.services_container import ServicesContainer
 
 class Client(BaseClient):
     """
-    The core python client for interacting with ONDEWO S2T services.
+    The core python client for interacting with ONDEWO CSI services.
     """
 
     def _initialize_services(
@@ -38,7 +38,7 @@ class Client(BaseClient):
     ) -> None:
         """
 
-        Initialize the service clients and lLogin with the current config and set up the services in self.services
+        Initialize the service clients with the current config and set up the services in self.services
 
         Args:
             config (BaseClientConfig):

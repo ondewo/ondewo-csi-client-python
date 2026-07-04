@@ -492,6 +492,53 @@ class TestSharedProviderRegistry:
 
         assert provider.token_expiration_in_s == token_expiration_in_s
 
+    def test_factory_uses_resolved_username_from_username_field(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """The factory posts the resolved `username` (not only the legacy `user_name`) in ROPC.
+
+        A config that sets only the primary `username` (legacy `user_name` left empty) — the
+        shape `examples/keycloak_auth_example.py` produces — must still send that username in
+        the `grant_type=password` login form; regression guard for reading `config.user_name`.
+
+        Args:
+            monkeypatch (pytest.MonkeyPatch):
+                Fixture used to patch `requests.post` and capture the posted ROPC form.
+        """
+        captured: Dict[str, str] = {}
+
+        def fake_post(url: str, data: Dict[str, str], timeout: float) -> FakeResponse:
+            """Capture the posted ROPC form and return a canned successful login response.
+
+            Args:
+                url (str):
+                    The token-endpoint URL (unused).
+                data (Dict[str, str]):
+                    The form-encoded ROPC parameters, captured for assertion.
+                timeout (float):
+                    The request timeout (unused).
+
+            Returns:
+                FakeResponse:
+                    A 200 response carrying access/refresh tokens.
+            """
+            captured.update(data)
+            return FakeResponse(200, _token_body('acc-1', 'off-1', 300))
+
+        monkeypatch.setattr(keycloak_module.requests, 'post', fake_post)
+
+        config: ClientConfig = ClientConfig(
+            host='localhost',
+            port='50055',
+            username=USERNAME,
+            user_name='',
+            password=PASSWORD,
+            keycloak_url=KEYCLOAK_URL,
+            realm=REALM,
+            client_id=CLIENT_ID,
+        )
+        get_keycloak_token_provider(config)
+
+        assert captured['username'] == USERNAME
+
 
 class TestDefaultRequestsTransport:
     """The default `_RequestsTransport` used when no transport is injected (production path)."""

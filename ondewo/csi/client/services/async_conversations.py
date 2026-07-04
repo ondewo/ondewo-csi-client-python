@@ -14,8 +14,8 @@
 from typing import Iterator
 
 from google.protobuf.empty_pb2 import Empty
-from ondewo.utils.async_base_services_interface import AsyncBaseServicesInterface
 
+from ondewo.csi.client.core.async_services_interface import AsyncServicesInterface
 from ondewo.csi.conversation_pb2 import (
     CheckUpstreamHealthResponse,
     ControlStreamRequest,
@@ -32,7 +32,7 @@ from ondewo.csi.conversation_pb2 import (
 from ondewo.csi.conversation_pb2_grpc import ConversationsStub
 
 
-class Conversations(AsyncBaseServicesInterface):
+class Conversations(AsyncServicesInterface):
     """
     Exposes the csi endpoints of ONDEWO csi in a user-friendly way.
 
@@ -45,37 +45,41 @@ class Conversations(AsyncBaseServicesInterface):
         return stub
 
     async def create_s2s_pipeline(self, request: S2sPipeline) -> Empty:
-        response: Empty = await self.stub.CreateS2sPipeline(request)
+        response: Empty = await self.stub.CreateS2sPipeline(request, metadata=self.metadata)
         return response
 
     async def get_s2s_pipeline(self, request: S2sPipelineId) -> S2sPipeline:
-        response: S2sPipeline = await self.stub.GetS2sPipeline(request)
+        response: S2sPipeline = await self.stub.GetS2sPipeline(request, metadata=self.metadata)
         return response
 
     async def update_s2s_pipeline(self, request: S2sPipeline) -> Empty:
-        response: Empty = await self.stub.UpdateS2sPipeline(request)
+        response: Empty = await self.stub.UpdateS2sPipeline(request, metadata=self.metadata)
         return response
 
     async def delete_s2s_pipeline(self, request: S2sPipelineId) -> Empty:
-        response: Empty = await self.stub.DeleteS2sPipeline(request)
+        response: Empty = await self.stub.DeleteS2sPipeline(request, metadata=self.metadata)
         return response
 
     async def list_s2s_pipelines(self, request: ListS2sPipelinesRequest) -> ListS2sPipelinesResponse:
-        response: ListS2sPipelinesResponse = await self.stub.ListS2sPipelines(request)
+        response: ListS2sPipelinesResponse = await self.stub.ListS2sPipelines(request, metadata=self.metadata)
         return response
 
     async def s2s_stream(self, request_iterator: Iterator[S2sStreamRequest]) -> Iterator[S2sStreamResponse]:
-        response_iterator: Iterator[S2sStreamResponse] = await self.stub.S2sStream(request_iterator)
+        response_iterator: Iterator[S2sStreamResponse] = await self.stub.S2sStream(
+            request_iterator, metadata=self.metadata,
+        )
         return response_iterator
 
     async def check_upstream_health(self, request: Empty) -> CheckUpstreamHealthResponse:
-        response: CheckUpstreamHealthResponse = await self.stub.CheckUpstreamHealth(request)
+        response: CheckUpstreamHealthResponse = await self.stub.CheckUpstreamHealth(request, metadata=self.metadata)
         return response
 
     async def get_control_stream(self, request: ControlStreamRequest) -> Iterator[ControlStreamResponse]:
-        response_iterator: Iterator[ControlStreamResponse] = await self.stub.GetControlStream(request)
+        response_iterator: Iterator[ControlStreamResponse] = await self.stub.GetControlStream(
+            request, metadata=self.metadata,
+        )
         return response_iterator
 
     async def set_control_status(self, request: SetControlStatusRequest) -> SetControlStatusResponse:
-        response: SetControlStatusResponse = await self.stub.SetControlStatus(request)
+        response: SetControlStatusResponse = await self.stub.SetControlStatus(request, metadata=self.metadata)
         return response
