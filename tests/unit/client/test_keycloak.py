@@ -939,7 +939,9 @@ class TestBackgroundRefresh:
         holder: Dict[str, Optional[KeycloakTokenProvider]] = {
             'provider': _build_background_provider(transport, clock, ScriptedEvent([], clock)),
         }
-        ref: 'Any' = _weak(holder['provider'])
+        provider: Optional[KeycloakTokenProvider] = holder['provider']
+        assert provider is not None
+        ref: 'Any' = _weak(provider)
 
         class CollectingEvent(ScriptedEvent):
             """A scripted event whose single `wait` collects the provider before returning."""

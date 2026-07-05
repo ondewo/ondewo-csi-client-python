@@ -15,7 +15,7 @@ from typing import Iterator
 
 from google.protobuf.empty_pb2 import Empty
 
-from ondewo.csi.client.core.async_services_interface import AsyncServicesInterface
+from ondewo.csi.client.core.services_interface import ServicesInterface
 from ondewo.csi.conversation_pb2 import (
     CheckUpstreamHealthResponse,
     ControlStreamRequest,
@@ -32,7 +32,7 @@ from ondewo.csi.conversation_pb2 import (
 from ondewo.csi.conversation_pb2_grpc import ConversationsStub
 
 
-class Conversations(AsyncServicesInterface):
+class Conversations(ServicesInterface):
     """
     Exposes the csi endpoints of ONDEWO csi in a user-friendly way.
 
@@ -66,7 +66,7 @@ class Conversations(AsyncServicesInterface):
 
     async def s2s_stream(self, request_iterator: Iterator[S2sStreamRequest]) -> Iterator[S2sStreamResponse]:
         response_iterator: Iterator[S2sStreamResponse] = await self.stub.S2sStream(
-            request_iterator, metadata=self.metadata,
+            request_iterator, metadata=self.metadata
         )
         return response_iterator
 
@@ -76,7 +76,7 @@ class Conversations(AsyncServicesInterface):
 
     async def get_control_stream(self, request: ControlStreamRequest) -> Iterator[ControlStreamResponse]:
         response_iterator: Iterator[ControlStreamResponse] = await self.stub.GetControlStream(
-            request, metadata=self.metadata,
+            request, metadata=self.metadata
         )
         return response_iterator
 
