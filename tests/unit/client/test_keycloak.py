@@ -1229,6 +1229,7 @@ class TestBackgroundRefresh:
         provider: Optional[KeycloakTokenProvider] = holder['provider']
         assert provider is not None
         ref: 'Any' = _weak(provider)
+        del provider  # drop the test-frame strong ref so gc.collect() in wait() can reclaim the provider
 
         class CollectingEvent(ScriptedEvent):
             """A scripted event whose single `wait` collects the provider before returning."""
