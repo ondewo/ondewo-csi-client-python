@@ -59,6 +59,10 @@ class ClientConfig(BaseClientConfig):
             auto-refresh keeps renewing the access token. Once elapsed the refresh loop
             stops and subsequent calls fail until a fresh login. ``None`` ⇒ refresh until
             the Keycloak offline session itself expires.
+        keycloak_verify_ssl (bool):
+            Whether to verify the Keycloak server's TLS certificate on the token-endpoint
+            call. Defaults to ``True`` (secure). Set ``False`` only for a self-signed/local
+            Envoy at ``https://localhost:12001/auth``.
     """
 
     keycloak_url: str = ""
@@ -68,6 +72,7 @@ class ClientConfig(BaseClientConfig):
     user_name: str = ""
     password: str = ""
     token_expiration_in_s: Optional[int] = None
+    keycloak_verify_ssl: bool = True
 
     def __post_init__(self) -> None:
         """
