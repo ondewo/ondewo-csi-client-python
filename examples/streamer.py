@@ -24,7 +24,7 @@ from typing import (
     Optional,
 )
 
-from ondewo.logging.logger import logger_console
+from loguru import logger as logger_console
 from ondewo.nlu.session_pb2 import (
     InputAudioConfig,
     QueryInput,

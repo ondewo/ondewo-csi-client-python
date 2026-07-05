@@ -16,7 +16,7 @@ import time
 import uuid
 from typing import Iterator
 
-from ondewo.logging.logger import logger_console
+from loguru import logger as logger_console
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.sip.client.client import Client as SipClient
 from ondewo.sip.client.client_config import ClientConfig as SipClientConfig

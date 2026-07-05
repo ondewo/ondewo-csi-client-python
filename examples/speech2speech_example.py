@@ -19,7 +19,7 @@ from typing import (
     Optional,
 )
 
-from ondewo.logging.logger import logger_console
+from loguru import logger as logger_console
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
 
