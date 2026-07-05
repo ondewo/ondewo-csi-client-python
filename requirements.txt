@@ -8,5 +8,8 @@ grpcio-tools
 loguru
 numpy
 ondewo-client-utils>=3.1.0
+ondewo-nlu-client
+ondewo-s2t-client
+ondewo-t2s-client
 requests
 setuptools
