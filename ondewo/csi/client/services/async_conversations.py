@@ -15,7 +15,7 @@ from typing import Iterator
 
 from google.protobuf.empty_pb2 import Empty
 
-from ondewo.csi.client.core.services_interface import ServicesInterface
+from ondewo.csi.client.core.async_services_interface import AsyncServicesInterface
 from ondewo.csi.conversation_pb2 import (
     CheckUpstreamHealthResponse,
     ControlStreamRequest,
@@ -32,7 +32,7 @@ from ondewo.csi.conversation_pb2 import (
 from ondewo.csi.conversation_pb2_grpc import ConversationsStub
 
 
-class Conversations(ServicesInterface):
+class Conversations(AsyncServicesInterface):
     """
     Exposes the csi endpoints of ONDEWO csi in a user-friendly way.
 
