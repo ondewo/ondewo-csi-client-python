@@ -25,7 +25,13 @@ The Keycloak endpoint / credentials are read from environment variables so no se
 hard-coded; sensible non-secret defaults are provided for the non-credential fields.
 """
 import os
+import sys
+from pathlib import Path
 from typing import List
+
+import grpc
+from dotenv import load_dotenv
+from loguru import logger as log
 
 from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
@@ -34,27 +40,34 @@ from ondewo.csi.conversation_pb2 import (
     ListS2sPipelinesResponse,
 )
 
+# Load the example configuration relative to this script, so the current working
+# directory does not matter.
+load_dotenv(Path(__file__).with_name("environment.env"))
+
 
 def build_config() -> ClientConfig:
     """
     Build a :class:`ClientConfig` populated with the current Keycloak headless-auth fields.
 
-    Values are taken from environment variables so credentials are never hard-coded. When
-    all five Keycloak fields (``keycloak_url``/``realm``/``client_id``/username/password)
-    are present the client sends ``Authorization: Bearer <jwt>`` on every RPC.
+    Values are taken from the canonical environment variables so credentials are never
+    hard-coded. When all five Keycloak fields (``KEYCLOAK_URL``/``KEYCLOAK_REALM``/
+    ``KEYCLOAK_CLIENT_ID``/``KEYCLOAK_USER_NAME``/``KEYCLOAK_PASSWORD``) are present the
+    client sends ``Authorization: Bearer <jwt>`` on every RPC.
 
     Returns:
         ClientConfig:
             A config carrying host/port plus the Keycloak bearer-auth fields.
     """
     return ClientConfig(
-        host=os.getenv("ONDEWO_CSI_HOST", "localhost"),
-        port=os.getenv("ONDEWO_CSI_PORT", "50055"),
-        keycloak_url=os.getenv("ONDEWO_KEYCLOAK_URL", "https://keycloak.ondewo.com/auth"),
-        realm=os.getenv("ONDEWO_KEYCLOAK_REALM", "ondewo-ccai-platform"),
-        client_id=os.getenv("ONDEWO_KEYCLOAK_CLIENT_ID", "ondewo-nlu-cai-sdk-public"),
-        username=os.getenv("ONDEWO_KEYCLOAK_USERNAME", "tech-user@ondewo.com"),
-        password=os.getenv("ONDEWO_KEYCLOAK_PASSWORD", ""),
+        host=os.getenv("ONDEWO_HOST", "localhost"),
+        port=os.getenv("ONDEWO_PORT", "50055"),
+        grpc_cert=os.getenv("ONDEWO_GRPC_CERT") or None,
+        keycloak_url=os.getenv("KEYCLOAK_URL", "https://keycloak.ondewo.com/auth"),
+        realm=os.getenv("KEYCLOAK_REALM", "ondewo-ccai-platform"),
+        client_id=os.getenv("KEYCLOAK_CLIENT_ID", "ondewo-nlu-cai-sdk-public"),
+        username=os.getenv("KEYCLOAK_USER_NAME", "tech-user@ondewo.com"),
+        password=os.getenv("KEYCLOAK_PASSWORD", ""),
+        keycloak_verify_ssl=os.getenv("KEYCLOAK_VERIFY_SSL", "true").lower() == "true",
     )
 
 
@@ -77,12 +90,28 @@ def list_pipeline_ids(client: Client) -> List[str]:
 
 def main() -> None:
     """Construct the client with Keycloak bearer auth and print the S2S pipeline ids."""
+    log.info("START: keycloak_auth_example: main")
     config: ClientConfig = build_config()
-    client: Client = Client(config=config, use_secure_channel=config.grpc_cert is not None)
+    use_secure_channel: bool = os.getenv("ONDEWO_USE_SECURE_CHANNEL", "false").lower() == "true"
+    log.info(f"Connecting to CSI at {config.host}:{config.port} (secure={use_secure_channel})")
+    client: Client = Client(config=config, use_secure_channel=use_secure_channel)
 
-    for pipeline_id in list_pipeline_ids(client):
+    pipeline_ids: List[str] = list_pipeline_ids(client)
+    log.info(f"Received {len(pipeline_ids)} S2S pipeline id(s).")
+    for pipeline_id in pipeline_ids:
         print(pipeline_id)
+    log.info("DONE: keycloak_auth_example: main")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except grpc.RpcError as rpc_error:
+        log.exception(
+            f"gRPC call failed while listing S2S pipelines: "
+            f"code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
+        )
+        sys.exit(1)
+    except Exception:
+        log.exception("keycloak_auth_example failed.")
+        sys.exit(1)

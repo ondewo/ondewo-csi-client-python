@@ -86,8 +86,8 @@ def test_build_config_uses_keycloak_bearer_auth(monkeypatch: pytest.MonkeyPatch)
         monkeypatch (pytest.MonkeyPatch):
             Fixture used to set the credential environment variables the example reads.
     """
-    monkeypatch.setenv("ONDEWO_KEYCLOAK_USERNAME", USERNAME)
-    monkeypatch.setenv("ONDEWO_KEYCLOAK_PASSWORD", PASSWORD)
+    monkeypatch.setenv("KEYCLOAK_USER_NAME", USERNAME)
+    monkeypatch.setenv("KEYCLOAK_PASSWORD", PASSWORD)
 
     module: ModuleType = _load_example("keycloak_auth_example")
     config = module.build_config()
@@ -127,7 +127,7 @@ def test_main_constructs_client_and_prints_pipeline_ids(
         capsys (pytest.CaptureFixture[str]):
             Fixture capturing the example's stdout.
     """
-    monkeypatch.setenv("ONDEWO_KEYCLOAK_PASSWORD", PASSWORD)
+    monkeypatch.setenv("KEYCLOAK_PASSWORD", PASSWORD)
 
     module: ModuleType = _load_example("keycloak_auth_example")
 

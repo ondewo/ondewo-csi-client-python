@@ -12,13 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import argparse
+import os
+import sys
 import time
 import uuid
+from pathlib import Path
 from typing import (
     Iterator,
     Optional,
 )
 
+import grpc
+from dotenv import load_dotenv
 from loguru import logger as logger_console
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
@@ -36,6 +41,25 @@ from streamer import (
     StreamerOutInterface,
 )
 
+# Load the example configuration relative to this script, so the current working
+# directory does not matter.
+load_dotenv(Path(__file__).with_name("environment.env"))
+
+
+def build_config() -> ClientConfig:
+    """
+    Build a :class:`ClientConfig` from the canonical environment variables.
+
+    Returns:
+        ClientConfig:
+            A config carrying the CSI host/port and optional gRPC certificate.
+    """
+    return ClientConfig(
+        host=os.getenv("ONDEWO_HOST", "localhost"),
+        port=os.getenv("ONDEWO_PORT", "50055"),
+        grpc_cert=os.getenv("ONDEWO_GRPC_CERT") or None,
+    )
+
 
 def main(
     pipeline_id: str,
@@ -44,11 +68,17 @@ def main(
     streamer_name: str,
     initial_intent_display_name: Optional[str] = None,
 ) -> None:
+    """Stream microphone audio through the S2S pipeline and play back the responses."""
+    logger_console.info("START: speech2speech_example: main")
     session_id = session_id if session_id else str(uuid.uuid4())
-    with open("csi.json") as f:
-        config: ClientConfig = ClientConfig.from_json(f.read())
+    config: ClientConfig = build_config()
+    use_secure_channel: bool = os.getenv("ONDEWO_USE_SECURE_CHANNEL", "false").lower() == "true"
+    logger_console.info(
+        f"Connecting to CSI at {config.host}:{config.port} (secure={use_secure_channel}), "
+        f"pipeline_id={pipeline_id}, session_id={session_id}, streamer={streamer_name}"
+    )
 
-    client: Client = Client(config=config, use_secure_channel=config.grpc_cert is not None)
+    client: Client = Client(config=config, use_secure_channel=use_secure_channel)
     conversations_service: Conversations = client.services.conversations
 
     if "pyaudio" in streamer_name:
@@ -99,7 +129,7 @@ def main(
 
 if __name__ == "__main__":
     parser: argparse.ArgumentParser = argparse.ArgumentParser(description="Streams stuff to websocket")
-    parser.add_argument("--pipeline_id", default="pizza")
+    parser.add_argument("--pipeline_id", default=os.getenv("ONDEWO_CSI_S2S_PIPELINE_ID", "pizza"))
     parser.add_argument("--session_id", default=str(uuid.uuid4()))
     parser.add_argument("--save_to_disk", default=False)
     parser.add_argument("--streamer_name", default="pysoundio")
@@ -107,10 +137,20 @@ if __name__ == "__main__":
 
     args: argparse.Namespace = parser.parse_args()
 
-    main(
-        pipeline_id=args.pipeline_id,
-        session_id=args.session_id,
-        save_to_disk=args.save_to_disk,
-        streamer_name=args.streamer_name,
-        initial_intent_display_name=args.intent_name,
-    )
+    try:
+        main(
+            pipeline_id=args.pipeline_id,
+            session_id=args.session_id,
+            save_to_disk=args.save_to_disk,
+            streamer_name=args.streamer_name,
+            initial_intent_display_name=args.intent_name,
+        )
+    except grpc.RpcError as rpc_error:
+        logger_console.exception(
+            f"gRPC streaming call failed: "
+            f"code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
+        )
+        sys.exit(1)
+    except Exception:
+        logger_console.exception("speech2speech_example failed.")
+        sys.exit(1)

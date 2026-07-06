@@ -11,8 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import argparse
 import json
+import os
+import sys
+from pathlib import Path
 from typing import (
     Any,
     List,
@@ -21,6 +23,8 @@ from typing import (
 )
 
 import grpc
+from dotenv import load_dotenv
+from loguru import logger as log
 
 from ondewo.csi.client.client import Client
 from ondewo.csi.client.client_config import ClientConfig
@@ -32,15 +36,32 @@ from ondewo.csi.conversation_pb2 import (
     S2sPipelineId,
 )
 
+# Load the example configuration relative to this script, so the current working
+# directory does not matter.
+load_dotenv(Path(__file__).with_name("environment.env"))
+
+
+def build_config() -> ClientConfig:
+    """
+    Build a :class:`ClientConfig` from the canonical environment variables.
+
+    Returns:
+        ClientConfig:
+            A config carrying the CSI host/port and optional gRPC certificate.
+    """
+    return ClientConfig(
+        host=os.getenv("ONDEWO_HOST", "localhost"),
+        port=os.getenv("ONDEWO_PORT", "50055"),
+        grpc_cert=os.getenv("ONDEWO_GRPC_CERT") or None,
+    )
+
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="S2S pipeline handling example.")
-    parser.add_argument("--config", type=str, default="configs/insecure_grpc.json")
-    parser.add_argument("--secure", default=False, action="store_true")
-    args = parser.parse_args()
-
-    with open(args.config) as f:
-        config: ClientConfig = ClientConfig.from_json(f.read())
+    """List the S2S pipelines and fetch the first one, with gRPC retry options set."""
+    log.info("START: s2s_pipelines_example: main")
+    config: ClientConfig = build_config()
+    use_secure_channel: bool = os.getenv("ONDEWO_USE_SECURE_CHANNEL", "false").lower() == "true"
+    log.info(f"Connecting to CSI at {config.host}:{config.port} (secure={use_secure_channel})")
 
     # https://github.com/grpc/grpc-proto/blob/master/grpc/service_config/service_config.proto
     service_config_json: str = json.dumps(
@@ -90,17 +111,19 @@ def main() -> None:
         ("grpc.service_config", service_config_json)
     }
 
-    client: Client = Client(config=config, use_secure_channel=args.secure, options=options)
+    client: Client = Client(config=config, use_secure_channel=use_secure_channel, options=options)
     conversations_service: Conversations = client.services.conversations
 
     # list the S2S pipelines
     list_request: ListS2sPipelinesRequest = ListS2sPipelinesRequest()
     list_response: ListS2sPipelinesResponse = conversations_service.list_s2s_pipelines(list_request)
     pipelines: List[S2sPipeline] = list(list_response.pipelines)
+    log.info(f"Received {len(pipelines)} S2S pipeline(s).")
     print(pipelines)
 
     # get the S2S pipeline
     print(conversations_service.get_s2s_pipeline(S2sPipelineId(id=pipelines[0].id)))
+    log.info("DONE: s2s_pipelines_example: main")
 
     # the code below does not work since "example_project" does not exist in the NLU server
     # # create an S2S pipeline
@@ -133,4 +156,14 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except grpc.RpcError as rpc_error:
+        log.exception(
+            f"gRPC call failed while handling S2S pipelines: "
+            f"code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
+        )
+        sys.exit(1)
+    except Exception:
+        log.exception("s2s_pipelines_example failed.")
+        sys.exit(1)
