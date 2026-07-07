@@ -1,0 +1,10 @@
+{
+    "client_id": "ondewo-nlu-cai-sdk-public",
+    "host": "grpc-csi.ondewo.com",
+    "keycloak_url": "https://keycloak.ondewo.com/auth",
+    "password": "YOUR_TECHNICAL_USER_PASSWORD",
+    "port": "443",
+    "realm": "ondewo-ccai-platform",
+    "token_expiration_in_s": null,
+    "username": "tech-user@ondewo.com"
+}

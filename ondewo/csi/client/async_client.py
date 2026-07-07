@@ -27,7 +27,7 @@ from ondewo.csi.client.services.async_conversations import Conversations
 
 class AsyncClient(AsyncBaseClient):
     """
-    The core asynchronous Python client for interacting with ONDEWO s2t services.
+    The core asynchronous Python client for interacting with ONDEWO CSI services.
     """
 
     def _initialize_services(
@@ -37,7 +37,7 @@ class AsyncClient(AsyncBaseClient):
         options: Optional[Set[Tuple[str, Any]]] = None,
     ) -> None:
         """
-        Initialize the asynchronous service clients, login with the current config,
+        Initialize the asynchronous service clients with the current config,
         and set up the services in self.services.
 
         Args:

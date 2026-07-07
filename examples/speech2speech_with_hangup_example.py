@@ -12,11 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import argparse
+import os
+import sys
 import time
 import uuid
+from pathlib import Path
 from typing import Iterator
 
-from ondewo.logging.logger import logger_console
+import grpc
+from dotenv import load_dotenv
+from loguru import logger as logger_console
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.sip.client.client import Client as SipClient
 from ondewo.sip.client.client_config import ClientConfig as SipClientConfig
@@ -40,16 +45,54 @@ from streamer import (
     StreamerOutInterface,
 )
 
+# Load the example configuration relative to this script, so the current working
+# directory does not matter.
+load_dotenv(Path(__file__).with_name("environment.env"))
+
+
+def build_csi_config() -> CsiClientConfig:
+    """
+    Build a CSI :class:`ClientConfig` from the canonical environment variables.
+
+    Returns:
+        CsiClientConfig:
+            A config carrying the CSI host/port and optional gRPC certificate.
+    """
+    return CsiClientConfig(
+        host=os.getenv("ONDEWO_HOST", "localhost"),
+        port=os.getenv("ONDEWO_PORT", "50055"),
+        grpc_cert=os.getenv("ONDEWO_GRPC_CERT") or None,
+    )
+
+
+def build_sip_config() -> SipClientConfig:
+    """
+    Build a SIP :class:`ClientConfig` from the canonical environment variables.
+
+    Returns:
+        SipClientConfig:
+            A config carrying the SIP host/port and optional gRPC certificate.
+    """
+    return SipClientConfig(
+        host=os.getenv("ONDEWO_SIP_HOST", "localhost"),
+        port=os.getenv("ONDEWO_SIP_PORT", "50053"),
+        grpc_cert=os.getenv("ONDEWO_GRPC_CERT") or None,
+    )
+
 
 def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer_name: str) -> None:
-    with open("csi.json") as f:
-        csi_config: CsiClientConfig = CsiClientConfig.from_json(f.read())
-    csi_client: CsiClient = CsiClient(config=csi_config, use_secure_channel=csi_config.grpc_cert is not None)
+    """Stream microphone audio through the S2S pipeline and hang up the SIP call on trigger."""
+    logger_console.info("START: speech2speech_with_hangup_example: main")
+    use_secure_channel: bool = os.getenv("ONDEWO_USE_SECURE_CHANNEL", "false").lower() == "true"
+
+    csi_config: CsiClientConfig = build_csi_config()
+    logger_console.info(f"Connecting to CSI at {csi_config.host}:{csi_config.port} (secure={use_secure_channel})")
+    csi_client: CsiClient = CsiClient(config=csi_config, use_secure_channel=use_secure_channel)
     conversations_service: Conversations = csi_client.services.conversations
 
-    with open("sip.json") as f:
-        sip_config: SipClientConfig = SipClientConfig.from_json(f.read())
-    sip_client: SipClient = SipClient(config=sip_config, use_secure_channel=sip_config.grpc_cert is not None)
+    sip_config: SipClientConfig = build_sip_config()
+    logger_console.info(f"Connecting to SIP at {sip_config.host}:{sip_config.port} (secure={use_secure_channel})")
+    sip_client: SipClient = SipClient(config=sip_config, use_secure_channel=use_secure_channel)
     sip_service: Sip = sip_client.services.sip
 
     session_id = session_id if session_id else str(uuid.uuid4())
@@ -101,15 +144,26 @@ def main(pipeline_id: str, session_id: str, save_to_disk: bool, streamer_name: s
             if sip_trigger.type is SipTrigger.SipTriggerType.HANGUP:
                 sip_service.end_call(EndCallRequest(hard_hangup=True))
                 streamer.close()
+    logger_console.info("DONE: speech2speech_with_hangup_example: main")
 
 
 if __name__ == "__main__":
     parser: argparse.ArgumentParser = argparse.ArgumentParser(description="Streams stuff to websocket")
-    parser.add_argument("--pipeline_id", default="hangup")
+    parser.add_argument("--pipeline_id", default=os.getenv("ONDEWO_CSI_S2S_HANGUP_PIPELINE_ID", "hangup"))
     parser.add_argument("--session_id", default=str(uuid.uuid4()))
     parser.add_argument("--save_to_disk", default=False)
     parser.add_argument("--streamer_name", default="pysoundio")
 
     args: argparse.Namespace = parser.parse_args()
 
-    main(args.pipeline_id, args.session_id, args.save_to_disk, args.streamer_name)
+    try:
+        main(args.pipeline_id, args.session_id, args.save_to_disk, args.streamer_name)
+    except grpc.RpcError as rpc_error:
+        logger_console.exception(
+            f"gRPC call failed during S2S/SIP streaming: "
+            f"code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
+        )
+        sys.exit(1)
+    except Exception:
+        logger_console.exception("speech2speech_with_hangup_example failed.")
+        sys.exit(1)

@@ -52,7 +52,7 @@ class _ControlStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._
     """Status that voice activity detection detected start of speech"""
 
 class ControlStatus(_ControlStatus, metaclass=_ControlStatusEnumTypeWrapper):
-    """Control status"""
+    """Control status."""
 
 OK: ControlStatus.ValueType  # 0
 """Status that control stream is ok"""
@@ -86,7 +86,7 @@ class _ControlMessageServiceNameEnumTypeWrapper(google.protobuf.internal.enum_ty
     """Survey control message service name"""
 
 class ControlMessageServiceName(_ControlMessageServiceName, metaclass=_ControlMessageServiceNameEnumTypeWrapper):
-    """Control message services"""
+    """Control message services."""
 
 UNKNOWNNAME: ControlMessageServiceName.ValueType  # 0
 """Unknown control message service name"""
@@ -120,25 +120,25 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_s2t",
-       "method": "update_config",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_s2t&quot;,
+       &quot;method&quot;: &quot;update_config&quot;,
+       &quot;parameters&quot;: [
            {
                // Speech2TextConfig object
-               “s2tPipelineId” : “s2t_pipeline_german_1”,
-               “languageModelName” : “language_model_german”
+               &quot;s2tPipelineId&quot; : &quot;s2t_pipeline_german_1&quot;,
+               &quot;languageModelName&quot; : &quot;language_model_german&quot;
            },
            {
-                // condition_start object => should take effect immediately
-                "type": "immediate",
-                “value”: “0”
+                // condition_start object =&gt; should take effect immediately
+                &quot;type&quot;: &quot;immediate&quot;,
+                &quot;value&quot;: &quot;0&quot;
            },
            {
                 // condition_end object - s2t config will be changed back to
                 // last valid configuration after 10 interactions of user with
                 // the AI agent
-                "type": "interactions",
-    	           "value": 10
+                &quot;type&quot;: &quot;interactions&quot;,
+    	           &quot;value&quot;: 10
            },
        ]
     }
@@ -150,16 +150,16 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_s2t",
-       "method": "undo_config",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_s2t&quot;,
+       &quot;method&quot;: &quot;undo_config&quot;,
+       &quot;parameters&quot;: [
            {
     	 	      // condition_start object
            },
            {
     	 	      // condition_end object (OPTIONAL) - for permanent change
     	          // no condition_end needs to be supplied i.e.
-    		      // this parameter is missing or empty “{}”
+    		      // this parameter is missing or empty &quot;{}&quot;
            },
        ]
     }
@@ -171,16 +171,16 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_s2t",
-       "method": "reset_config",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_s2t&quot;,
+       &quot;method&quot;: &quot;reset_config&quot;,
+       &quot;parameters&quot;: [
            {
     	 	      // condition_start object
            },
            {
     	 	      // condition_end object (OPTIONAL) - for permanent change
                // no condition_end needs to be supplied i.e.
-    		      // this parameter is missing or empty “{}”
+    		      // this parameter is missing or empty &quot;{}&quot;
            },
        ]
     }
@@ -192,16 +192,16 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_sip",
-       "method": "end_call",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_sip&quot;,
+       &quot;method&quot;: &quot;end_call&quot;,
+       &quot;parameters&quot;: [
            {
     	 	      // condition_start object
            },
            {
     	 	      // condition_end object (OPTIONAL) - for permanent change
                // no condition_end needs to be supplied i.e.
-    		      // this parameter is missing or empty “{}”
+    		      // this parameter is missing or empty &quot;{}&quot;
            },
        ]
     }
@@ -213,11 +213,11 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_sip",
-       "method": "transfer_call",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_sip&quot;,
+       &quot;method&quot;: &quot;transfer_call&quot;,
+       &quot;parameters&quot;: [
            {
-    	 	      "transfer_id": "+43123456789@127.0.0.10:5060",
+    	 	      &quot;transfer_id&quot;: &quot;+43123456789@127.0.0.10:5060&quot;,
            },
            {
     	 	      // condition_start object
@@ -225,7 +225,7 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
            {
     	 	      // condition_end object (OPTIONAL) - for permanent change
                // no condition_end needs to be supplied i.e.
-    		      // this parameter is missing or empty “{}”
+    		      // this parameter is missing or empty &quot;{}&quot;
            },
        ]
     }
@@ -237,14 +237,14 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_sip",
-       "method": "  "play_wav_files",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_sip&quot;,
+       &quot;method&quot;: &quot;play_wav_files&quot;,
+       &quot;parameters&quot;: [
            {
-    	 	      "wav_files":  [
-                   <bytes_of_file_1>,
-                   <bytes_of_file_2>,
-                   <bytes_of_file_3>,
+    	 	      &quot;wav_files&quot;:  [
+                   &lt;bytes_of_file_1&gt;,
+                   &lt;bytes_of_file_2&gt;,
+                   &lt;bytes_of_file_3&gt;,
                ]
            },
            {
@@ -265,11 +265,11 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_sip",
-       "method": "play_text",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_sip&quot;,
+       &quot;method&quot;: &quot;play_text&quot;,
+       &quot;parameters&quot;: [
            {
-    	 	      "text": "Welcome from ONDEWO AI Agent! How are you today?",
+    	 	      &quot;text&quot;: &quot;Welcome from ONDEWO AI Agent! How are you today?&quot;,
            },
            {
     	 	      // condition_start object
@@ -277,7 +277,7 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
            {
     	 	      // condition_end object (OPTIONAL) - for permanent change
                // no condition_end needs to be supplied i.e.
-    		      // this parameter is missing or empty “{}”
+    		      // this parameter is missing or empty &quot;{}&quot;
            },
        ]
     }
@@ -289,16 +289,16 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_sip",
-       "method": "mute",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_sip&quot;,
+       &quot;method&quot;: &quot;mute&quot;,
+       &quot;parameters&quot;: [
            {
     	 	      // condition_start object
            },
            {
     	 	      // condition_end object (OPTIONAL) - for permanent change
                // no condition_end needs to be supplied i.e.
-    		      // this parameter is missing or empty “{}”
+    		      // this parameter is missing or empty &quot;{}&quot;
            },
        ]
     }
@@ -310,16 +310,16 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_sip",
-       "method": "un_mute",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_sip&quot;,
+       &quot;method&quot;: &quot;un_mute&quot;,
+       &quot;parameters&quot;: [
            {
     	 	      // condition_start object
            },
            {
     	 	      // condition_end object (OPTIONAL) - for permanent change
                // no condition_end needs to be supplied i.e.
-    		      // this parameter is missing or empty “{}”
+    		      // this parameter is missing or empty &quot;{}&quot;
            },
        ]
     }
@@ -331,8 +331,8 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "",    <= empty string since it is for all services / no specific service
-       "method": "stop_all_control_messages",
+       &quot;service&quot;: &quot;&quot;,    &lt;= empty string since it is for all services / no specific service
+       &quot;method&quot;: &quot;stop_all_control_messages&quot;,
        "parameters": [
            {
     	 	      // condition_start object
@@ -352,16 +352,16 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_nlu",
-       "method": "train_agent",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_nlu&quot;,
+       &quot;method&quot;: &quot;train_agent&quot;,
+       &quot;parameters&quot;: [
            {
     	 	      // condition_start object
            },
            {
     	 	      // condition_end object (OPTIONAL) - for permanent change
                // no condition_end needs to be supplied i.e.
-    		      // this parameter is missing or empty “{}”
+    		      // this parameter is missing or empty &quot;{}&quot;
            },
        ]
     }
@@ -373,32 +373,32 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_nlu",
-       "method": "cancel_train_agent",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_nlu&quot;,
+       &quot;method&quot;: &quot;cancel_train_agent&quot;,
+       &quot;parameters&quot;: [
            {
     	 	      // condition_start object
            },
            {
     	 	      // condition_end object (OPTIONAL) - for permanent change
                // no condition_end needs to be supplied i.e.
-    		      // this parameter is missing or empty “{}”
+    		      // this parameter is missing or empty &quot;{}&quot;
            },
        ]
     }
     </code></pre>
     """
     delete_session: _ControlMessageServiceMethod.ValueType  # 13
-    """NLU: delete session all all session-related information
+    """NLU: delete session and all session-related information
 
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_nlu",
-       "method": "delete_session",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_nlu&quot;,
+       &quot;method&quot;: &quot;delete_session&quot;,
+       &quot;parameters&quot;: [
            {
-    	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
+    	 	      &quot;session_id&quot;: &quot;97ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
            },
            {
     	 	      // condition_start object
@@ -406,7 +406,7 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
            {
     	 	      // condition_end object (OPTIONAL) - for permanent change
                // no condition_end needs to be supplied i.e.
-    		      // this parameter is missing or empty “{}”
+    		      // this parameter is missing or empty &quot;{}&quot;
            },
        ]
     }
@@ -418,11 +418,11 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_nlu",
-       "method": "delete_all_contexts",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_nlu&quot;,
+       &quot;method&quot;: &quot;delete_all_contexts&quot;,
+       &quot;parameters&quot;: [
            {
-    	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
+    	 	      &quot;session_id&quot;: &quot;97ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
            },
            {
     	 	      // condition_start object
@@ -430,7 +430,7 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
            {
     	 	      // condition_end object (OPTIONAL) - for permanent change
                // no condition_end needs to be supplied i.e.
-    		      // this parameter is missing or empty “{}”
+    		      // this parameter is missing or empty &quot;{}&quot;
            },
        ]
     }
@@ -446,8 +446,8 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
        "method": "create_context",
        "parameters": [
            {
-    	 	      "context": {           <== <NLU Context Object as JSON object>
-                   name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ss2ea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
+    	 	      &quot;context&quot;: {           &lt;== &lt;NLU Context Object as JSON object&gt;
+                   &quot;name&quot;: &quot;projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ss2ea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
                    ...,
                }
            },
@@ -473,8 +473,8 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
        "method": "update_context",
        "parameters": [
            {
-    	 	      "context": {           <== <NLU Context Object as JSON object>
-                   name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/2dea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
+    	 	      &quot;context&quot;: {           &lt;== &lt;NLU Context Object as JSON object&gt;
+                   &quot;name&quot;: &quot;projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/2dea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
                    ...,
                }
            },
@@ -496,12 +496,12 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
     <pre><code>
     {
-       "service": "ondewo_nlu",
-       "method": "delete_context",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_nlu&quot;,
+       &quot;method&quot;: &quot;delete_context&quot;,
+       &quot;parameters&quot;: [
            {
-    	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
-    	 	      "context_name": "78ea1a20-0784-442b-93c0-eb9e2469420e",
+    	 	      &quot;session_id&quot;: &quot;97ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
+    	 	      &quot;context_name&quot;: &quot;78ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
            },
            {
     	 	      // condition_start object
@@ -509,7 +509,7 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
            {
     	 	      // condition_end object (OPTIONAL) - for permanent change
                // no condition_end needs to be supplied i.e.
-    		      // this parameter is missing or empty “{}”
+    		      // this parameter is missing or empty &quot;{}&quot;
            },
        ]
     }
@@ -517,13 +517,16 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     """
     detect_intent: _ControlMessageServiceMethod.ValueType  # 18
     """NLU: execute a detect intent request based on the provided information in the current session
+
+    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    <pre><code>
     {
-       "service": "ondewo_nlu",
-       "method": "detect_intent",
-       "parameters": [
+       &quot;service&quot;: &quot;ondewo_nlu&quot;,
+       &quot;method&quot;: &quot;detect_intent&quot;,
+       &quot;parameters&quot;: [
            {
-    	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
-    	 	      "text": "Are you an artificial intelligence?",
+    	 	      &quot;session_id&quot;: &quot;97ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
+    	 	      &quot;text&quot;: &quot;Are you an artificial intelligence?&quot;,
            },
            {
     	 	      // condition_start object
@@ -531,7 +534,7 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
            {
     	 	      // condition_end object (OPTIONAL) - for permanent change
                // no condition_end needs to be supplied i.e.
-    		      // this parameter is missing or empty “{}”
+    		      // this parameter is missing or empty &quot;{}&quot;
            },
        ]
     }
@@ -539,7 +542,7 @@ class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_
     """
 
 class ControlMessageServiceMethod(_ControlMessageServiceMethod, metaclass=_ControlMessageServiceMethodEnumTypeWrapper):
-    """Control message methods to control services during a conversation"""
+    """Control message methods to control services during a conversation."""
 
 UNKNOWNMETHOD: ControlMessageServiceMethod.ValueType  # 0
 """Unknown method (default)"""
@@ -549,25 +552,25 @@ update_config: ControlMessageServiceMethod.ValueType  # 1
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_s2t",
-   "method": "update_config",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_s2t&quot;,
+   &quot;method&quot;: &quot;update_config&quot;,
+   &quot;parameters&quot;: [
        {
            // Speech2TextConfig object
-           “s2tPipelineId” : “s2t_pipeline_german_1”,
-           “languageModelName” : “language_model_german”
+           &quot;s2tPipelineId&quot; : &quot;s2t_pipeline_german_1&quot;,
+           &quot;languageModelName&quot; : &quot;language_model_german&quot;
        },
        {
-            // condition_start object => should take effect immediately
-            "type": "immediate",
-            “value”: “0”
+            // condition_start object =&gt; should take effect immediately
+            &quot;type&quot;: &quot;immediate&quot;,
+            &quot;value&quot;: &quot;0&quot;
        },
        {
             // condition_end object - s2t config will be changed back to
             // last valid configuration after 10 interactions of user with
             // the AI agent
-            "type": "interactions",
-	           "value": 10
+            &quot;type&quot;: &quot;interactions&quot;,
+	           &quot;value&quot;: 10
        },
    ]
 }
@@ -579,16 +582,16 @@ undo_config: ControlMessageServiceMethod.ValueType  # 2
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_s2t",
-   "method": "undo_config",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_s2t&quot;,
+   &quot;method&quot;: &quot;undo_config&quot;,
+   &quot;parameters&quot;: [
        {
 	 	      // condition_start object
        },
        {
 	 	      // condition_end object (OPTIONAL) - for permanent change
 	          // no condition_end needs to be supplied i.e.
-		      // this parameter is missing or empty “{}”
+		      // this parameter is missing or empty &quot;{}&quot;
        },
    ]
 }
@@ -600,16 +603,16 @@ reset_config: ControlMessageServiceMethod.ValueType  # 3
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_s2t",
-   "method": "reset_config",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_s2t&quot;,
+   &quot;method&quot;: &quot;reset_config&quot;,
+   &quot;parameters&quot;: [
        {
 	 	      // condition_start object
        },
        {
 	 	      // condition_end object (OPTIONAL) - for permanent change
            // no condition_end needs to be supplied i.e.
-		      // this parameter is missing or empty “{}”
+		      // this parameter is missing or empty &quot;{}&quot;
        },
    ]
 }
@@ -621,16 +624,16 @@ end_call: ControlMessageServiceMethod.ValueType  # 4
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_sip",
-   "method": "end_call",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_sip&quot;,
+   &quot;method&quot;: &quot;end_call&quot;,
+   &quot;parameters&quot;: [
        {
 	 	      // condition_start object
        },
        {
 	 	      // condition_end object (OPTIONAL) - for permanent change
            // no condition_end needs to be supplied i.e.
-		      // this parameter is missing or empty “{}”
+		      // this parameter is missing or empty &quot;{}&quot;
        },
    ]
 }
@@ -642,11 +645,11 @@ transfer_call: ControlMessageServiceMethod.ValueType  # 5
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_sip",
-   "method": "transfer_call",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_sip&quot;,
+   &quot;method&quot;: &quot;transfer_call&quot;,
+   &quot;parameters&quot;: [
        {
-	 	      "transfer_id": "+43123456789@127.0.0.10:5060",
+	 	      &quot;transfer_id&quot;: &quot;+43123456789@127.0.0.10:5060&quot;,
        },
        {
 	 	      // condition_start object
@@ -654,7 +657,7 @@ transfer_call: ControlMessageServiceMethod.ValueType  # 5
        {
 	 	      // condition_end object (OPTIONAL) - for permanent change
            // no condition_end needs to be supplied i.e.
-		      // this parameter is missing or empty “{}”
+		      // this parameter is missing or empty &quot;{}&quot;
        },
    ]
 }
@@ -666,14 +669,14 @@ play_wav_files: ControlMessageServiceMethod.ValueType  # 6
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_sip",
-   "method": "  "play_wav_files",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_sip&quot;,
+   &quot;method&quot;: &quot;play_wav_files&quot;,
+   &quot;parameters&quot;: [
        {
-	 	      "wav_files":  [
-               <bytes_of_file_1>,
-               <bytes_of_file_2>,
-               <bytes_of_file_3>,
+	 	      &quot;wav_files&quot;:  [
+               &lt;bytes_of_file_1&gt;,
+               &lt;bytes_of_file_2&gt;,
+               &lt;bytes_of_file_3&gt;,
            ]
        },
        {
@@ -694,11 +697,11 @@ play_text: ControlMessageServiceMethod.ValueType  # 7
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_sip",
-   "method": "play_text",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_sip&quot;,
+   &quot;method&quot;: &quot;play_text&quot;,
+   &quot;parameters&quot;: [
        {
-	 	      "text": "Welcome from ONDEWO AI Agent! How are you today?",
+	 	      &quot;text&quot;: &quot;Welcome from ONDEWO AI Agent! How are you today?&quot;,
        },
        {
 	 	      // condition_start object
@@ -706,7 +709,7 @@ play_text: ControlMessageServiceMethod.ValueType  # 7
        {
 	 	      // condition_end object (OPTIONAL) - for permanent change
            // no condition_end needs to be supplied i.e.
-		      // this parameter is missing or empty “{}”
+		      // this parameter is missing or empty &quot;{}&quot;
        },
    ]
 }
@@ -718,16 +721,16 @@ mute: ControlMessageServiceMethod.ValueType  # 8
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_sip",
-   "method": "mute",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_sip&quot;,
+   &quot;method&quot;: &quot;mute&quot;,
+   &quot;parameters&quot;: [
        {
 	 	      // condition_start object
        },
        {
 	 	      // condition_end object (OPTIONAL) - for permanent change
            // no condition_end needs to be supplied i.e.
-		      // this parameter is missing or empty “{}”
+		      // this parameter is missing or empty &quot;{}&quot;
        },
    ]
 }
@@ -739,16 +742,16 @@ un_mute: ControlMessageServiceMethod.ValueType  # 9
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_sip",
-   "method": "un_mute",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_sip&quot;,
+   &quot;method&quot;: &quot;un_mute&quot;,
+   &quot;parameters&quot;: [
        {
 	 	      // condition_start object
        },
        {
 	 	      // condition_end object (OPTIONAL) - for permanent change
            // no condition_end needs to be supplied i.e.
-		      // this parameter is missing or empty “{}”
+		      // this parameter is missing or empty &quot;{}&quot;
        },
    ]
 }
@@ -760,8 +763,8 @@ stop_all_control_messages: ControlMessageServiceMethod.ValueType  # 10
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "",    <= empty string since it is for all services / no specific service
-   "method": "stop_all_control_messages",
+   &quot;service&quot;: &quot;&quot;,    &lt;= empty string since it is for all services / no specific service
+   &quot;method&quot;: &quot;stop_all_control_messages&quot;,
    "parameters": [
        {
 	 	      // condition_start object
@@ -781,16 +784,16 @@ train_agent: ControlMessageServiceMethod.ValueType  # 11
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_nlu",
-   "method": "train_agent",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_nlu&quot;,
+   &quot;method&quot;: &quot;train_agent&quot;,
+   &quot;parameters&quot;: [
        {
 	 	      // condition_start object
        },
        {
 	 	      // condition_end object (OPTIONAL) - for permanent change
            // no condition_end needs to be supplied i.e.
-		      // this parameter is missing or empty “{}”
+		      // this parameter is missing or empty &quot;{}&quot;
        },
    ]
 }
@@ -802,32 +805,32 @@ cancel_train_agent: ControlMessageServiceMethod.ValueType  # 12
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_nlu",
-   "method": "cancel_train_agent",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_nlu&quot;,
+   &quot;method&quot;: &quot;cancel_train_agent&quot;,
+   &quot;parameters&quot;: [
        {
 	 	      // condition_start object
        },
        {
 	 	      // condition_end object (OPTIONAL) - for permanent change
            // no condition_end needs to be supplied i.e.
-		      // this parameter is missing or empty “{}”
+		      // this parameter is missing or empty &quot;{}&quot;
        },
    ]
 }
 </code></pre>
 """
 delete_session: ControlMessageServiceMethod.ValueType  # 13
-"""NLU: delete session all all session-related information
+"""NLU: delete session and all session-related information
 
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_nlu",
-   "method": "delete_session",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_nlu&quot;,
+   &quot;method&quot;: &quot;delete_session&quot;,
+   &quot;parameters&quot;: [
        {
-	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
+	 	      &quot;session_id&quot;: &quot;97ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
        },
        {
 	 	      // condition_start object
@@ -835,7 +838,7 @@ delete_session: ControlMessageServiceMethod.ValueType  # 13
        {
 	 	      // condition_end object (OPTIONAL) - for permanent change
            // no condition_end needs to be supplied i.e.
-		      // this parameter is missing or empty “{}”
+		      // this parameter is missing or empty &quot;{}&quot;
        },
    ]
 }
@@ -847,11 +850,11 @@ delete_all_contexts: ControlMessageServiceMethod.ValueType  # 14
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_nlu",
-   "method": "delete_all_contexts",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_nlu&quot;,
+   &quot;method&quot;: &quot;delete_all_contexts&quot;,
+   &quot;parameters&quot;: [
        {
-	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
+	 	      &quot;session_id&quot;: &quot;97ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
        },
        {
 	 	      // condition_start object
@@ -859,7 +862,7 @@ delete_all_contexts: ControlMessageServiceMethod.ValueType  # 14
        {
 	 	      // condition_end object (OPTIONAL) - for permanent change
            // no condition_end needs to be supplied i.e.
-		      // this parameter is missing or empty “{}”
+		      // this parameter is missing or empty &quot;{}&quot;
        },
    ]
 }
@@ -875,8 +878,8 @@ create_context: ControlMessageServiceMethod.ValueType  # 15
    "method": "create_context",
    "parameters": [
        {
-	 	      "context": {           <== <NLU Context Object as JSON object>
-               name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ss2ea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
+	 	      &quot;context&quot;: {           &lt;== &lt;NLU Context Object as JSON object&gt;
+               &quot;name&quot;: &quot;projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/ss2ea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
                ...,
            }
        },
@@ -902,8 +905,8 @@ update_context: ControlMessageServiceMethod.ValueType  # 16
    "method": "update_context",
    "parameters": [
        {
-	 	      "context": {           <== <NLU Context Object as JSON object>
-               name": "projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/2dea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e",
+	 	      &quot;context&quot;: {           &lt;== &lt;NLU Context Object as JSON object&gt;
+               &quot;name&quot;: &quot;projects/db46dcf8-2d2c-4115-ac38-eff443ea0e72/agent/sessions/2dea1a20-0784-442b-93c0-eb9e2469420e/contexts/78ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
                ...,
            }
        },
@@ -925,12 +928,12 @@ delete_context: ControlMessageServiceMethod.ValueType  # 17
 <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
 <pre><code>
 {
-   "service": "ondewo_nlu",
-   "method": "delete_context",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_nlu&quot;,
+   &quot;method&quot;: &quot;delete_context&quot;,
+   &quot;parameters&quot;: [
        {
-	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
-	 	      "context_name": "78ea1a20-0784-442b-93c0-eb9e2469420e",
+	 	      &quot;session_id&quot;: &quot;97ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
+	 	      &quot;context_name&quot;: &quot;78ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
        },
        {
 	 	      // condition_start object
@@ -938,7 +941,7 @@ delete_context: ControlMessageServiceMethod.ValueType  # 17
        {
 	 	      // condition_end object (OPTIONAL) - for permanent change
            // no condition_end needs to be supplied i.e.
-		      // this parameter is missing or empty “{}”
+		      // this parameter is missing or empty &quot;{}&quot;
        },
    ]
 }
@@ -946,13 +949,16 @@ delete_context: ControlMessageServiceMethod.ValueType  # 17
 """
 detect_intent: ControlMessageServiceMethod.ValueType  # 18
 """NLU: execute a detect intent request based on the provided information in the current session
+
+<p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+<pre><code>
 {
-   "service": "ondewo_nlu",
-   "method": "detect_intent",
-   "parameters": [
+   &quot;service&quot;: &quot;ondewo_nlu&quot;,
+   &quot;method&quot;: &quot;detect_intent&quot;,
+   &quot;parameters&quot;: [
        {
-	 	      "session_id": "97ea1a20-0784-442b-93c0-eb9e2469420e",
-	 	      "text": "Are you an artificial intelligence?",
+	 	      &quot;session_id&quot;: &quot;97ea1a20-0784-442b-93c0-eb9e2469420e&quot;,
+	 	      &quot;text&quot;: &quot;Are you an artificial intelligence?&quot;,
        },
        {
 	 	      // condition_start object
@@ -960,7 +966,7 @@ detect_intent: ControlMessageServiceMethod.ValueType  # 18
        {
 	 	      // condition_end object (OPTIONAL) - for permanent change
            // no condition_end needs to be supplied i.e.
-		      // this parameter is missing or empty “{}”
+		      // this parameter is missing or empty &quot;{}&quot;
        },
    ]
 }
@@ -977,50 +983,32 @@ class _ConditionTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._
     UNKNOWTYPE: _ConditionType.ValueType  # 0
     """Unknown type"""
     immediate: _ConditionType.ValueType  # 1
-    """Immediate execution of the control message
-    Example value need be given as a string in the format: <pre><code>value="5"</code></pre>
-    """
+    """Immediate execution of the control message. Example value need be given as a string in the format: <pre><code>value=&quot;5&quot;</code></pre>"""
     duration: _ConditionType.ValueType  # 2
-    """Duration in number of seconds after a control message should be executed,
-    Example value need be given as a string in the format: <pre><code>value="10"</code></pre>
-    """
+    """Duration in number of seconds after a control message should be executed. Example value need be given as a string in the format: <pre><code>value=&quot;10&quot;</code></pre>"""
     datetime: _ConditionType.ValueType  # 3
-    """Date and time when a control message should be executed,
-    Example value need be given as a string in the format: <pre><code>value="2021-12-23T13:45:00.000Z"</code></pre>
-    """
+    """Date and time when a control message should be executed. Example value need be given as a string in the format: <pre><code>value=&quot;2021-12-23T13:45:00.000Z&quot;</code></pre>"""
     interactions: _ConditionType.ValueType  # 4
-    """Number of interactions of the user with an ONDEWO AI agent after a control message should be executed
-    Example value need be given as a string in the format: <pre><code>value="4"</code></pre>
-    """
+    """Number of interactions of the user with an ONDEWO AI agent after a control message should be executed. Example value need be given as a string in the format: <pre><code>value=&quot;4&quot;</code></pre>"""
 
 class ConditionType(_ConditionType, metaclass=_ConditionTypeEnumTypeWrapper):
-    """Type of condition that need to be satisfied to execute a control message"""
+    """Type of condition that need to be satisfied to execute a control message."""
 
 UNKNOWTYPE: ConditionType.ValueType  # 0
 """Unknown type"""
 immediate: ConditionType.ValueType  # 1
-"""Immediate execution of the control message
-Example value need be given as a string in the format: <pre><code>value="5"</code></pre>
-"""
+"""Immediate execution of the control message. Example value need be given as a string in the format: <pre><code>value=&quot;5&quot;</code></pre>"""
 duration: ConditionType.ValueType  # 2
-"""Duration in number of seconds after a control message should be executed,
-Example value need be given as a string in the format: <pre><code>value="10"</code></pre>
-"""
+"""Duration in number of seconds after a control message should be executed. Example value need be given as a string in the format: <pre><code>value=&quot;10&quot;</code></pre>"""
 datetime: ConditionType.ValueType  # 3
-"""Date and time when a control message should be executed,
-Example value need be given as a string in the format: <pre><code>value="2021-12-23T13:45:00.000Z"</code></pre>
-"""
+"""Date and time when a control message should be executed. Example value need be given as a string in the format: <pre><code>value=&quot;2021-12-23T13:45:00.000Z&quot;</code></pre>"""
 interactions: ConditionType.ValueType  # 4
-"""Number of interactions of the user with an ONDEWO AI agent after a control message should be executed
-Example value need be given as a string in the format: <pre><code>value="4"</code></pre>
-"""
+"""Number of interactions of the user with an ONDEWO AI agent after a control message should be executed. Example value need be given as a string in the format: <pre><code>value=&quot;4&quot;</code></pre>"""
 global___ConditionType = ConditionType
 
 @typing.final
 class S2sPipeline(google.protobuf.message.Message):
-    """The top-level message sent by client to `CreateS2sPipeline` and `UpdateS2sPipeline` endpoints and received from
-    `GetS2sPipeline` endpoint.
-    """
+    """The top-level message sent by client to <code>CreateS2sPipeline</code> and <code>UpdateS2sPipeline</code> endpoints and received from <code>GetS2sPipeline</code> endpoint."""
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -1054,7 +1042,7 @@ global___S2sPipeline = S2sPipeline
 
 @typing.final
 class S2sPipelineId(google.protobuf.message.Message):
-    """The top-level message sent by client to `GetS2sPipeline` and `DeleteS2sPipeline` endpoints."""
+    """The top-level message sent by client to <code>GetS2sPipeline</code> and <code>DeleteS2sPipeline</code> endpoints."""
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -1072,7 +1060,7 @@ global___S2sPipelineId = S2sPipelineId
 
 @typing.final
 class ListS2sPipelinesRequest(google.protobuf.message.Message):
-    """The top-level message sent by client to `ListS2sPipelines` endpoint. Currently without arguments.
+    """The top-level message sent by client to <code>ListS2sPipelines</code> endpoint. Currently without arguments.
     TODO: add filtering options
     """
 
@@ -1086,7 +1074,7 @@ global___ListS2sPipelinesRequest = ListS2sPipelinesRequest
 
 @typing.final
 class ListS2sPipelinesResponse(google.protobuf.message.Message):
-    """The top-level message received from `ListS2sPipelines` endpoint."""
+    """The top-level message received from <code>ListS2sPipelines</code> endpoint."""
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -1106,15 +1094,12 @@ global___ListS2sPipelinesResponse = ListS2sPipelinesResponse
 
 @typing.final
 class S2sStreamRequest(google.protobuf.message.Message):
-    """The top-level message sent by the client to the
-    `S2sStream` method.
-
+    """The top-level message sent by the client to the <code>S2sStream</code> method.
     Multiple request messages should be sent in order:
-
-    1.  The first message must contain `pipeline_id` and can contain `session_id` or `initial_intent_display_name`.
-        The message must not contain `audio` nor `end_of_stream`.
-
-    2.  All subsequent messages must contain `audio`. If `end_of_stream` is `true`, the stream is closed.
+    <ul>
+      <li>The first message must contain <code>pipeline_id</code> and can contain <code>session_id</code> or <code>initial_intent_display_name</code>. The message must not contain <code>audio</code> nor <code>end_of_stream</code>.</li>
+      <li>All subsequent messages must contain <code>audio</code>. If <code>end_of_stream</code> is <code>true</code>, the stream is closed.</li>
+    </ul>
     """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
@@ -1127,17 +1112,11 @@ class S2sStreamRequest(google.protobuf.message.Message):
     pipeline_id: builtins.str
     """Optional. The CSI pipeline ID specified in the initial request."""
     session_id: builtins.str
-    """Optional. The session or call ID specified in the initial request. It’s up to the API caller to choose
-    an appropriate string. It can be a random number or some type of user identifier (preferably hashed).
-    """
+    """<p>Optional. The session or call ID specified in the initial request. It&apos;s up to the API caller to choose an appropriate string. It can be a random number or some type of user identifier (preferably hashed).</p>"""
     audio: builtins.bytes
-    """Optional. The input audio content to be recognized.
-
-    If `true`, the recognizer will not return
-    any further hypotheses about this piece of the audio. May only be populated
-    for `event_type` = `RECOGNITION_EVENT_TRANSCRIPT`.
-    """
+    """Optional. The input audio content to be recognized."""
     end_of_stream: builtins.bool
+    """If <code>true</code>, the recognizer will not return any further hypotheses about this piece of the audio. May only be populated for <code>event_type</code> = <code>RECOGNITION_EVENT_TRANSCRIPT</code>."""
     initial_intent_display_name: builtins.str
     """Optional. Intent display name to trigger in NLU system in the beginning of the conversation."""
     def __init__(
@@ -1155,19 +1134,18 @@ global___S2sStreamRequest = S2sStreamRequest
 
 @typing.final
 class S2sStreamResponse(google.protobuf.message.Message):
-    """The top-level message returned from the
-    `S2sStream` method.
-
-    A response message is returned for each utterance of the input stream. It contains the full response from NLU system
-    in `detect_intent_response` or the full T2S response in `synthesize_response`.
+    """The top-level message returned from the <code>S2sStream</code> method.
+    A response message is returned for each utterance of the input stream. It contains the full response from NLU system in <code>detect_intent_response</code> or the full T2S response in <code>synthesize_response</code>.
     Multiple response messages can be returned in order:
-
-    1.  The first response message for an input utterance contains response from NLU system `detect_intent_response`
-        with detected intent and N fulfillment messages (N >= 0).
-
-    2.  The next N response messages contain for each fulfillment message one of the following:
-         a. T2S response `synthesize_response` with synthesized audio
-         b. SIP trigger message `sip_trigger` with SIP trigger extracted from the fulfillment message
+    <ul>
+      <li>The first response message for an input utterance contains response from NLU system <code>detect_intent_response</code> with detected intent and N fulfillment messages (N &gt;= 0).</li>
+      <li>The next N response messages contain for each fulfillment message one of the following:
+        <ul>
+          <li>T2S response <code>synthesize_response</code> with synthesized audio</li>
+          <li>SIP trigger message <code>sip_trigger</code> with SIP trigger extracted from the fulfillment message</li>
+        </ul>
+      </li>
+    </ul>
     """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
@@ -1202,7 +1180,7 @@ global___S2sStreamResponse = S2sStreamResponse
 
 @typing.final
 class SipTrigger(google.protobuf.message.Message):
-    """SIP trigger message"""
+    """SIP trigger message."""
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -1230,7 +1208,7 @@ class SipTrigger(google.protobuf.message.Message):
         """play audio"""
 
     class SipTriggerType(_SipTriggerType, metaclass=_SipTriggerTypeEnumTypeWrapper):
-        """type of the SIP trigger"""
+        """Type of SIP trigger that can be executed during a conversation."""
 
     UNSPECIFIED: SipTrigger.SipTriggerType.ValueType  # 0
     """should never be used"""
@@ -1252,6 +1230,7 @@ class SipTrigger(google.protobuf.message.Message):
     TYPE_FIELD_NUMBER: builtins.int
     CONTENT_FIELD_NUMBER: builtins.int
     type: global___SipTrigger.SipTriggerType.ValueType
+    """Type of the SIP trigger."""
     @property
     def content(self) -> google.protobuf.struct_pb2.Struct:
         """extra parameters for the trigger"""
@@ -1269,7 +1248,7 @@ global___SipTrigger = SipTrigger
 
 @typing.final
 class CheckUpstreamHealthResponse(google.protobuf.message.Message):
-    """Health checks"""
+    """Health checks."""
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -1302,7 +1281,7 @@ global___CheckUpstreamHealthResponse = CheckUpstreamHealthResponse
 
 @typing.final
 class ControlStreamRequest(google.protobuf.message.Message):
-    """Control stream message"""
+    """Control stream message."""
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -1314,7 +1293,7 @@ global___ControlStreamRequest = ControlStreamRequest
 
 @typing.final
 class ControlStreamResponse(google.protobuf.message.Message):
-    """Control stream response message"""
+    """Control stream response message."""
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -1332,7 +1311,7 @@ global___ControlStreamResponse = ControlStreamResponse
 
 @typing.final
 class SetControlStatusRequest(google.protobuf.message.Message):
-    """Request to set control status"""
+    """Request to set control status."""
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -1350,7 +1329,7 @@ global___SetControlStatusRequest = SetControlStatusRequest
 
 @typing.final
 class SetControlStatusResponse(google.protobuf.message.Message):
-    """Response of setting the control status with the old and new status objects"""
+    """Response of setting the control status with the old and new status objects."""
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -1372,38 +1351,34 @@ global___SetControlStatusResponse = SetControlStatusResponse
 
 @typing.final
 class Condition(google.protobuf.message.Message):
-    """A condition message with its type and value
-
+    """A condition message with its type and value.
     A Condition can be of various types.
-    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:
+    Immediate execution:
     <pre><code>
-    immediate execution
     {
-       "type": "immediate"
+       &quot;type&quot;: &quot;immediate&quot;
     }
     </code></pre>
-
-    number of interactions of the user with the AI agent
+    Number of interactions of the user with the AI agent:
     <pre><code>
     {
-       "type": "interactions",
-       "value": “10”
+       &quot;type&quot;: &quot;interactions&quot;,
+       &quot;value&quot;: &quot;10&quot;
     }
     </code></pre>
-
-     number of seconds
+    Number of seconds:
     <pre><code>
     {
-       "type": "duration",
-       "value": “3600”
+       &quot;type&quot;: &quot;duration&quot;,
+       &quot;value&quot;: &quot;3600&quot;
     }
     </code></pre>
-
-     at a specific date and time
+    At a specific date and time:
     <pre><code>
     {
-       "type": "datetime",
-       "value": "2021-12-23T13:45:00.000Z"
+       &quot;type&quot;: &quot;datetime&quot;,
+       &quot;value&quot;: &quot;2021-12-23T13:45:00.000Z&quot;
     }
     </code></pre>
     """
@@ -1415,9 +1390,7 @@ class Condition(google.protobuf.message.Message):
     type: global___ConditionType.ValueType
     """Condition type"""
     value: builtins.str
-    """Value of the condition.
-    Examples of conditions values based on the condition type are given in the <pre>ConditionType</pre> documentation
-    """
+    """Value of the condition. Examples of conditions values based on the condition type are given in the <code>ConditionType</code> documentation."""
     def __init__(
         self,
         *,
@@ -1430,7 +1403,7 @@ global___Condition = Condition
 
 @typing.final
 class ControlMessageServiceParameters(google.protobuf.message.Message):
-    """Parameters of the control message passed to the service specified in the control message"""
+    """Parameters of the control message passed to the service specified in the control message."""
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
@@ -1498,19 +1471,18 @@ global___ControlMessageServiceParameters = ControlMessageServiceParameters
 
 @typing.final
 class ControlMessage(google.protobuf.message.Message):
-    """A control message
-
-    <p>Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:</p>
+    """A control message.
+    Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:
     <pre><code>
     {
-      "service": "<SERVICE_NAME>", 			// e.g. ondewo_s2t
-      "method": "<SERVICE_CONTROL_METHOD>", 	// e.g. update_config
-      "parameters": [
+      &quot;service&quot;: &quot;&lt;SERVICE_NAME&gt;&quot;, 			// e.g. ondewo_s2t
+      &quot;method&quot;: &quot;&lt;SERVICE_CONTROL_METHOD&gt;&quot;, 	// e.g. update_config
+      &quot;parameters&quot;: [
           // primitive data types and JSON objects are possible
           1,
           1.0,
           -2.0,
-          “string”,
+          &quot;string&quot;,
           true,
       	 {
               // parameter JSON object
@@ -1532,9 +1504,7 @@ class ControlMessage(google.protobuf.message.Message):
     METHOD_FIELD_NUMBER: builtins.int
     PARAMETERS_FIELD_NUMBER: builtins.int
     service: global___ControlMessageServiceName.ValueType
-    """Service to control.
-    Valid service names are:'ondewo_nlu', 'ondewo_t2s', 'ondewo_s2t', 'ondewo_sip' and 'ondewo_csi'
-    """
+    """Service to control. Valid service names are: <code>ondewo_nlu</code>, <code>ondewo_t2s</code>, <code>ondewo_s2t</code>, <code>ondewo_sip</code> and <code>ondewo_csi</code>."""
     method: global___ControlMessageServiceMethod.ValueType
     """Method to invoke on the service"""
     @property

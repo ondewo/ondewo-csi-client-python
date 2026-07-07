@@ -11,16 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import argparse
+import os
+import sys
 import time
 import uuid
 import wave
+from pathlib import Path
 from typing import (
     Iterator,
     Optional,
 )
 from uuid import uuid4
 
+import grpc
+from dotenv import load_dotenv
+from loguru import logger as log
 from ondewo.nlu.session_pb2 import QueryResult
 from ondewo.t2s.text_to_speech_pb2 import SynthesizeResponse
 
@@ -29,8 +34,26 @@ from ondewo.csi.client.client_config import ClientConfig
 from ondewo.csi.client.services.conversations import Conversations
 from ondewo.csi.conversation_pb2 import S2sStreamRequest
 
-AUDIO_FILE: str = "ondewo/csi/examples/audiofiles/pizza_de.wav"
+# Load the example configuration relative to this script, so the current working
+# directory does not matter.
+load_dotenv(Path(__file__).with_name("environment.env"))
+
 CHUNK_SIZE: int = 8000
+
+
+def build_config() -> ClientConfig:
+    """
+    Build a :class:`ClientConfig` from the canonical environment variables.
+
+    Returns:
+        ClientConfig:
+            A config carrying the CSI host/port and optional gRPC certificate.
+    """
+    return ClientConfig(
+        host=os.getenv("ONDEWO_HOST", "localhost"),
+        port=os.getenv("ONDEWO_PORT", "50055"),
+        grpc_cert=os.getenv("ONDEWO_GRPC_CERT") or None,
+    )
 
 
 # We are going to make to send the file chunk-by-chunk to simulate a stream
@@ -62,29 +85,30 @@ def create_streaming_request(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Streaming example.")
-    parser.add_argument("--config", type=str)
-    parser.add_argument("--secure", default=False, action="store_true")
-    parser.add_argument("--pipeline-id", default="pizza")
-    parser.add_argument("--session-id", default=str(uuid.uuid4()))
-    parser.add_argument("--intent-name")
-    args = parser.parse_args()
+    """Stream a WAV file through the S2S pipeline and print / save the responses."""
+    log.info("START: s2s_streaming_example: main")
+    config: ClientConfig = build_config()
+    use_secure_channel: bool = os.getenv("ONDEWO_USE_SECURE_CHANNEL", "false").lower() == "true"
+    pipeline_id: str = os.getenv("ONDEWO_CSI_S2S_PIPELINE_ID", "pizza")
+    audio_file: str = os.getenv("ONDEWO_CSI_S2S_AUDIO_FILE", "examples/audiofiles/pizza_de.wav")
+    session_id: str = str(uuid.uuid4())
+    log.info(
+        f"Connecting to CSI at {config.host}:{config.port} (secure={use_secure_channel}), "
+        f"pipeline_id={pipeline_id}, audio_file={audio_file}, session_id={session_id}"
+    )
 
-    with open(args.config) as f:
-        config: ClientConfig = ClientConfig.from_json(f.read())
-
-    client: Client = Client(config=config, use_secure_channel=args.secure)
+    client: Client = Client(config=config, use_secure_channel=use_secure_channel)
     conversations_service: Conversations = client.services.conversations
 
     # Get audio stream (iterator of audio chunks)
-    audio_stream: Iterator[bytes] = get_streaming_audio(AUDIO_FILE)
+    audio_stream: Iterator[bytes] = get_streaming_audio(audio_file)
 
     # Create streaming request
     streaming_request: Iterator[S2sStreamRequest] = create_streaming_request(
         audio_stream=audio_stream,
-        pipeline_id=args.pipeline_id,
-        session_id=args.session_id,
-        initial_intent_display_name=args.intent_name,
+        pipeline_id=pipeline_id,
+        session_id=session_id,
+        initial_intent_display_name=None,
     )
 
     # get back responses
@@ -99,11 +123,22 @@ def main() -> None:
         elif response.HasField("synthesize_response"):
             t2s_response: SynthesizeResponse = response.synthesize_response
             print(f"\t{j}: {t2s_response.text}")
-            with open(f"ondewo/csi/examples/audiofiles/response_{i}-{j}.wav", "wb") as f:
+            with open(f"examples/audiofiles/response_{i}-{j}.wav", "wb") as f:
                 f.write(response.synthesize_response.audio)
 
             j += 1
+    log.info("DONE: s2s_streaming_example: main")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except grpc.RpcError as rpc_error:
+        log.exception(
+            f"gRPC streaming call failed: "
+            f"code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
+        )
+        sys.exit(1)
+    except Exception:
+        log.exception("s2s_streaming_example failed.")
+        sys.exit(1)

@@ -24,11 +24,11 @@ PYPI_PASSWORD?=ENTER_HERE_YOUR_PYPI_PASSWORD
 GITHUB_GH_TOKEN?=ENTER_YOUR_TOKEN_HERE
 
 CURRENT_RELEASE_NOTES=`cat RELEASE.md \
-	| sed -n '/Release ONDEWO CSI Python Client ${ONDEWO_CSI_VERSION}/,/\*\*/p'`
+	| perl -ne 'print if /Release ONDEWO CSI Python Client ${ONDEWO_CSI_VERSION}/../\*\*/'`
 
 GH_REPO="https://github.com/ondewo/ondewo-csi-client-python"
-ONDEWO_CSI_API_GIT_BRANCH=tags/5.2.0
-ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/5.8.0
+ONDEWO_CSI_API_GIT_BRANCH=OND211-2418-add-keycloak-for-2-fa
+ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/5.10.0
 ONDEWO_CSI_API_DIR=ondewo-csi-api
 ONDEWO_PROTO_COMPILER_DIR=ondewo-proto-compiler
 GOOGLE_PROTOS_DIR=${ONDEWO_CSI_API_DIR}/google/
@@ -105,8 +105,8 @@ check_build: ## Checks if all built proto-code is there
 #		Build
 
 update_setup: ## Update Version in setup.py
-	@sed -i "s/version='[0-9]*.[0-9]*.[0-9]*'/version='${ONDEWO_CSI_VERSION}'/g" setup.py
-	@sed -i "s/version=\"[0-9]*.[0-9]*.[0-9]*\"/version='${ONDEWO_CSI_VERSION}'/g" setup.py
+	@perl -i -pe "s/version='[0-9]*.[0-9]*.[0-9]*'/version='${ONDEWO_CSI_VERSION}'/g" setup.py
+	@perl -i -pe "s/version=\"[0-9]*.[0-9]*.[0-9]*\"/version='${ONDEWO_CSI_VERSION}'/g" setup.py
 
 build: clear_package_data prepare_submodules build_compiler generate_all_protos create_async_services update_setup ## Build source code
 
@@ -158,12 +158,7 @@ create_async_services: ## Create async services for all synchronous services
 	        cp "$$file" "$$dir/async_$$filename"; \
 	    done; \
 	    for file in "$$dir"/async_*.py; do \
-	        sed -i -E \
-	            -e '/def stub/b' -e 's/^([[:space:]]*)def /\1async def /g' \
-	            -e 's/self\.stub/await self.stub/g' \
-	            -e 's/\(BaseServicesInterface\)/\(AsyncBaseServicesInterface\)/g' \
-	            -e 's/base_services_interface/async_base_services_interface/g' \
-	            -e 's/import BaseServicesInterface/import AsyncBaseServicesInterface/g' \
+	        perl -i -pe 'unless(/def stub/){ s/^([[:space:]]*)def /$$1async def /g; s/self\.stub/await self.stub/g; s/\(BaseServicesInterface\)/(AsyncBaseServicesInterface)/g; s/base_services_interface/async_base_services_interface/g; s/import BaseServicesInterface/import AsyncBaseServicesInterface/g; }' \
 	            "$$file"; \
 	    done; \
 	done
