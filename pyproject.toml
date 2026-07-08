@@ -1,0 +1,148 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ondewo-csi-client"
+version = "5.2.0"
+description = "ONDEWO Communication System Integration (CSI) Client library for Python"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [
+    { name = "ONDEWO GmbH", email = "office@ondewo.com" },
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+]
+dependencies = [
+    "aiohttp",
+    "dataclasses-json",
+    "google-api-core",
+    "googleapis-common-protos",
+    "grpcio",
+    "grpcio-reflection",
+    "grpcio-tools",
+    "loguru",
+    "numpy",
+    "ondewo-client-utils>=3.2.0",
+    "ondewo-nlu-client",
+    "ondewo-s2t-client",
+    "ondewo-t2s-client",
+    "requests",
+    "setuptools",
+]
+
+[project.optional-dependencies]
+dev = [
+    "jupyter",
+    "mypy",
+    "mypy-protobuf",
+    "pytest",
+    "ruff",
+    "SoundFile>=0.10.3.post1",
+    "pyaudio>=0.2.12",
+    "pysoundio>=1.1.0",
+    "python-dotenv",
+    "setuptools",
+    "typing_extensions",
+    "pytest-cov",
+    "pytest-asyncio",
+]
+
+[project.urls]
+Homepage = "https://github.com/ondewo/ondewo-csi-client-python"
+Repository = "https://github.com/ondewo/ondewo-csi-client-python"
+
+# ---------------------------------------------------------------------------
+# setuptools: package discovery + package data
+# Equivalent to the old setup.py:
+#   packages = [n for n in find_packages() if n == 'ondewo' or n.startswith('ondewo.')]
+#   include_package_data=True + package_data for py.typed / *.pyi
+# ---------------------------------------------------------------------------
+[tool.setuptools.packages.find]
+include = ["ondewo", "ondewo.*"]
+
+[tool.setuptools.package-data]
+"ondewo.csi" = ["py.typed", "*.pyi"]
+
+# ---------------------------------------------------------------------------
+# Ruff  (replaces flake8: ignore C901,W504; max-line-length 120; exclude *_pb2*)
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+# Never lint/format the generated protobuf/gRPC stubs (the old .flake8 excluded
+# ondewo/csi/conversation_pb2.py / .pyi / _pb2_grpc.py individually), and skip
+# the proto-compiler / api git submodules.
+extend-exclude = [
+    "*_pb2.py",
+    "*_pb2.pyi",
+    "*_pb2_grpc.py",
+    "ondewo-csi-api",
+    "ondewo-proto-compiler",
+    # Demo/tutorial Jupyter notebooks were never linted by the old flake8 (flake8
+    # does not process .ipynb); ruff does by default. Keep them out to avoid churn.
+    "*.ipynb",
+]
+
+[tool.ruff.lint]
+# pycodestyle (E/W) + pyflakes (F) == the flake8 default rule set.
+# C901 (mccabe complexity) is intentionally NOT enabled -> old "ignore = C901".
+# W504 (line break after binary operator) is not implemented by ruff,
+# so the old "ignore = W504" is a no-op here.
+select = ["E", "F", "W"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+
+# ---------------------------------------------------------------------------
+# Mypy  (translated faithfully from mypy.ini)
+# ---------------------------------------------------------------------------
+[tool.mypy]
+# mypy.ini used 3.9, but current mypy rejects 3.9 ("must be 3.10 or higher");
+# the validated blueprint pins 3.10 (CI/Docker run 3.12).
+python_version = "3.10"
+ignore_errors = false
+ignore_missing_imports = false
+disallow_untyped_defs = true
+no_implicit_optional = true
+strict_optional = true
+show_traceback = true
+warn_no_return = true
+warn_return_any = true
+warn_unused_configs = true
+
+# Generated protobuf / gRPC stubs: never type-check them.
+[[tool.mypy.overrides]]
+module = [
+    "ondewo.csi.conversation_pb2",
+    "ondewo.csi.conversation_pb2_grpc",
+]
+ignore_errors = true
+ignore_missing_imports = true
+
+# Third-party / sibling-client packages without (complete) type stubs.
+[[tool.mypy.overrides]]
+module = [
+    "loguru.*",
+    "ondewo.nlu.*",
+    "ondewo.t2s.*",
+    "ondewo.s2t.*",
+    "ondewo.sip.*",
+    "ondewo.utils.*",
+    "google.*",
+    "grpc.*",
+    "pyaudio",
+    "pysoundio",
+    "setuptools.*",
+]
+ignore_missing_imports = true
