@@ -19,6 +19,9 @@ jobs:
       - name: Set up Python 3.12
         run: uv python install 3.12
 
+      - name: Install system libs for native deps (portaudio for pyaudio, pulled transitively via ondewo-s2t/t2s-client)
+        run: sudo apt-get update && sudo apt-get install -y portaudio19-dev
+
       - name: Install package + dev/test dependencies (from uv.lock)
         run: uv sync --extra dev --frozen
 
