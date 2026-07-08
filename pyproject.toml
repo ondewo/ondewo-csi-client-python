@@ -45,6 +45,7 @@ dev = [
     "jupyter",
     "mypy",
     "mypy-protobuf",
+    "pre-commit",
     "pytest",
     "ruff",
     "SoundFile>=0.10.3.post1",
@@ -108,9 +109,10 @@ quote-style = "double"
 # Mypy  (translated faithfully from mypy.ini)
 # ---------------------------------------------------------------------------
 [tool.mypy]
-# mypy.ini used 3.9, but current mypy rejects 3.9 ("must be 3.10 or higher");
-# the validated blueprint pins 3.10 (CI/Docker run 3.12).
-python_version = "3.10"
+# mypy.ini had python_version=3.9, but current mypy requires >=3.10. Use 3.12 so
+# mypy parses the numpy 2.x type stubs (which use PEP 695 `type X = ...` statements,
+# valid only on 3.12+). Runtime requires-python stays ">=3.9".
+python_version = "3.12"
 ignore_errors = false
 ignore_missing_imports = false
 disallow_untyped_defs = true

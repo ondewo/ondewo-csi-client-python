@@ -135,8 +135,7 @@ if __name__ == "__main__":
         main()
     except grpc.RpcError as rpc_error:
         log.exception(
-            f"gRPC streaming call failed: "
-            f"code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
+            f"gRPC streaming call failed: code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
         )
         sys.exit(1)
     except Exception:

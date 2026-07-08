@@ -1,44 +1,52 @@
 # Release History
 
 *****************
+
 ## Release ONDEWO CSI Python Client 5.2.0
 
 ### Improvements
- * Tracking API Version [5.2.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/5.2.0) ( [Documentation](https://ondewo.github.io/ondewo-csi-api/) )
 
+* Tracking API Version [5.2.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/5.2.0) ( [Documentation](https://ondewo.github.io/ondewo-csi-api/) )
 
 *****************
+
 ## Release ONDEWO CSI Python Client 5.1.0
 
 ### Improvements
- * Tracking API Version [5.1.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/5.1.0) ( [Documentation](https://ondewo.github.io/ondewo-csi-api/) )
 
+* Tracking API Version [5.1.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/5.1.0) ( [Documentation](https://ondewo.github.io/ondewo-csi-api/) )
 
 *****************
+
 ## Release ONDEWO CSI Python Client 5.0.0
 
 ### Improvements
- * Tracking API Version [5.0.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/5.0.0) ( [Documentation](https://ondewo.github.io/ondewo-csi-api/) )
+
+* Tracking API Version [5.0.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/5.0.0) ( [Documentation](https://ondewo.github.io/ondewo-csi-api/) )
 
 *****************
+
 ## Release ONDEWO CSI Python Client 4.0.1
 
 ### Improvements
- * Added functionality to pass grpc options to grpc clients based on [ONDEWO CLIENT UTILS PYTHON 2.0.0](https://github.com/ondewo/ondewo-client-utils-python/releases/tag/2.0.0)
+
+* Added functionality to pass grpc options to grpc clients based on [ONDEWO CLIENT UTILS PYTHON 2.0.0](https://github.com/ondewo/ondewo-client-utils-python/releases/tag/2.0.0)
 
 *****************
+
 ## Release ONDEWO CSI Python Client 4.0.0
 
 ### Improvements
- * Tracking API Version [4.0.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/4.0.0) ( [Documentation](https://ondewo.github.io/ondewo-csi-api/) )
 
+* Tracking API Version [4.0.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/4.0.0) ( [Documentation](https://ondewo.github.io/ondewo-csi-api/) )
 
 *****************
+
 ## Release ONDEWO CSI Python Client 3.2.0
 
 ### Improvements
- * Tracking API Version [3.2.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/3.2.0) ( [Documentation](https://ondewo.github.io/ondewo-csi-api/) )
 
+* Tracking API Version [3.2.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/3.2.0) ( [Documentation](https://ondewo.github.io/ondewo-csi-api/) )
 
 *****************
 
@@ -48,7 +56,6 @@
 
 * Spelling mistakes fixed synthesize_response
 * Examples updated for ondewo-csi-api version 3.1.0
-
 
 *****************
 

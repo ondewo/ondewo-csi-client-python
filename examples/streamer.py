@@ -144,7 +144,6 @@ class PyAudioStreamerIn(StreamerInInterface):
 
         global PLAYING
         while True:  # not self.stop.done():
-
             if PLAYING:
                 print("PLAYING")
                 time.sleep(0.5)
@@ -180,7 +179,6 @@ class PyAudioStreamerIn(StreamerInInterface):
 
 
 class PySoundIoStreamerOut(StreamerOutInterface):
-
     def __init__(self, device_id: Optional[int] = None) -> None:
         import pysoundio
 
@@ -206,7 +204,7 @@ class PySoundIoStreamerOut(StreamerOutInterface):
                 # if the response is still being played: calculate the length in bytes, overwrite the output
                 # data with the portion of the response, increase the index and return
                 num_bytes = length * SAMPLEWIDTH * MONO
-                data[:] = self.response[self.idx: self.idx + num_bytes]  # noqa:
+                data[:] = self.response[self.idx : self.idx + num_bytes]  # noqa:
                 self.idx += num_bytes
                 return
 
@@ -298,9 +296,7 @@ class PySoundIoStreamerIn(StreamerInInterface):
             data_save = bytes()
             time.sleep(0.1)
 
-    def create_intent_request(
-        self, cai_project: str, cai_session: str
-    ) -> Iterator[StreamingDetectIntentRequest]:
+    def create_intent_request(self, cai_project: str, cai_session: str) -> Iterator[StreamingDetectIntentRequest]:
         count = 0
         data_save = bytes()
         while True:  # not self.stop.done():

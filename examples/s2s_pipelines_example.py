@@ -101,14 +101,14 @@ def main() -> None:
         ("grpc.max_send_message_length", 1024 * 1024),
         ("grpc.max_receive_message_length", 1024 * 1024),
         # Example of setting KeepAlive options through generic channel_args
-        ("grpc.keepalive_time_ms", 2 ** 31 - 1),
+        ("grpc.keepalive_time_ms", 2**31 - 1),
         ("grpc.keepalive_timeout_ms", 20000),
         ("grpc.keepalive_permit_without_calls", False),
         ("grpc.http2.max_pings_without_data", 2),
         # Example arg requested for the feature
         ("grpc.dns_enable_srv_queries", 1),
         ("grpc.enable_retries", 1),
-        ("grpc.service_config", service_config_json)
+        ("grpc.service_config", service_config_json),
     }
 
     client: Client = Client(config=config, use_secure_channel=use_secure_channel, options=options)
@@ -160,8 +160,7 @@ if __name__ == "__main__":
         main()
     except grpc.RpcError as rpc_error:
         log.exception(
-            f"gRPC call failed while handling S2S pipelines: "
-            f"code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
+            f"gRPC call failed while handling S2S pipelines: code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
         )
         sys.exit(1)
     except Exception:

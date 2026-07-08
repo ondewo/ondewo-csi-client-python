@@ -102,9 +102,7 @@ class ClientConfig(BaseClientConfig):
             provided.add("username")
 
         if provided and provided != {"keycloak_url", "realm", "client_id", "username", "password"}:
-            missing = sorted(
-                {"keycloak_url", "realm", "client_id", "username", "password"} - provided
-            )
+            missing = sorted({"keycloak_url", "realm", "client_id", "username", "password"} - provided)
             raise ValueError(
                 f"Incomplete Keycloak configuration in {self.__class__.__name__}: "
                 f"missing field(s) {missing}. Provide all of keycloak_url, realm, client_id, "
@@ -132,10 +130,4 @@ class ClientConfig(BaseClientConfig):
                 ``True`` when ``keycloak_url``/``realm``/``client_id``/username/password are
                 all present, so the D18 offline-token flow can run.
         """
-        return bool(
-            self.keycloak_url and
-            self.realm and
-            self.client_id and
-            self.resolved_username and
-            self.password
-        )
+        return bool(self.keycloak_url and self.realm and self.client_id and self.resolved_username and self.password)

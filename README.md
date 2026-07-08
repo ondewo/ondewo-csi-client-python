@@ -21,7 +21,6 @@
   </h1>
 </div>
 
-
 This library facilitates the interaction between a user and a CAI server. It achieves this by providing a higher-level interface mediator.
 
 This higher-level interface mediator is structured around a series of python files generated from protobuf files. These protobuf files specify the details of the interface, and can be used to generate code in 10+ high-level languages. They are found in the [ONDEWO CSI API](https://github.com/ondewo/ondewo-csi-api) along with the older Google protobufs from Dialogueflow that were used at the start. The [ONDEWO PROTO-COMPILER](https://github.com/ondewo/ondewo-proto-compiler) will generate the needed files directly in this library.
@@ -130,17 +129,23 @@ The entire process is automated to make development easier. The actual steps are
 TODO after Pull Request was merged in:
 
 - Checkout master:
+
   ```shell
   git checkout master
   ```
+
 - Pull the new stuff:
+
   ```shell
   git pull
   ```
+
 - (If not already, run the `setup_developer_environment_locally` command):
+
   ```shell
   make setup_developer_environment_locally
   ```
+
 - Update the `ONDEWO_CSI_VERSION` in the `Makefile`
 - Add the new Release Notes in `RELEASE.md` in the format:
 
@@ -153,6 +158,7 @@ TODO after Pull Request was merged in:
   ```
 
 - Release:
+
   ```shell
   make ondewo_release
   ```

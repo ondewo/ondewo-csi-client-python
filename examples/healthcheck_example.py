@@ -63,8 +63,7 @@ if __name__ == "__main__":
         main()
     except grpc.RpcError as rpc_error:
         log.exception(
-            f"gRPC health-check call failed: "
-            f"code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
+            f"gRPC health-check call failed: code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
         )
         sys.exit(1)
     except Exception:
