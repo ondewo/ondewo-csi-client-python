@@ -50,6 +50,16 @@ class _ControlStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._
     """Status that control stream needs to stop immediately"""
     VAD_START_OF_SPEECH: _ControlStatus.ValueType  # 2
     """Status that voice activity detection detected start of speech"""
+    BARGE_IN: _ControlStatus.ValueType  # 3
+    """Status that the caller started speaking while the bot was speaking (barge-in): playback pauses and the un-played audio remainder is buffered"""
+    RESUME_PLAYBACK: _ControlStatus.ValueType  # 4
+    """Status sent by the server to the client to resume playback of the buffered audio remainder after a false interruption (no committed transcription final arrived within the false interruption timeout)"""
+    DISCARD_REMAINDER: _ControlStatus.ValueType  # 5
+    """Status sent by the server to the client to discard the buffered audio remainder because the interruption committed as a real turn"""
+    PLAYBACK_RESUMED: _ControlStatus.ValueType  # 6
+    """Status reported by the client to the server via <code>SetControlStatus</code> that playback of the buffered audio remainder has resumed"""
+    PLAYBACK_DONE: _ControlStatus.ValueType  # 7
+    """Status reported by the client to the server via <code>SetControlStatus</code> that playback of an utterance has completed"""
 
 class ControlStatus(_ControlStatus, metaclass=_ControlStatusEnumTypeWrapper):
     """Control status."""
@@ -60,6 +70,16 @@ EMERGENCY_STOP: ControlStatus.ValueType  # 1
 """Status that control stream needs to stop immediately"""
 VAD_START_OF_SPEECH: ControlStatus.ValueType  # 2
 """Status that voice activity detection detected start of speech"""
+BARGE_IN: ControlStatus.ValueType  # 3
+"""Status that the caller started speaking while the bot was speaking (barge-in): playback pauses and the un-played audio remainder is buffered"""
+RESUME_PLAYBACK: ControlStatus.ValueType  # 4
+"""Status sent by the server to the client to resume playback of the buffered audio remainder after a false interruption (no committed transcription final arrived within the false interruption timeout)"""
+DISCARD_REMAINDER: ControlStatus.ValueType  # 5
+"""Status sent by the server to the client to discard the buffered audio remainder because the interruption committed as a real turn"""
+PLAYBACK_RESUMED: ControlStatus.ValueType  # 6
+"""Status reported by the client to the server via <code>SetControlStatus</code> that playback of the buffered audio remainder has resumed"""
+PLAYBACK_DONE: ControlStatus.ValueType  # 7
+"""Status reported by the client to the server via <code>SetControlStatus</code> that playback of an utterance has completed"""
 global___ControlStatus = ControlStatus
 
 class _ControlMessageServiceName:
@@ -1153,6 +1173,18 @@ class S2sStreamResponse(google.protobuf.message.Message):
     DETECT_INTENT_RESPONSE_FIELD_NUMBER: builtins.int
     SYNTHESIZE_RESPONSE_FIELD_NUMBER: builtins.int
     SIP_TRIGGER_FIELD_NUMBER: builtins.int
+    UTTERANCE_ID_FIELD_NUMBER: builtins.int
+    CHUNK_INDEX_FIELD_NUMBER: builtins.int
+    LAST_CHUNK_FIELD_NUMBER: builtins.int
+    TURN_EPOCH_FIELD_NUMBER: builtins.int
+    utterance_id: builtins.str
+    """Optional. Identifier of the utterance this response belongs to. All chunks of one synthesized utterance share the same <code>utterance_id</code>"""
+    chunk_index: builtins.int
+    """Optional. Zero-based index of this chunk within the utterance identified by <code>utterance_id</code>"""
+    last_chunk: builtins.bool
+    """Optional. If <code>true</code>, this is the last chunk of the utterance identified by <code>utterance_id</code>"""
+    turn_epoch: builtins.int
+    """Optional. Monotonic turn epoch of the conversation turn that produced this response. Used by consumers to fence stale audio of an interrupted turn"""
     @property
     def detect_intent_response(self) -> ondewo.nlu.session_pb2.DetectIntentResponse:
         """full NLU detect intent response"""
@@ -1171,9 +1203,13 @@ class S2sStreamResponse(google.protobuf.message.Message):
         detect_intent_response: ondewo.nlu.session_pb2.DetectIntentResponse | None = ...,
         synthesize_response: ondewo.t2s.text_to_speech_pb2.SynthesizeResponse | None = ...,
         sip_trigger: global___SipTrigger | None = ...,
+        utterance_id: builtins.str = ...,
+        chunk_index: builtins.int = ...,
+        last_chunk: builtins.bool = ...,
+        turn_epoch: builtins.int = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["detect_intent_response", b"detect_intent_response", "response", b"response", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["detect_intent_response", b"detect_intent_response", "response", b"response", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["chunk_index", b"chunk_index", "detect_intent_response", b"detect_intent_response", "last_chunk", b"last_chunk", "response", b"response", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response", "turn_epoch", b"turn_epoch", "utterance_id", b"utterance_id"]) -> None: ...
     def WhichOneof(self, oneof_group: typing.Literal["response", b"response"]) -> typing.Literal["detect_intent_response", "synthesize_response", "sip_trigger"] | None: ...
 
 global___S2sStreamResponse = S2sStreamResponse
@@ -1298,14 +1334,18 @@ class ControlStreamResponse(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     CONTROL_STATUS_FIELD_NUMBER: builtins.int
+    EPOCH_FIELD_NUMBER: builtins.int
     control_status: global___ControlStatus.ValueType
     """Control status"""
+    epoch: builtins.int
+    """Monotonic barge-in epoch/sequence number so control status transitions are correlatable with the <code>S2sStreamResponse</code> <code>turn_epoch</code> and a second barge-in during a resumed remainder can never be coalesced away"""
     def __init__(
         self,
         *,
         control_status: global___ControlStatus.ValueType = ...,
+        epoch: builtins.int = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["control_status", b"control_status"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["control_status", b"control_status", "epoch", b"epoch"]) -> None: ...
 
 global___ControlStreamResponse = ControlStreamResponse
 
