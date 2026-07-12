@@ -27,7 +27,7 @@ if _version_not_supported:
 
 
 class ConversationsStub(object):
-    """endpoints of csi service
+    """<p>Endpoints of CSI service.</p>
     """
 
     def __init__(self, channel):
@@ -84,11 +84,11 @@ class ConversationsStub(object):
 
 
 class ConversationsServicer(object):
-    """endpoints of csi service
+    """<p>Endpoints of CSI service.</p>
     """
 
     def CreateS2sPipeline(self, request, context):
-        """Create the S2S pipeline specified in the request message. The pipeline with the specified ID must not exist.
+        """<p>Create the S2S pipeline specified in the request message. The pipeline with the specified ID must not exist.</p>
 
         <p>Examples:</p>
 
@@ -108,7 +108,7 @@ class ConversationsServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetS2sPipeline(self, request, context):
-        """Retrieve the S2S pipeline with the ID specified in the request message.
+        """<p>Retrieve the S2S pipeline with the ID specified in the request message.</p>
 
         <p>Examples:</p>
 
@@ -129,7 +129,7 @@ class ConversationsServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def UpdateS2sPipeline(self, request, context):
-        """Update the S2S pipeline specified in the request message. The pipeline must exist.
+        """<p>Update the S2S pipeline specified in the request message. The pipeline must exist.</p>
 
         <p>Examples:</p>
 
@@ -149,7 +149,7 @@ class ConversationsServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def DeleteS2sPipeline(self, request, context):
-        """Delete the S2S pipeline with the ID specified in the request message. The pipeline must exist.
+        """<p>Delete the S2S pipeline with the ID specified in the request message. The pipeline must exist.</p>
 
         <p>Examples:</p>
 
@@ -163,7 +163,7 @@ class ConversationsServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def ListS2sPipelines(self, request, context):
-        """List all S2S pipelines of the server.
+        """<p>List all S2S pipelines of the server.</p>
 
         <p>Examples:</p>
 
@@ -187,15 +187,14 @@ class ConversationsServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def S2sStream(self, request_iterator, context):
-        """Processes a natural language query in audio format in a streaming fashion
-        and returns structured, actionable data as a result.
+        """<p>Processes a natural language query in audio format in a streaming fashion and returns structured, actionable data as a result.</p>
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def CheckUpstreamHealth(self, request, context):
-        """Check the health of S2T, NLU and T2S servers
+        """<p>Check the health of S2T, NLU and T2S servers.</p>
 
         <p>Examples:</p>
 
@@ -227,14 +226,14 @@ class ConversationsServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetControlStream(self, request, context):
-        """Get the control stream to control sip, t2s, s2t etc. during a conversation
+        """<p>Get the control stream to control sip, t2s, s2t etc. during a conversation.</p>
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def SetControlStatus(self, request, context):
-        """Send a message on the control stream to control sip, t2s, s2t etc. during a conversation
+        """<p>Send a message on the control stream to control sip, t2s, s2t etc. during a conversation.</p>
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -297,7 +296,7 @@ def add_ConversationsServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class Conversations(object):
-    """endpoints of csi service
+    """<p>Endpoints of CSI service.</p>
     """
 
     @staticmethod

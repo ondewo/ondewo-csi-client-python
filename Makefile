@@ -27,7 +27,8 @@ CURRENT_RELEASE_NOTES=`cat RELEASE.md \
 	| sed -n '/Release ONDEWO CSI Python Client ${ONDEWO_CSI_VERSION}/,/\*\*/p'`
 
 GH_REPO="https://github.com/ondewo/ondewo-csi-client-python"
-ONDEWO_CSI_API_GIT_BRANCH=tags/5.2.0
+# Pinned to feature/OND235-105-interruption-turn-taking-v2 (barge-in control statuses + turn epoch)
+ONDEWO_CSI_API_GIT_BRANCH=2335c397843c6d61b1c2dcc6dfc6c670dfaff157
 ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/5.8.0
 ONDEWO_CSI_API_DIR=ondewo-csi-api
 ONDEWO_PROTO_COMPILER_DIR=ondewo-proto-compiler
