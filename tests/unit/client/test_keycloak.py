@@ -153,7 +153,7 @@ def _token_body(access_token: str, refresh_token: str, expires_in: int) -> Dict[
 
 def _build_provider(
     transport: FakeTransport,
-    token_expiration_in_s: int | None = None,
+    token_expiration_in_s: Optional[int] = None,
 ) -> KeycloakTokenProvider:
     """Construct a `KeycloakTokenProvider` wired to the fake transport and shared test fixtures.
 
@@ -1044,7 +1044,7 @@ def _build_background_provider(
     transport: FakeTransport,
     clock: Dict[str, float],
     stop_event: ScriptedEvent,
-    token_expiration_in_s: int | None = None,
+    token_expiration_in_s: Optional[int] = None,
 ) -> KeycloakTokenProvider:
     """Construct a provider wired to an injected clock + scripted event, background thread off.
 

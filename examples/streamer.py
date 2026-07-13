@@ -142,7 +142,6 @@ class PyAudioStreamerIn(StreamerInInterface):
         if save_to_disk:
             f = open(f"record_{session_id}.raw", "wb")
 
-        global PLAYING
         while True:  # not self.stop.done():
 
             if PLAYING:
