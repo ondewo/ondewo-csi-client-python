@@ -60,6 +60,8 @@ class _ControlStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._
     """Status reported by the client to the server via <code>SetControlStatus</code> that playback of the buffered audio remainder has resumed"""
     PLAYBACK_DONE: _ControlStatus.ValueType  # 7
     """Status reported by the client to the server via <code>SetControlStatus</code> that playback of an utterance has completed"""
+    CALL_ENDED: _ControlStatus.ValueType  # 8
+    """Status reported by ondewo-sip to the server via <code>SetControlStatus</code> that the phone call has ENDED and the server must reset ALL per-call state in place (persistent-listener model). It is a command, not a state: it is never pushed onto the control stream"""
 
 class ControlStatus(_ControlStatus, metaclass=_ControlStatusEnumTypeWrapper):
     """Control status."""
@@ -80,6 +82,8 @@ PLAYBACK_RESUMED: ControlStatus.ValueType  # 6
 """Status reported by the client to the server via <code>SetControlStatus</code> that playback of the buffered audio remainder has resumed"""
 PLAYBACK_DONE: ControlStatus.ValueType  # 7
 """Status reported by the client to the server via <code>SetControlStatus</code> that playback of an utterance has completed"""
+CALL_ENDED: ControlStatus.ValueType  # 8
+"""Status reported by ondewo-sip to the server via <code>SetControlStatus</code> that the phone call has ENDED and the server must reset ALL per-call state in place (persistent-listener model). It is a command, not a state: it is never pushed onto the control stream"""
 global___ControlStatus = ControlStatus
 
 class _ControlMessageServiceName:
