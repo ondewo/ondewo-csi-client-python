@@ -149,6 +149,25 @@ Raises:
 - Prefer region comments for grouping methods in files that already use them.
 - End edited Markdown and YAML files with a trailing newline.
 
+## What this package actually ships (and what it does not)
+
+This client installs **`ondewo/csi` only**. It contains **no** `ondewo/nlu`, `ondewo/s2t` or
+`ondewo/t2s` `*_pb2` modules — `requirements.txt` declares `ondewo-nlu-client==7.0.1`,
+`ondewo-s2t-client` and `ondewo-t2s-client`, and the csi protos reference those packages'
+descriptors at import time. Verified against the installed `.dist-info/RECORD`: this dist claims
+zero files under `ondewo/nlu/`.
+
+That matters when someone reasons about descriptor-pool collisions. The sibling client
+`ondewo-vtsi-client-python` **does** vendor foreign protos (55 files under `ondewo/nlu`, plus
+`ondewo/{s2t,t2s,sip,qa}`), so *it* has to be regenerated in lockstep with the service clients. This
+one does not — bump it only when the `ondewo/csi` surface itself changes. Do not "helpfully" add
+vendored nlu protos here; it would create exactly the duplicate-file-in-pool crash the current
+layout avoids.
+
+Consumers pin this repo by git rev, not by PyPI version: `ondewo-vtsi` and `ondewo-csi` both pin
+rev **`23b568fa`** (the `CALL_ENDED` control-status regen) in their `pyproject.toml`. Never rebase or
+force-push a commit that a pin references.
+
 ## Jenkins — never trigger a multibranch scan or branch indexing
 
 **NEVER trigger a Jenkins multibranch scan or branch indexing.** Do not call a multibranch/folder job's
