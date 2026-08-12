@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """Hermetic unit tests for the D18 Keycloak fields on the CSI ``ClientConfig``."""
+
 from typing import (
     Any,
     Dict,

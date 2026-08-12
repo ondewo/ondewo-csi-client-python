@@ -160,8 +160,7 @@ if __name__ == "__main__":
         main(args.pipeline_id, args.session_id, args.save_to_disk, args.streamer_name)
     except grpc.RpcError as rpc_error:
         logger_console.exception(
-            f"gRPC call failed during S2S/SIP streaming: "
-            f"code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
+            f"gRPC call failed during S2S/SIP streaming: code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
         )
         sys.exit(1)
     except Exception:
