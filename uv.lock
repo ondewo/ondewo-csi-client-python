@@ -3975,6 +3975,8 @@ dev = [
     { name = "setuptools", version = "83.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "soundfile", version = "0.13.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "soundfile", version = "0.14.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "types-requests", version = "2.32.4.20260107", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "types-requests", version = "2.33.0.20260712", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "typing-extensions" },
 ]
 
@@ -3993,7 +3995,7 @@ requires-dist = [
     { name = "mypy-protobuf", marker = "extra == 'dev'" },
     { name = "numpy" },
     { name = "ondewo-client-utils", specifier = ">=3.2.0" },
-    { name = "ondewo-nlu-client" },
+    { name = "ondewo-nlu-client", specifier = "==7.0.2" },
     { name = "ondewo-s2t-client" },
     { name = "ondewo-t2s-client" },
     { name = "pre-commit", marker = "extra == 'dev'" },
@@ -4008,39 +4010,30 @@ requires-dist = [
     { name = "setuptools" },
     { name = "setuptools", marker = "extra == 'dev'" },
     { name = "soundfile", marker = "extra == 'dev'", specifier = ">=0.10.3.post1" },
+    { name = "types-requests", marker = "extra == 'dev'" },
     { name = "typing-extensions", marker = "extra == 'dev'" },
 ]
 provides-extras = ["dev"]
 
 [[package]]
 name = "ondewo-nlu-client"
-version = "6.14.0"
+version = "7.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "dataclasses-json" },
     { name = "google-api-core", version = "2.30.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "google-api-core", version = "2.31.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "grpcio", version = "1.80.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "grpcio", version = "1.81.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "grpcio-reflection", version = "1.80.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "grpcio-reflection", version = "1.81.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "grpcio-tools", version = "1.80.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "grpcio-tools", version = "1.81.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "loguru" },
     { name = "ondewo-client-utils" },
     { name = "polling" },
     { name = "protobuf" },
-    { name = "python-dateutil" },
-    { name = "regex", version = "2026.1.15", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "regex", version = "2026.6.28", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "requests", version = "2.32.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
     { name = "requests", version = "2.34.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
-    { name = "setuptools", version = "82.0.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "setuptools", version = "83.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/27/b5/3351e021c0421689d95a3e872b1b6c637e98d29a469bf5b578e7a168ef7d/ondewo_nlu_client-6.14.0.tar.gz", hash = "sha256:62ff5b02e829bd946822c7cdd6cf323f26438ed2d97a7aaa5554805588226fb3", size = 382977, upload-time = "2026-07-07T16:19:26.928Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0a/e2/7472b521a5a13ef2e1f5e83e3d471e6264ed5620f5bac8419b0d18c8f024/ondewo_nlu_client-7.0.2.tar.gz", hash = "sha256:0056d0e0ee9d91d101dfade051297a1662dc1247e4fe1f8a240d47ae51258578", size = 411455, upload-time = "2026-08-08T14:03:39Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/42/80/3c9d2bafde077152a7cc0efab22bd23a6da44cf397942c3ff873742bc2f1/ondewo_nlu_client-6.14.0-py2.py3-none-any.whl", hash = "sha256:8b2172a7059f81d3a4c5d310f8bfe53d1347c7828f17a21bbbf31b47fa75cc19", size = 441118, upload-time = "2026-07-07T16:19:25.079Z" },
+    { url = "https://files.pythonhosted.org/packages/0f/dc/e632cedddf6e4011c819ea044ffbd53094920f0cc0f9793a60b84d431fa8/ondewo_nlu_client-7.0.2-py3-none-any.whl", hash = "sha256:0d0e58e78d5e496ec1d15266e1b3af38d9b0a9d08618faee1cd1635d5fbdd60b", size = 461789, upload-time = "2026-08-08T14:03:35.379Z" },
 ]
 
 [[package]]
@@ -6281,6 +6274,42 @@ resolution-markers = [
 sdist = { url = "https://files.pythonhosted.org/packages/29/59/e2b13b499d15e6720150c4b1a8d91e31fcacf716b432397475b3151ff7e4/types_protobuf-7.34.1.20260518.tar.gz", hash = "sha256:28cfaded25889cb83ebfb63cfb0a43628f0b6f3785767bec17287dc6468795f2", size = 68936, upload-time = "2026-05-18T06:01:47.332Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2a/1f/ec5caf72c2e3b688ca3927e0979a04ddad19e1afc4bf1c199bd743e0f419/types_protobuf-7.34.1.20260518-py3-none-any.whl", hash = "sha256:a0a5337413347166439c0e07cbc26c6164d091401c6f01b1dfd8cdb966c4dd8f", size = 85992, upload-time = "2026-05-18T06:01:45.696Z" },
+]
+
+[[package]]
+name = "types-requests"
+version = "2.32.4.20260107"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version > '3.9' and python_full_version < '3.10'",
+    "python_full_version <= '3.9'",
+]
+dependencies = [
+    { name = "urllib3", version = "2.6.3", source = { registry = "https://pypi.org/simple" } },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/0f/f3/a0663907082280664d745929205a89d41dffb29e89a50f753af7d57d0a96/types_requests-2.32.4.20260107.tar.gz", hash = "sha256:018a11ac158f801bfa84857ddec1650750e393df8a004a8a9ae2a9bec6fcb24f", size = 23165, upload-time = "2026-01-07T03:20:54.091Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1c/12/709ea261f2bf91ef0a26a9eed20f2623227a8ed85610c1e54c5805692ecb/types_requests-2.32.4.20260107-py3-none-any.whl", hash = "sha256:b703fe72f8ce5b31ef031264fe9395cac8f46a04661a79f7ed31a80fb308730d", size = 20676, upload-time = "2026-01-07T03:20:52.929Z" },
+]
+
+[[package]]
+name = "types-requests"
+version = "2.33.0.20260712"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.15'",
+    "python_full_version == '3.14.*'",
+    "python_full_version == '3.13.*'",
+    "python_full_version == '3.12.*'",
+    "python_full_version == '3.11.*'",
+    "python_full_version == '3.10.*'",
+]
+dependencies = [
+    { name = "urllib3", version = "2.7.0", source = { registry = "https://pypi.org/simple" } },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/db/51/703318f7b7be8bee126ec13bf615050f932d0179b8784420f3a0199cc769/types_requests-2.33.0.20260712.tar.gz", hash = "sha256:2141b67ab534a5c5cd2dac5034f2a35f42e699c5bf185eee608c5246a069d7fb", size = 25084, upload-time = "2026-07-12T05:14:20.455Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/62/e7/010c87f559e216d83f9dc51e939633fd0d0ead3377340181ab0e223cd3b5/types_requests-2.33.0.20260712-py3-none-any.whl", hash = "sha256:de027e28c171d3da529689cbfa023b0b4eab188c8dfa22fd834eebd2cee6e7bb", size = 21392, upload-time = "2026-07-12T05:14:19.616Z" },
 ]
 
 [[package]]

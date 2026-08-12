@@ -33,7 +33,7 @@ dependencies = [
     "loguru",
     "numpy",
     "ondewo-client-utils>=3.2.0",
-    "ondewo-nlu-client",
+    "ondewo-nlu-client==7.0.2",
     "ondewo-s2t-client",
     "ondewo-t2s-client",
     "requests",
@@ -54,6 +54,7 @@ dev = [
     "python-dotenv",
     "setuptools",
     "typing_extensions",
+    "types-requests",
     "pytest-cov",
     "pytest-asyncio",
 ]
