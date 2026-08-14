@@ -18,6 +18,7 @@ client, so they catch the regression where the provider was wired but never invo
 RPC path. No channel is opened and no Keycloak/network call is made: the stub is replaced
 with a mock and the token provider is swapped for a fake that yields a known bearer tuple.
 """
+
 from typing import (
     List,
     Tuple,
@@ -41,15 +42,15 @@ from ondewo.csi.conversation_pb2 import (
 
 # Bound exactly once so a refactor that changes only an input or only an expectation cannot
 # silently make a test tautological.
-HOST: str = 'localhost'
-PORT: str = '50055'
-KEYCLOAK_URL: str = 'https://kc.example.com/auth'
-REALM: str = 'ondewo-ccai-platform'
-CLIENT_ID: str = 'ondewo-nlu-cai-sdk-public'
-USERNAME: str = 'tech-user@example.com'
-PASSWORD: str = 's3cr3t'
-TOKEN: str = 'header.payload.signature'
-BEARER_METADATA: List[Tuple[str, str]] = [('authorization', f'Bearer {TOKEN}')]
+HOST: str = "localhost"
+PORT: str = "50055"
+KEYCLOAK_URL: str = "https://kc.example.com/auth"
+REALM: str = "ondewo-ccai-platform"
+CLIENT_ID: str = "ondewo-nlu-cai-sdk-public"
+USERNAME: str = "tech-user@example.com"
+PASSWORD: str = "s3cr3t"
+TOKEN: str = "header.payload.signature"
+BEARER_METADATA: List[Tuple[str, str]] = [("authorization", f"Bearer {TOKEN}")]
 
 
 class _FakeProvider:
@@ -100,13 +101,13 @@ def test_sync_conversations_attaches_bearer_metadata(monkeypatch: pytest.MonkeyP
         monkeypatch (pytest.MonkeyPatch):
             Fixture used to swap the token-provider factory and the service stub.
     """
-    monkeypatch.setattr(sync_interface_module, 'get_keycloak_token_provider', lambda config: _FakeProvider())
+    monkeypatch.setattr(sync_interface_module, "get_keycloak_token_provider", lambda config: _FakeProvider())
 
     conversations: SyncConversations = SyncConversations(config=_keycloak_config(), use_secure_channel=False)
 
     stub: MagicMock = MagicMock()
     stub.ListS2sPipelines.return_value = ListS2sPipelinesResponse()
-    monkeypatch.setattr(type(conversations), 'stub', property(lambda self: stub))
+    monkeypatch.setattr(type(conversations), "stub", property(lambda self: stub))
 
     request: ListS2sPipelinesRequest = ListS2sPipelinesRequest()
     conversations.list_s2s_pipelines(request)
@@ -126,7 +127,7 @@ def test_sync_conversations_anonymous_sends_empty_metadata(monkeypatch: pytest.M
 
     stub: MagicMock = MagicMock()
     stub.ListS2sPipelines.return_value = ListS2sPipelinesResponse()
-    monkeypatch.setattr(type(conversations), 'stub', property(lambda self: stub))
+    monkeypatch.setattr(type(conversations), "stub", property(lambda self: stub))
 
     request: ListS2sPipelinesRequest = ListS2sPipelinesRequest()
     conversations.list_s2s_pipelines(request)
@@ -142,13 +143,13 @@ async def test_async_conversations_attaches_bearer_metadata(monkeypatch: pytest.
         monkeypatch (pytest.MonkeyPatch):
             Fixture used to swap the token-provider factory and the service stub.
     """
-    monkeypatch.setattr(async_interface_module, 'get_keycloak_token_provider', lambda config: _FakeProvider())
+    monkeypatch.setattr(async_interface_module, "get_keycloak_token_provider", lambda config: _FakeProvider())
 
     conversations: AsyncConversations = AsyncConversations(config=_keycloak_config(), use_secure_channel=False)
 
     stub: MagicMock = MagicMock()
     stub.ListS2sPipelines = AsyncMock(return_value=ListS2sPipelinesResponse())
-    monkeypatch.setattr(type(conversations), 'stub', property(lambda self: stub))
+    monkeypatch.setattr(type(conversations), "stub", property(lambda self: stub))
 
     request: ListS2sPipelinesRequest = ListS2sPipelinesRequest()
     await conversations.list_s2s_pipelines(request)
@@ -169,7 +170,7 @@ async def test_async_conversations_anonymous_sends_empty_metadata(monkeypatch: p
 
     stub: MagicMock = MagicMock()
     stub.ListS2sPipelines = AsyncMock(return_value=ListS2sPipelinesResponse())
-    monkeypatch.setattr(type(conversations), 'stub', property(lambda self: stub))
+    monkeypatch.setattr(type(conversations), "stub", property(lambda self: stub))
 
     request: ListS2sPipelinesRequest = ListS2sPipelinesRequest()
     await conversations.list_s2s_pipelines(request)

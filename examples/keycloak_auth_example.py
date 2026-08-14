@@ -24,6 +24,7 @@ metadata on every RPC. The legacy ``cai-token`` / HTTP-Basic ``http_token`` and
 The Keycloak endpoint / credentials are read from environment variables so no secrets are
 hard-coded; sensible non-secret defaults are provided for the non-credential fields.
 """
+
 import os
 import sys
 from pathlib import Path
@@ -108,8 +109,7 @@ if __name__ == "__main__":
         main()
     except grpc.RpcError as rpc_error:
         log.exception(
-            f"gRPC call failed while listing S2S pipelines: "
-            f"code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
+            f"gRPC call failed while listing S2S pipelines: code={rpc_error.code()} details={rpc_error.details()}"  # type: ignore[attr-defined]
         )
         sys.exit(1)
     except Exception:
