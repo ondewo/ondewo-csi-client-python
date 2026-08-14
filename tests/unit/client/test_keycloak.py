@@ -539,6 +539,127 @@ class TestSharedProviderRegistry:
 
         assert captured['username'] == USERNAME
 
+    def test_configs_with_equal_credentials_share_one_provider(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Two SIMULTANEOUSLY-ALIVE, credential-identical configs must resolve to one provider.
+
+        Both configs are kept referenced on purpose: that is what makes this deterministic. Under the
+        old `id(config)` keying two live configs always have different addresses, so this produced two
+        providers and two ROPC logins. Identity-based keying is also what made a cross-identity leak
+        possible -- an address is reused as soon as its config is collected, and the service interfaces
+        keep only the grpc channel, so the config of `Client(config=ClientConfig(...))` dies the moment
+        the client is built.
+
+        Args:
+            monkeypatch (pytest.MonkeyPatch):
+                Fixture used to patch `requests.post` so the default transport hits no network.
+        """
+        post_calls: List[Dict[str, str]] = []
+
+        def fake_post(url: str, data: Dict[str, str], timeout: float, verify: bool = True) -> FakeResponse:
+            """Record the POST and return a canned successful login response.
+
+            Args:
+                url (str):
+                    The token-endpoint URL.
+                data (Dict[str, str]):
+                    The form-encoded request parameters.
+                timeout (float):
+                    The request timeout (unused).
+                verify (bool):
+                    Whether TLS verification is on (unused).
+
+            Returns:
+                FakeResponse:
+                    A 200 response carrying access/refresh tokens.
+            """
+            post_calls.append({'url': url, **data})
+            return FakeResponse(200, _token_body('acc-1', 'off-1', 300))
+
+        monkeypatch.setattr(keycloak_module.requests, 'post', fake_post)
+
+        def build_config() -> ClientConfig:
+            """Build a config carrying the shared test credentials."""
+            return ClientConfig(
+                host='localhost',
+                port='50055',
+                user_name=USERNAME,
+                password=PASSWORD,
+                keycloak_url=KEYCLOAK_URL,
+                realm=REALM,
+                client_id=CLIENT_ID,
+            )
+
+        first_config: ClientConfig = build_config()
+        second_config: ClientConfig = build_config()
+        assert first_config is not second_config
+
+        first: KeycloakTokenProvider = get_keycloak_token_provider(first_config)
+        second: KeycloakTokenProvider = get_keycloak_token_provider(second_config)
+
+        assert first is second
+        # One ROPC login for both configs, which is the whole point of the shared registry.
+        assert len(post_calls) == 1
+
+    def test_configs_with_different_credentials_never_share_a_provider(
+        self,
+        monkeypatch: pytest.MonkeyPatch,
+    ) -> None:
+        """Differing credentials must never resolve to the same provider.
+
+        This is the security half of the keying contract: a client must authenticate as the identity
+        its own config names, never as one an earlier client happened to register.
+
+        Args:
+            monkeypatch (pytest.MonkeyPatch):
+                Fixture used to patch `requests.post` so the default transport hits no network.
+        """
+        logged_in_as: List[str] = []
+
+        def fake_post(url: str, data: Dict[str, str], timeout: float, verify: bool = True) -> FakeResponse:
+            """Record the username each login used and return a canned response.
+
+            Args:
+                url (str):
+                    The token-endpoint URL (unused).
+                data (Dict[str, str]):
+                    The form-encoded request parameters.
+                timeout (float):
+                    The request timeout (unused).
+                verify (bool):
+                    Whether TLS verification is on (unused).
+
+            Returns:
+                FakeResponse:
+                    A 200 response carrying access/refresh tokens.
+            """
+            logged_in_as.append(data['username'])
+            return FakeResponse(200, _token_body('acc-1', 'off-1', 300))
+
+        monkeypatch.setattr(keycloak_module.requests, 'post', fake_post)
+
+        other_username: str = 'someone-else@example.com'
+
+        def build_config(user_name: str) -> ClientConfig:
+            """Build a config for the given identity."""
+            return ClientConfig(
+                host='localhost',
+                port='50055',
+                user_name=user_name,
+                password=PASSWORD,
+                keycloak_url=KEYCLOAK_URL,
+                realm=REALM,
+                client_id=CLIENT_ID,
+            )
+
+        first: KeycloakTokenProvider = get_keycloak_token_provider(build_config(USERNAME))
+        second: KeycloakTokenProvider = get_keycloak_token_provider(build_config(other_username))
+
+        assert first is not second
+        assert first.username == USERNAME
+        assert second.username == other_username
+        # Each identity logged in with its OWN credentials; neither rode on the other's token.
+        assert logged_in_as == [USERNAME, other_username]
+
 
 class TestDefaultRequestsTransport:
     """The default `_RequestsTransport` used when no transport is injected (production path)."""
