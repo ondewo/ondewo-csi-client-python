@@ -32,6 +32,7 @@ keycloak migration plan (D18) for the *public* SDK client `ondewo-nlu-cai-sdk-pu
 No 2FA is involved: the account is a 2FA-exempt technical user and ROPC bypasses the
 browser flow (D14). The client is public, so no ``client_secret`` is sent.
 """
+
 import hashlib
 import threading
 import time
@@ -535,7 +536,7 @@ class KeycloakTokenProvider:
 # `ClientConfig`, and a registry keyed by that stale int handed the new client the PREVIOUS user's
 # still-alive provider. The second client then silently authenticated as the first user — including
 # with credentials that do not exist at all.
-_PROVIDER_REGISTRY: 'WeakValueDictionary[str, KeycloakTokenProvider]' = WeakValueDictionary()
+_PROVIDER_REGISTRY: "WeakValueDictionary[str, KeycloakTokenProvider]" = WeakValueDictionary()
 _PROVIDER_REGISTRY_LOCK: threading.Lock = threading.Lock()
 
 
@@ -563,11 +564,11 @@ def _provider_registry_key(config: ClientConfig) -> str:
         config.client_id,
         config.resolved_username,
         config.password,
-        '' if config.token_expiration_in_s is None else str(config.token_expiration_in_s),
+        "" if config.token_expiration_in_s is None else str(config.token_expiration_in_s),
         str(config.keycloak_verify_ssl),
     ]
     # '\0' cannot occur in any of the fields, so the join is unambiguous.
-    return hashlib.sha256('\0'.join(fields).encode('utf-8')).hexdigest()
+    return hashlib.sha256("\0".join(fields).encode("utf-8")).hexdigest()
 
 
 def get_keycloak_token_provider(config: ClientConfig) -> KeycloakTokenProvider:
