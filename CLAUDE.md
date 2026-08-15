@@ -159,14 +159,16 @@ zero files under `ondewo/nlu/`.
 
 That matters when someone reasons about descriptor-pool collisions. The sibling client
 `ondewo-vtsi-client-python` **does** vendor foreign protos (55 files under `ondewo/nlu`, plus
-`ondewo/{s2t,t2s,sip,qa}`), so *it* has to be regenerated in lockstep with the service clients. This
+`ondewo/{s2t,t2s,sip,qa}`), so _it_ has to be regenerated in lockstep with the service clients. This
 one does not — bump it only when the `ondewo/csi` surface itself changes. Do not "helpfully" add
 vendored nlu protos here; it would create exactly the duplicate-file-in-pool crash the current
 layout avoids.
 
-Consumers pin this repo by git rev, not by PyPI version: `ondewo-vtsi` and `ondewo-csi` both pin
-rev **`23b568fa`** (the `CALL_ENDED` control-status regen) in their `pyproject.toml`. Never rebase or
-force-push a commit that a pin references.
+Consumers pin this repo two different ways, and the difference decides whether a fix here reaches them:
+`ondewo-csi` pins a **git rev** (`pyproject.toml`, currently `b033abec` — the commit immediately before the
+`ClientConfig` redaction below), while `ondewo-vtsi` pins an **exact PyPI version**,
+`ondewo-csi-client==5.4.0`. A rev pin picks up a branch commit; a version pin needs a release. Never rebase
+or force-push a commit that a pin references.
 
 ## Jenkins — never trigger a multibranch scan or branch indexing
 
@@ -178,6 +180,7 @@ force-push a commit that a pin references.
 If a branch is not building — it was not discovered, or its job is marked `buildable: false` / orphaned —
 **report it and stop**. Let the user or a Jenkins admin adjust branch-discovery/config or rename the branch
 to the convention. Never force a build by scanning or reindexing.
+
 ## Release gotchas (hard-won this session)
 
 These bit us during the 6.14.0 release. Keep them in mind when releasing.
@@ -215,3 +218,61 @@ The repo is now fully on **uv** (not just pyproject.toml):
 - **`[tool.mypy] python_version` must be `3.12`** wherever numpy 2.x is on the mypy path — its PEP-695 `type X = …` stubs fail to parse on < 3.12.
 - The release `git commit` uses **`--no-verify`** so pre-commit hooks never gate an automated release.
 - **Validated by a real PyPI publish** — `ondewo-t2s-client 6.5.0` was built with `uv build` and uploaded via twine end-to-end; the uv release pipeline works.
+
+## `ClientConfig` must not print its secrets
+
+`@dataclass` generates a `__repr__` that prints **every** field, so `log.debug(f"…{config}")` — or any
+traceback carrying locals — wrote the ROPC `password` and the PEM `grpc_cert` to the log in clear text.
+Downstream consumers really do log config objects: a repository-wide sweep in ondewo-vtsi found this class
+among the leakers, alongside thirteen of its own dataclasses. All five ONDEWO Python clients had the same
+defect and all five now carry the same fix.
+
+`ondewo/csi/client/client_config.py` names the secrets once and renders around them:
+
+```python
+SECRET_FIELD_NAMES: ClassVar[FrozenSet[str]] = frozenset({"password", "grpc_cert"})
+```
+
+Four properties are load-bearing:
+
+- **An empty secret renders as `''`, never as `***REDACTED***`.** The marker reads as "this is set and
+  sensitive", which is actively misleading when the real fault is that nobody set it — usually the very
+  thing being debugged. The `__repr__` therefore redacts only a _truthy_ value.
+- **A new secret field must join `SECRET_FIELD_NAMES` in the same commit.** That frozenset is the entire
+  policy; nothing infers sensitivity from a field name.
+- **Redaction covers `repr()` / `str()` only.** Measured on the sibling class: `to_json()`, `to_dict()` and
+  `dataclasses.asdict()` still return the plaintext password, and `to_json()` renders the certificate as a
+  byte array. That is deliberate, because `@dataclass_json` has to round-trip through `from_json` — so
+  never log a serialized config, and do not "fix" it by redacting there.
+- **The guard is behavioural.** `tests/unit/client/test_client_config_redacts_secrets.py` builds a
+  `ClientConfig` with distinctive planted values and reads its `repr`. It does not grep for `__repr__`,
+  because a grep passes just as well for a `__repr__` that prints the secret anyway. It also asserts each
+  secret is really **on the object** (`config.password == PASSWORD`) before asserting it is absent from the
+  repr — reading only the repr would pass vacuously against unfixed code. The certificate is compared
+  against `GRPC_CERT.encode()`, since `BaseClientConfig.__post_init__` encodes it to `bytes`; comparing to
+  the `str` would fail while the redaction it guards worked perfectly.
+
+Run it with `uv run pytest tests/unit/client/test_client_config_redacts_secrets.py -q` — 5 tests.
+
+**The fix is unreleased, and the version string cannot tell you that.** `git tag --contains HEAD` is empty
+here; the redaction commit sits _after_ `PREPARING FOR RELEASE 5.4.0` and did not bump the version, so this
+tree still says `5.4.0` while the published `5.4.0` has the leak. ondewo-vtsi's `ondewo-csi-client==5.4.0`
+therefore keeps resolving to the artifact without the fix; ondewo-csi's git-rev pin will pick it up as soon
+as that rev is moved past it.
+
+## The two commit-msg hooks must run in this order
+
+`.pre-commit-config.yaml` lists `conventional-pre-commit` **before** `giticket`, and the order is the whole
+point. pre-commit runs hooks in file order, and `giticket` rewrites the subject to
+`[OND211-2418] <subject>`, which is not a valid Conventional Commit. With `giticket` first the validator is
+handed the prefix the other hook just added and rejects it, so **no conforming commit message exists at
+all** — one hook failing on the other hook's output. The only escapes were `--no-verify` (which also skips
+ruff, ruff-format, mypy and uv-lock) or renaming the branch away from its ticket, and this repo's history
+shows the result: subjects that are not Conventional Commits at all.
+
+This repo had the wrong order until the redaction commit fixed it. So: type the plain subject
+(`fix(client-config): …`), let the validator see exactly that, and let `giticket` decorate it afterwards.
+Never write the `[TICKET]` prefix yourself — that yields `[OND211-2418] [OND211-2418] …`.
+
+One cosmetic leftover: an orphaned `# Enforce Conventional Commits on the commit message.` comment sits at
+the end of the file, where the hook used to be. It documents nothing now.

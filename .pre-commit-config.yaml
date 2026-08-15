@@ -80,6 +80,16 @@ repos:
     hooks:
       - id: uv-lock
 
+  # ORDER IS LOAD-BEARING: conventional-pre-commit must validate the message the AUTHOR typed,
+  # BEFORE giticket layers the `[TICKET] ` prefix onto it. pre-commit runs hooks in file order,
+  # so with giticket first the validator sees `[OND211-2418] fix(x): y`, rejects the leading
+  # prefix it was just handed, and NO conforming message can be committed -- which is why this
+  # repo's recent history is full of non-conventional subjects committed with --no-verify.
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [ commit-msg ]
   - repo: https://github.com/milin/giticket
     rev: '1.92'
     hooks:
@@ -89,8 +99,3 @@ repos:
                 '--mode=regex_match' ]
 
   # Enforce Conventional Commits on the commit message.
-  - repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v4.4.0
-    hooks:
-      - id: conventional-pre-commit
-        stages: [ commit-msg ]
