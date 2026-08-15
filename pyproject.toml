@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ondewo-csi-client"
-version = "5.4.1"
+version = "5.4.2"
 description = "ONDEWO Communication System Integration (CSI) Client library for Python"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -33,7 +33,14 @@ dependencies = [
     "loguru",
     "numpy",
     "ondewo-client-utils>=3.2.0",
-    "ondewo-nlu-client==7.0.2",
+    # This pin is EXACT on purpose: this package ships `ondewo/csi` only and consumes the
+    # `ondewo/nlu` protos from the nlu-client wheel, so the two must come from the same
+    # nlu-api generation. Because it is exact, it also propagates: any consumer that wants a
+    # newer nlu-client cannot resolve until this line moves too. 5.4.1 pinned 7.0.2 and made
+    # `ondewo-nlu-client==7.0.3` unsatisfiable for every downstream project — which is what
+    # this release fixes. 7.0.3 is the same nlu-api 7.0.0 generation as 7.0.2 (measured: no
+    # `_pb2.py` / `_pb2_grpc.py` differs between them), so the vendored protos stay aligned.
+    "ondewo-nlu-client==7.0.3",
     "ondewo-s2t-client",
     "ondewo-t2s-client",
     "requests",

@@ -2,6 +2,21 @@
 
 *****************
 
+## Release ONDEWO CSI Python Client 5.4.2
+
+### Bug Fixes
+
+* **5.4.1 made `ondewo-nlu-client==7.0.3` unresolvable for every downstream project.** This package
+  ships `ondewo/csi` only and consumes the `ondewo/nlu` protos from the nlu-client wheel, so it pins
+  that wheel **exactly** — and an exact pin propagates. 5.4.1 shipped pinning `ondewo-nlu-client==7.0.2`
+  on the same day nlu-client 7.0.3 was released, so any project depending on both got
+  `requirements are unsatisfiable` from its resolver rather than a usable resolution. The pin is now
+  `ondewo-nlu-client==7.0.3`. 7.0.3 is the same nlu-api 7.0.0 generation as 7.0.2 — no `_pb2.py` or
+  `_pb2_grpc.py` differs between the two wheels — so the vendored proto alignment the exact pin exists
+  to protect is unchanged. No code in this package changed.
+
+*****************
+
 ## Release ONDEWO CSI Python Client 5.4.1
 
 ### Bug Fixes
