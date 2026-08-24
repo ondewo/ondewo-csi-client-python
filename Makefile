@@ -274,7 +274,10 @@ clone_devops_accounts: ## Clones devops-accounts repo
 
 run_release_with_devops: ## Gets Credentials from devops-repo and run release command with them
 	$(eval info:= $(shell cat ${DEVOPS_ACCOUNT_DIR}/account_github.env | grep GITHUB_GH & cat ${DEVOPS_ACCOUNT_DIR}/account_pypi.env | grep PYPI_USERNAME & cat ${DEVOPS_ACCOUNT_DIR}/account_pypi.env | grep PYPI_PASSWORD))
-	make release $(info)
+	# MUST stay @-prefixed: $(info) expands to GITHUB_GH_TOKEN=... PYPI_USERNAME=... PYPI_PASSWORD=...
+	# on the command line, and make echoes an unprefixed recipe line verbatim -- which printed all
+	# three secrets in clear text to the release console. Any token echoed by a release must be rotated.
+	@make release $(info)
 
 spc: ## Checks if the Release Branch, Tag and Pypi version already exist
 	$(eval filtered_branches:= $(shell git branch --all | grep "release/${ONDEWO_CSI_VERSION}"))
