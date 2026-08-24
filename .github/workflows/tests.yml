@@ -32,14 +32,15 @@ jobs:
         run: uv run --frozen mypy ondewo
 
       # The repo is ~95% generated protobuf/gRPC stubs; coverage is gated on the HAND-WRITTEN surface
-      # (the Keycloak/D18 auth managers + client config) — the production-critical code this SDK owns.
+      # — the production-critical code this SDK owns. `ondewo.csi.client` is exactly that surface:
+      # the generated `*_pb2*` modules live in `ondewo/csi/`, one level up, and stay excluded.
+      # Naming the package rather than four modules means a NEW hand-written module is covered by
+      # this gate the day it is added, instead of silently sitting at 0% until someone extends the
+      # list — which is how `async_client.py` went untested.
       - name: Unit tests + 100% coverage gate on hand-written code
         run: |
           uv run --frozen pytest tests/unit -q \
-            --cov=ondewo.csi.client.utils.keycloak \
-            --cov=ondewo.csi.client.client_config \
-            --cov=ondewo.csi.client.core.services_interface \
-            --cov=ondewo.csi.client.core.async_services_interface \
+            --cov=ondewo.csi.client \
             --cov-report=term-missing \
             --cov-report=xml \
             --cov-fail-under=100

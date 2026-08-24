@@ -152,10 +152,13 @@ Raises:
 ## What this package actually ships (and what it does not)
 
 This client installs **`ondewo/csi` only**. It contains **no** `ondewo/nlu`, `ondewo/s2t` or
-`ondewo/t2s` `*_pb2` modules — `pyproject.toml` declares `ondewo-nlu-client==7.0.2`,
-`ondewo-s2t-client` and `ondewo-t2s-client`, and the csi protos reference those packages'
-descriptors at import time. Verified against the installed `.dist-info/RECORD`: this dist claims
-zero files under `ondewo/nlu/`.
+`ondewo/t2s` `*_pb2` modules — `pyproject.toml` declares `ondewo-nlu-client>=7.0.4,<7.1.0`,
+`ondewo-s2t-client>=7.4.2,<7.5.0` and `ondewo-t2s-client>=6.6.3,<6.7.0`, and the csi protos
+reference those packages' descriptors at import time. Verified against the installed
+`.dist-info/RECORD`: this dist claims zero files under `ondewo/nlu/`.
+`tests/unit/client/test_proto_descriptor_pool.py` holds that line at test time: it imports the csi,
+nlu, s2t and t2s protos into one process and asserts all four register, which is the exact collision
+a vendored copy would cause.
 
 That matters when someone reasons about descriptor-pool collisions. The sibling client
 `ondewo-vtsi-client-python` **does** vendor foreign protos (55 files under `ondewo/nlu`, plus
@@ -166,9 +169,23 @@ layout avoids.
 
 Consumers pin this repo two different ways, and the difference decides whether a fix here reaches them:
 `ondewo-csi` pins a **git rev** (`pyproject.toml`, currently `b033abec` — the commit immediately before the
-`ClientConfig` redaction below), while `ondewo-vtsi` pins an **exact PyPI version**,
-`ondewo-csi-client==5.4.0`. A rev pin picks up a branch commit; a version pin needs a release. Never rebase
+`ClientConfig` redaction below), while `ondewo-vtsi` pins an **exact PyPI version**, currently
+`ondewo-csi-client==5.4.3`. A rev pin picks up a branch commit; a version pin needs a release. Never rebase
 or force-push a commit that a pin references.
+
+**Whatever this file allows is what ondewo-vtsi can resolve, and that was papered over there.** This package
+is the only edge in vtsi's whole locked graph that requires nlu-client, so the pin here propagates verbatim:
+while this repo pinned `ondewo-nlu-client==7.0.3` **exactly**, vtsi could not lock against `7.0.4` at all
+(`requirements are unsatisfiable`) and carries a `[tool.uv] override-dependencies = ["ondewo-nlu-client==7.0.4"]`
+to cross it. **5.4.4 replaces that exact pin with `>=7.0.4,<7.1.0`**, which makes the override obsolete — once
+5.4.4 is published, vtsi should bump its pin and drop it. Note what an override actually costs: it silences the
+resolver, so a genuinely incompatible nlu-client would install without complaint and fail at import or at
+descriptor registration.
+
+The range narrows that propagation rather than ending it. A sibling **patch** release now reaches consumers with
+no release here at all. A sibling **minor** — nlu `7.1.0`, s2t `7.5.0`, t2s `6.7.0` — still makes every consumer
+unresolvable until this file moves, and that is deliberate: a minor is where a new proto generation would
+plausibly land, so it should force a decision rather than resolve silently.
 
 ## Jenkins — never trigger a multibranch scan or branch indexing
 
@@ -254,11 +271,74 @@ Four properties are load-bearing:
 
 Run it with `uv run pytest tests/unit/client/test_client_config_redacts_secrets.py -q` — 5 tests.
 
-**The fix is unreleased, and the version string cannot tell you that.** `git tag --contains HEAD` is empty
-here; the redaction commit sits _after_ `PREPARING FOR RELEASE 5.4.0` and did not bump the version, so this
-tree still says `5.4.0` while the published `5.4.0` has the leak. ondewo-vtsi's `ondewo-csi-client==5.4.0`
-therefore keeps resolving to the artifact without the fix; ondewo-csi's git-rev pin will pick it up as soon
-as that rev is moved past it.
+**The fix shipped in 5.4.1** — `git tag --contains ed7f90c` lists `5.4.1`, `5.4.2`, `5.4.3`, and ondewo-vtsi
+now pins `ondewo-csi-client==5.4.3`, so that consumer has it. Only the published `5.4.0` artifact still
+carries the leak. ondewo-csi's git-rev pin (`b033abec`, the commit immediately before the redaction) does
+**not** have it and will pick it up as soon as that rev is moved past it. This paragraph was wrong for two
+releases while it read "the fix is unreleased": a version string cannot tell you what a tree contains, so
+re-run `git tag --contains <commit>` before repeating a claim like this.
+
+## Tests: the coverage gate covers the whole hand-written surface
+
+`uv run pytest tests/unit -q` — 97 tests, no network, no channel, no Keycloak call. CI (and any local
+check worth trusting) runs the gate the way `.github/workflows/tests.yml` does:
+
+```bash
+uv run --frozen pytest tests/unit -q --cov=ondewo.csi.client --cov-report=term-missing --cov-fail-under=100
+```
+
+**`--cov=ondewo.csi.client` is the whole policy, and it is deliberately a package, not a list of modules.**
+The gate used to name four modules (`utils.keycloak`, `client_config`, `core.services_interface`,
+`core.async_services_interface`) and reported a triumphant 100% while `async_client.py` sat at **0%** and
+every one of the eighteen `Conversations` RPC wrappers was never executed — real coverage was 84%. A
+hand-written module that nobody adds to the list is invisible to a gate built from a list. Naming the
+package means a new module is covered the day it lands. This costs nothing in generated-code noise: the
+`*_pb2*` stubs live in `ondewo/csi/`, one level **above** `ondewo/csi/client/`, so they are outside the
+measured package automatically.
+
+What the suite pins down, so a new test lands in the right file:
+
+- `test_client_config.py` / `test_client_config_redacts_secrets.py` — config validation and the
+  secret-redaction behaviour described above.
+- `test_keycloak.py` — the token provider, its refresh loop and the credential-keyed registry.
+- `test_conversations_metadata.py` — depth: a Keycloak bearer token really reaches an outgoing call.
+- `test_conversations_rpcs.py` — breadth: every RPC wrapper, sync and async, forwards the right request to
+  the right stub endpoint **with `metadata=`**, and returns the stub's own object (identity, not equality —
+  a wrapper returning a fresh empty message would compare equal and pass a weaker assertion). Streaming RPCs
+  additionally assert the iterator comes back **unconsumed**: `s2s_stream` is fed by a live generator, so a
+  wrapper that materialized it would block until the caller stopped speaking.
+- `test_clients.py` — `Client` / `AsyncClient` wiring, gRPC option forwarding, and that a secure channel
+  without a certificate fails loudly _without_ the `ValueError` printing the password.
+- `test_proto_descriptor_pool.py` — the csi/nlu/s2t/t2s coexistence guarantee.
+
+Async tests are marked `@pytest.mark.asyncio` explicitly (pytest-asyncio runs in its default strict mode;
+there is no `asyncio_mode` setting in `pyproject.toml`). Construct clients with `use_secure_channel=False`:
+`grpc.insecure_channel` connects lazily, so no test touches the network.
+
+## Bumping the ondewo client dependencies — measure, don't assume
+
+The three sibling clients are each pinned to a **single minor** (`ondewo-nlu-client>=7.0.4,<7.1.0`,
+`ondewo-s2t-client>=7.4.2,<7.5.0`, `ondewo-t2s-client>=6.6.3,<6.7.0`), so widening a bound is a decision, not
+a chore. Before moving one, prove the new wheel is the same api generation instead of trusting the version
+number:
+
+```bash
+# unzip both wheels, then:
+diff -rq x-<old>/ondewo x-<new>/ondewo    # must be empty
+```
+
+A patch bump that is byte-identical under `ondewo/` (7.0.2 → 7.0.3 → 7.0.4 all were — the only difference
+in the whole distribution was the `Version:` line and the `.dist-info` directory name) is safe: the proto
+alignment the pin exists to protect is unchanged. If the trees differ at all, that justification is void.
+This is also why the upper bound stops at the minor: every patch bump measured so far has been provably inert
+under `ondewo/`, and no minor bump has been.
+
+Check the sibling wheels too — `ondewo-s2t-client` and `ondewo-t2s-client` must ship only `ondewo/s2t` and
+`ondewo/t2s`. The day one of them starts vendoring `ondewo/nlu`, this package gets the duplicate-file
+descriptor-pool crash, and the version bump will look like the innocent party.
+
+Then: `uv lock --upgrade-package ondewo-nlu-client --upgrade-package ...` (never a bare `uv lock --upgrade`,
+which churns the entire graph), `uv sync --extra dev --frozen`, and run the gate above.
 
 ## The two commit-msg hooks must run in this order
 
