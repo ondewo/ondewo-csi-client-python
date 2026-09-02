@@ -18,6 +18,7 @@ made. The tests assert that ``keycloak_auth_example`` constructs the client with
 current Keycloak bearer-auth config, builds the right request, and handles the response,
 and that every example file still compiles.
 """
+
 import glob
 import importlib.util
 import py_compile

@@ -5,22 +5,39 @@
 # - pre-commit hooks are run on staged files just before a commit or a push                 #
 # - to run a given hook on any file at any time, run the following on the command line:     #
 #    pre-commit run <HOOK_ID> --files <FILE1> <FILE2> ..., e.g.,                            #
-#    pre-commit run autopep8 --files mal_formatted_file.py                                  #
+#    pre-commit run ruff --files mal_formatted_file.py                                       #
 #############################################################################################
-exclude: '^$'
-# "exclude: '^$'" specifies the global file exclude pattern; '^$' excludes
+
+# Never lint/format the generated protobuf/gRPC stubs.
+exclude: '(.*_pb2\.pyi?$|.*_pb2_grpc\.py$)'
 
 fail_fast: false
 # "fail_fast: false" means pre-commit continues to run hooks after the first failure
 
 repos:
 
+  # Markdown linting. MD013 (line-length) and MD033 (inline HTML) are disabled in
+  # .markdownlint-cli2.yaml because the docs embed <p>/<code> and long lines.
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.23.0
+    hooks:
+      - id: markdownlint-cli2
+
+  # Ruff replaces flake8 (lint) AND black + autopep8 (format). Config lives in pyproject.toml
+  # ([tool.ruff]); generated *_pb2* stubs are excluded via the global exclude above.
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.20
+    hooks:
+      - id: ruff  # Lint (replaces flake8)
+        args: [ --fix ]
+      - id: ruff-format  # Format (replaces black + autopep8)
+
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v2.1.0
+    rev: v2.2.0
     hooks:
       - id: mypy  # Run mypy type checker; note: runs with flag --missing-imports
         exclude: ondewo
-        args: [ --config-file=mypy.ini ]
+        args: [ --config-file=pyproject.toml ]
         # Use language: system to run Mypy git repo's existing virtual environment
         # instead of mypy's own virtual environment. Necessary to find types-.* packages
         # Replace language: python in your hook definition with language: system.
@@ -35,27 +52,6 @@ repos:
         # Print the number of files as sanity-check
         verbose: true
         types: [ python ]
-
-  - repo: https://github.com/psf/black
-    rev: 26.5.1
-    hooks:
-      - id: black  # Perform line breaks and indentation auto-formatting
-        args: [ --line-length=120 ]
-        exclude: |
-          (?x) (
-            ^.*_pb2.*  # Exclude files with _pb2 in their name
-          )
-        files: 'ondewo/.*/services/async_.*\.py'  # Match files with async_ prefix in any service folder under ondewo/
-
-  - repo: https://github.com/hhatto/autopep8
-    rev: v2.3.2
-    hooks:
-      - id: autopep8  # Perform pep8 auto-formatting
-        args: [ --max-line-length=120, --in-place ]
-        exclude: |
-          (?x) (
-          ^.*_pb2*
-          )
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
@@ -77,14 +73,23 @@ repos:
         args: [ --autofix, --indent=4 ]
       - id: name-tests-test # name pytest files correctly
         args: [ --pytest-test-first ]
-      - id: requirements-txt-fixer  # Sorts the requirement.txt files' content
-        files: 'requirements/requirements.*\.txt$'
 
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.3.0
+  # Keep uv.lock in sync with pyproject.toml.
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.11.28
     hooks:
-      - id: flake8
+      - id: uv-lock
 
+  # ORDER IS LOAD-BEARING: conventional-pre-commit must validate the message the AUTHOR typed,
+  # BEFORE giticket layers the `[TICKET] ` prefix onto it. pre-commit runs hooks in file order,
+  # so with giticket first the validator sees `[OND211-2418] fix(x): y`, rejects the leading
+  # prefix it was just handed, and NO conforming message can be committed -- which is why this
+  # repo's recent history is full of non-conventional subjects committed with --no-verify.
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [ commit-msg ]
   - repo: https://github.com/milin/giticket
     rev: '1.92'
     hooks:
@@ -92,3 +97,5 @@ repos:
         args: [ '--regex=(?:(?:feature|bugfix|support|hotfix)/)?(OND[0-9]{3}-[0-9]{1,5})[_-][\w-]+',
                 '--format=[{ticket}] {commit_msg}',
                 '--mode=regex_match' ]
+
+  # Enforce Conventional Commits on the commit message.

@@ -11,8 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from dataclasses import dataclass
-from typing import Optional
+from dataclasses import dataclass, fields
+from typing import Any, ClassVar, FrozenSet, List, Optional
 
 from dataclasses_json import dataclass_json
 from ondewo.utils.base_client_config import BaseClientConfig
@@ -74,6 +74,36 @@ class ClientConfig(BaseClientConfig):
     token_expiration_in_s: Optional[int] = None
     keycloak_verify_ssl: bool = True
 
+    #: Fields whose value must never be rendered. ``grpc_cert`` is PEM material and ``password`` is
+    #: the ROPC login secret; both are printed verbatim by the ``__repr__`` ``@dataclass`` generates.
+    SECRET_FIELD_NAMES: ClassVar[FrozenSet[str]] = frozenset({"password", "grpc_cert"})
+
+    def __repr__(self) -> str:
+        """
+        Render the config without its credential material.
+
+        ``@dataclass`` generates a ``__repr__`` that prints every field, so any caller doing
+        ``log.debug(f"...{config}")`` -- or a bare traceback carrying locals -- writes the ROPC
+        password and the gRPC certificate to its logs in clear text. Downstream services do exactly
+        that: a repository-wide sweep in ondewo-vtsi found this class among its leaking dataclasses.
+
+        An EMPTY secret still renders as ``''`` rather than as ``***REDACTED***``. The distinction is
+        deliberate: the marker reads as "this is set and sensitive", which is actively misleading
+        when the real problem is that nobody set it -- usually the very thing being debugged.
+
+        Returns:
+            str:
+                ``ClientConfig(host=..., password=***REDACTED***, ...)``.
+        """
+        rendered: List[str] = []
+        for field in fields(self):
+            value: Any = getattr(self, field.name, None)
+            if field.name in self.SECRET_FIELD_NAMES and value:
+                rendered.append(f"{field.name}='***REDACTED***'")
+            else:
+                rendered.append(f"{field.name}={value!r}")
+        return f"{type(self).__name__}({', '.join(rendered)})"
+
     def __post_init__(self) -> None:
         """
         Validate the Keycloak fields without requiring the removed ``http_token``.
@@ -102,9 +132,7 @@ class ClientConfig(BaseClientConfig):
             provided.add("username")
 
         if provided and provided != {"keycloak_url", "realm", "client_id", "username", "password"}:
-            missing = sorted(
-                {"keycloak_url", "realm", "client_id", "username", "password"} - provided
-            )
+            missing = sorted({"keycloak_url", "realm", "client_id", "username", "password"} - provided)
             raise ValueError(
                 f"Incomplete Keycloak configuration in {self.__class__.__name__}: "
                 f"missing field(s) {missing}. Provide all of keycloak_url, realm, client_id, "
@@ -132,10 +160,4 @@ class ClientConfig(BaseClientConfig):
                 ``True`` when ``keycloak_url``/``realm``/``client_id``/username/password are
                 all present, so the D18 offline-token flow can run.
         """
-        return bool(
-            self.keycloak_url and
-            self.realm and
-            self.client_id and
-            self.resolved_username and
-            self.password
-        )
+        return bool(self.keycloak_url and self.realm and self.client_id and self.resolved_username and self.password)
