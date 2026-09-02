@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ondewo-csi-client"
-version = "5.4.4"
+version = "5.4.5"
 description = "ONDEWO Communication System Integration (CSI) Client library for Python"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -34,7 +34,7 @@ dependencies = [
     "loguru",
     "numpy",
     "ondewo-client-utils>=3.2.0",
-    "ondewo-nlu-client>=7.0.4,<7.1.0",
+    "ondewo-nlu-client>=7.0.5,<7.1.0",
     "ondewo-s2t-client>=7.4.2,<7.5.0",
     "ondewo-t2s-client>=6.6.3,<6.7.0",
     "requests",

@@ -2,6 +2,43 @@
 
 *****************
 
+## Release ONDEWO CSI Python Client 5.4.5
+
+### Improvements
+
+* **Depends on the newest released ONDEWO client libraries.** The `ondewo-nlu-client` floor moves from
+  `>=7.0.4` to `>=7.0.5,<7.1.0`; `ondewo-s2t-client>=7.4.2,<7.5.0`, `ondewo-t2s-client>=6.6.3,<6.7.0` and
+  `ondewo-client-utils>=3.2.0` were already at the newest published releases and are unchanged. nlu-client
+  7.0.5 is 7.0.4 plus purely additive optional surface — `ClientConfig.refresh_token`, appended LAST so no
+  positional call site shifts, and a matching optional trailing parameter on
+  `KeycloakTokenProvider.__init__` — so nothing in this client's own Keycloak implementation changes with
+  it. This client has always carried its own offline-token support in
+  `ondewo/csi/client/utils/keycloak.py` and does not read the nlu-client field; the floor is raised so a
+  consumer resolving this package gets the current nlu-client rather than a superseded one.
+
+### Bug Fixes
+
+* **`make build` no longer silently DOWNGRADES the proto compiler.** `ONDEWO_PROTO_COMPILER_GIT_BRANCH`
+  still read `tags/5.12.0` while the committed submodule gitlink had already moved to `205429a5` —
+  `tags/5.13.0` — in "Update proto compiler dependency to version 5.13.0". The two disagreed, so
+  `checkout_defined_submodule_versions` would check the submodule back out to 5.12.0 and the next commit
+  would record that downgrade with nothing failing anywhere. The Makefile pin and the gitlink are now the
+  same commit again, and both are the newest release: **`tags/5.14.0`** (`b71f8ed`).
+* Guarded the `python-dotenv` import in `examples/keycloak_auth_example.py`. It was imported at module
+  scope but declared only in `requirements-dev.txt`, so the example could not run against a plain
+  `pip install ondewo-csi-client`. Every value it reads already had an `os.getenv` fallback, so an absent
+  `python-dotenv` now only means the variables must be exported by the caller.
+
+### Notes
+
+* The proto compiler bump changes **no generated Python code**, and that is measured rather than assumed:
+  `git diff --name-only tags/5.12.0 tags/5.14.0 -- python/` reports **zero files**. The whole 5.13.0 →
+  5.14.0 delta is the Angular/TypeScript/JS proto3-optional-presence work (`fix-proto3-optional-presence.ts`
+  and its fixtures), plus documentation and tests. A Python client takes the bump for pin correctness and
+  currency, not for a behaviour change.
+
+*****************
+
 ## Release ONDEWO CSI Python Client 5.4.4
 
 ### Breaking Changes

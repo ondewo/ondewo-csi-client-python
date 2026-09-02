@@ -276,8 +276,36 @@ These bit us during the 6.14.0 release. Keep them in mind when releasing.
 - **Trust the registry, not the log.** `make release_all_clients` wraps each client in `|| echo "Already released …"`, so a _failed_ release is reported as "done". After any release, verify the GitHub release **and** the published package (PyPI / npm) directly.
 - **`npm install failed after 5 attempts` in a release log is usually a red herring** — that text is the echo _inside_ the docker `RUN for i in 1..5; do npm install …` retry loop, not a real failure (`npm install` succeeds → `#10 DONE`). Look further down for the real error (a TTY error, an eslint failure, a `setup.py` error).
 - **Codegen must run TTY-free.** The `docker run` that invokes the proto-compiler must not pass `-it` — non-interactively it fails with `cannot attach stdin to a TTY-enabled container because stdin is not a terminal`. Fix the script (drop `-it`), or run the whole release under a pseudo-TTY: `script -qc 'make …' /dev/null`.
-- **Release Makefiles print secrets.** Some `docker run … -e <TOKEN>=…` recipe lines lack a leading `@`, so `make` echoes the expanded token. Rotate any token printed during a release; fix by prefixing the recipe line with `@`.
-- The release auto-pulls the **latest** `ondewo-proto-compiler` tag.
+- **Release Makefiles can print secrets, and that is the PROJECT OWNER'S call, not yours.** Some
+  `docker run … -e <TOKEN>=…` recipe lines lack a leading `@`, so `make` echoes the expanded token. In
+  THIS repo that was fixed on master by "fix(release): stop make echoing PyPI and GitHub credentials".
+  Where it still happens elsewhere, **do not rotate the credential and do not re-plumb the shared release
+  recipe yourself** — those credentials live in `ondewo-devops-accounts` and are shared by every ondewo
+  repository's release job, so rotating one breaks the next release of every other repo, and
+  `run_release_with_devops` is shared verbatim across the SDKs so a local "improvement" desynchronises
+  them. Report it once and leave it; the decision is recorded in ondewo-vtsi's CLAUDE.md §0.2. What still
+  applies without exception: never write a credential into a file, a commit, a document or a log line
+  yourself, and scrub any scratch file that captured one.
+- **The release does NOT auto-pull the latest `ondewo-proto-compiler` tag — it checks out the PINNED one,
+  and the pin can silently disagree with the committed gitlink.** `checkout_defined_submodule_versions`
+  runs `git -C ondewo-proto-compiler checkout ${ONDEWO_PROTO_COMPILER_GIT_BRANCH}`, so the Makefile
+  variable is authoritative for what gets built while the gitlink is authoritative for what git records.
+  When they disagree the build DOWNGRADES the submodule and the release commit records that downgrade,
+  with nothing failing anywhere. Measured 2026-09-02: the Makefile read `tags/5.12.0` while the gitlink
+  had already moved to `205429a5` = `tags/5.13.0` (commit "Update proto compiler dependency to version
+  5.13.0"), so every build since had been quietly reverting it. **Before any release, assert the two
+  agree:**
+
+  ```bash
+  git -C ondewo-proto-compiler rev-parse "$(grep -oE '^ONDEWO_PROTO_COMPILER_GIT_BRANCH=.*' Makefile \
+    | cut -d= -f2)^{commit}"          # what make will check out
+  git ls-files -s ondewo-proto-compiler | awk '{print $2}'   # what git records
+  ```
+
+  The same trap exists in `ondewo-sip-client-python`, where it was found first. A Python client can take a
+  compiler bump cheaply: `git diff --name-only tags/<old> tags/<new> -- python/` was **empty** for
+  5.12.0 -> 5.14.0, because 5.13.0 and 5.14.0 are Angular/TypeScript presence work. Measure that diff
+  rather than assuming a bump is inert, and rather than assuming it is risky.
 - **npm package names are inconsistent** — e.g. the JS client publishes as `@ondewo/ondewo-nlu-client-js` (double `ondewo`), not `@ondewo/nlu-client-js`. Check `src/package.json`'s `name` before querying npm.
 - **PyPI build needs setuptools.** The release image (`Dockerfile.utils`) is `python:3.12-slim`, which bundles no `setuptools`, so `python setup.py sdist bdist_wheel` dies with `ModuleNotFoundError: No module named 'setuptools'`. `Dockerfile.utils` must `pip install … setuptools wheel`.
 
