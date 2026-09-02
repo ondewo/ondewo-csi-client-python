@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ondewo-csi-client"
-version = "5.4.0"
+version = "5.4.4"
 description = "ONDEWO Communication System Integration (CSI) Client library for Python"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 authors = [
     { name = "ONDEWO GmbH", email = "office@ondewo.com" },
 ]
@@ -16,10 +16,11 @@ classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries",
 ]
 dependencies = [
@@ -33,9 +34,9 @@ dependencies = [
     "loguru",
     "numpy",
     "ondewo-client-utils>=3.2.0",
-    "ondewo-nlu-client==7.0.2",
-    "ondewo-s2t-client",
-    "ondewo-t2s-client",
+    "ondewo-nlu-client>=7.0.4,<7.1.0",
+    "ondewo-s2t-client>=7.4.2,<7.5.0",
+    "ondewo-t2s-client>=6.6.3,<6.7.0",
     "requests",
     "setuptools",
 ]
@@ -80,7 +81,7 @@ include = ["ondewo", "ondewo.*"]
 # ---------------------------------------------------------------------------
 [tool.ruff]
 line-length = 120
-target-version = "py39"
+target-version = "py310"
 # Never lint/format the generated protobuf/gRPC stubs (the old .flake8 excluded
 # ondewo/csi/conversation_pb2.py / .pyi / _pb2_grpc.py individually), and skip
 # the proto-compiler / api git submodules.
@@ -110,9 +111,8 @@ quote-style = "double"
 # Mypy  (translated faithfully from mypy.ini)
 # ---------------------------------------------------------------------------
 [tool.mypy]
-# mypy.ini had python_version=3.9, but current mypy requires >=3.10. Use 3.12 so
-# mypy parses the numpy 2.x type stubs (which use PEP 695 `type X = ...` statements,
-# valid only on 3.12+). Runtime requires-python stays ">=3.9".
+# Use 3.12 so mypy parses the numpy 2.x type stubs (which use PEP 695 `type X = ...`
+# statements, valid only on 3.12+). Runtime requires-python is ">=3.10".
 python_version = "3.12"
 ignore_errors = false
 ignore_missing_imports = false

@@ -581,16 +581,16 @@ class TestSharedProviderRegistry:
                 FakeResponse:
                     A 200 response carrying access/refresh tokens.
             """
-            post_calls.append({'url': url, **data})
-            return FakeResponse(200, _token_body('acc-1', 'off-1', 300))
+            post_calls.append({"url": url, **data})
+            return FakeResponse(200, _token_body("acc-1", "off-1", 300))
 
-        monkeypatch.setattr(keycloak_module.requests, 'post', fake_post)
+        monkeypatch.setattr(keycloak_module.requests, "post", fake_post)
 
         def build_config() -> ClientConfig:
             """Build a config carrying the shared test credentials."""
             return ClientConfig(
-                host='localhost',
-                port='50055',
+                host="localhost",
+                port="50055",
                 user_name=USERNAME,
                 password=PASSWORD,
                 keycloak_url=KEYCLOAK_URL,
@@ -641,18 +641,18 @@ class TestSharedProviderRegistry:
                 FakeResponse:
                     A 200 response carrying access/refresh tokens.
             """
-            logged_in_as.append(data['username'])
-            return FakeResponse(200, _token_body('acc-1', 'off-1', 300))
+            logged_in_as.append(data["username"])
+            return FakeResponse(200, _token_body("acc-1", "off-1", 300))
 
-        monkeypatch.setattr(keycloak_module.requests, 'post', fake_post)
+        monkeypatch.setattr(keycloak_module.requests, "post", fake_post)
 
-        other_username: str = 'someone-else@example.com'
+        other_username: str = "someone-else@example.com"
 
         def build_config(user_name: str) -> ClientConfig:
             """Build a config for the given identity."""
             return ClientConfig(
-                host='localhost',
-                port='50055',
+                host="localhost",
+                port="50055",
                 user_name=user_name,
                 password=PASSWORD,
                 keycloak_url=KEYCLOAK_URL,
