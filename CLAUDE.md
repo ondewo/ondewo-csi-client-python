@@ -149,6 +149,77 @@ Raises:
 - Prefer region comments for grouping methods in files that already use them.
 - End edited Markdown and YAML files with a trailing newline.
 
+## GitHub Actions — the `tests` workflow is a REQUIRED gate
+
+`.github/workflows/tests.yml` (job `unit-tests`) runs on **every push to every branch** and on every pull request. It
+is a required gate, not advisory: a red run means the commit is broken and must be fixed, never merged around. Ask the
+API for a specific commit's real verdict rather than guessing:
+
+```bash
+SHA=$(git rev-parse HEAD)
+curl -s "https://api.github.com/repos/ondewo/ondewo-csi-client-python/actions/runs?head_sha=$SHA"
+```
+
+Read `.workflow_runs[].status` and `.conclusion`. Downloading a run's **logs** needs admin rights and answers
+`403 Must have admin rights to Repository` for an ordinary token, so reproduce the failure locally instead.
+
+### Reproducing it locally — in a FRESH venv, never your dev venv
+
+This repo does not use `uv`; the workflow is plain `pip` on Python 3.12. Copy its commands exactly:
+
+```bash
+python3.12 -m venv /tmp/gha_venv
+/tmp/gha_venv/bin/python -m pip install --upgrade pip
+/tmp/gha_venv/bin/python -m pip install -e .
+/tmp/gha_venv/bin/python -m pip install pytest pytest-cov pytest-asyncio
+/tmp/gha_venv/bin/python -m pytest tests/unit -q \
+  --cov=ondewo.csi.client.utils.keycloak \
+  --cov=ondewo.csi.client.client_config \
+  --cov=ondewo.csi.client.core.services_interface \
+  --cov=ondewo.csi.client.core.async_services_interface \
+  --cov-report=term-missing \
+  --cov-report=xml \
+  --cov-fail-under=100
+```
+
+- **The fresh venv is the load-bearing part.** The workflow installs `pip install -e .` (that is, `requirements.txt`)
+  plus exactly `pytest pytest-cov pytest-asyncio`, and NEVER `requirements-dev.txt`. Your working venv does have the
+  dev requirements, so it carries packages CI lacks and hides this entire failure class — the same way a non-frozen
+  dependency install hides a stale lock file in the `uv`-based repos. Running the suite in your dev venv is not a
+  reproduction of CI.
+- **`python-dotenv` is the live instance of that trap.** It is listed in `requirements-dev.txt` only, never in
+  `requirements.txt`, so it is absent in CI. All eight scripts under `examples/` pre-load `examples/environment.env`,
+  and a module-scope `from dotenv import load_dotenv` therefore passes locally and dies in CI with
+  `ModuleNotFoundError: No module named 'dotenv'`. That is what turned run #49 red, through the three tests in
+  `tests/unit/examples/test_examples.py` that import `keycloak_auth_example`. The README promises an example runs
+  "like any other python file" after installing the library, so the fix belongs in the example, not in CI: guard the
+  import and fall back to the process environment, as `_load_example_environment` in
+  `examples/keycloak_auth_example.py` now does. Do **not** promote `python-dotenv` to `requirements.txt` — that makes
+  it a runtime dependency of every consumer for a convenience the shipped wheel does not even contain (`setup.py`
+  packages `ondewo.*` only, so `examples/` is never distributed). The other seven examples still carry the unguarded
+  import; no test imports them, so they do not break CI today.
+
+### The coverage gate names its modules by hand, and the dotted form FAILS OPEN
+
+`--cov-fail-under=100` reads as absolute but is scoped to the four dotted modules listed above, and the repo holds no
+coverage configuration at all — no `.coveragerc`, no `pyproject.toml`, and `setup.cfg` carries only `[bdist_wheel]` —
+so those CLI arguments are the entire configuration. Two consequences, both measured here rather than assumed:
+
+- **A dotted `--cov=` module the suite never imports vanishes from the report instead of scoring 0%**, and the run
+  stays green. Appending `--cov=ondewo.csi.client.async_client --cov=ondewo.csi.client.async_services_container`
+  (neither is imported anywhere under `tests/unit`) still prints `Required test coverage of 100% reached. Total
+  coverage: 100.00%` and exits 0. The only trace is a non-fatal `CoverageWarning: ... was never imported
+  (module-not-imported)` on stderr. Naming a module in the gate is therefore NOT the same as gating it: after adding
+  one, confirm its row really appears in the `term-missing` table.
+- **The filesystem-scanned form does not fail open.** `--cov=ondewo.csi.client` reports those same two modules at 0%,
+  and the whole hand-written surface as 306 statements at 83%, against the gated subset's 204 statements at 100%. The
+  gap is deliberate — `client.py`, `services_container.py`, both `conversations` services and the two async modules
+  sit outside the gate by the workflow's own comment — but it means "100%" describes the Keycloak/D18 auth surface,
+  not the package.
+
+`flake8` and `mypy` are **not** part of this workflow; they run only through `.pre-commit-config.yaml` and the
+`make flake8` / `make mypy` targets. A green Actions run says nothing about lint or types — run those yourself.
+
 ## Jenkins — never trigger a multibranch scan or branch indexing
 
 **NEVER trigger a Jenkins multibranch scan or branch indexing.** Do not call a multibranch/folder job's

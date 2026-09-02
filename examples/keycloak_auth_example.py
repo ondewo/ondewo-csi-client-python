@@ -30,7 +30,6 @@ from pathlib import Path
 from typing import List
 
 import grpc
-from dotenv import load_dotenv
 from loguru import logger as log
 
 from ondewo.csi.client.client import Client
@@ -40,9 +39,36 @@ from ondewo.csi.conversation_pb2 import (
     ListS2sPipelinesResponse,
 )
 
-# Load the example configuration relative to this script, so the current working
-# directory does not matter.
-load_dotenv(Path(__file__).with_name("environment.env"))
+
+def _load_example_environment() -> None:
+    """
+    Pre-load ``examples/environment.env`` into the process environment when possible.
+
+    ``python-dotenv`` is a development convenience listed in ``requirements-dev.txt`` only; it
+    is deliberately not an install requirement of ``ondewo-csi-client``, so this example has to
+    keep running against a plain ``pip install ondewo-csi-client``. Every value read below has
+    an ``os.getenv`` fallback, so an absent ``python-dotenv`` only means the variables must
+    already be exported by the caller. The file is resolved relative to this script, so the
+    current working directory does not matter.
+
+    Returns:
+        None:
+            Nothing; the process environment is updated in place when the file was loaded.
+    """
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        log.debug(
+            "python-dotenv is not installed; reading the example configuration from the process "
+            "environment only. Install it with `pip install python-dotenv` to load "
+            "examples/environment.env automatically."
+        )
+        return
+
+    load_dotenv(Path(__file__).with_name("environment.env"))
+
+
+_load_example_environment()
 
 
 def build_config() -> ClientConfig:
