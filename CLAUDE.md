@@ -149,6 +149,77 @@ Raises:
 - Prefer region comments for grouping methods in files that already use them.
 - End edited Markdown and YAML files with a trailing newline.
 
+## GitHub Actions — the `tests` workflow is a REQUIRED gate
+
+`.github/workflows/tests.yml` (job `unit-tests`) runs on **every push to every branch** and on every pull request. It
+is a required gate, not advisory: a red run means the commit is broken and must be fixed, never merged around. Ask the
+API for a specific commit's real verdict rather than guessing:
+
+```bash
+SHA=$(git rev-parse HEAD)
+curl -s "https://api.github.com/repos/ondewo/ondewo-csi-client-python/actions/runs?head_sha=$SHA"
+```
+
+Read `.workflow_runs[].status` and `.conclusion`. Downloading a run's **logs** needs admin rights and answers
+`403 Must have admin rights to Repository` for an ordinary token, so reproduce the failure locally instead.
+
+### Reproducing it locally — in a FRESH venv, never your dev venv
+
+This repo does not use `uv`; the workflow is plain `pip` on Python 3.12. Copy its commands exactly:
+
+```bash
+python3.12 -m venv /tmp/gha_venv
+/tmp/gha_venv/bin/python -m pip install --upgrade pip
+/tmp/gha_venv/bin/python -m pip install -e .
+/tmp/gha_venv/bin/python -m pip install pytest pytest-cov pytest-asyncio
+/tmp/gha_venv/bin/python -m pytest tests/unit -q \
+  --cov=ondewo.csi.client.utils.keycloak \
+  --cov=ondewo.csi.client.client_config \
+  --cov=ondewo.csi.client.core.services_interface \
+  --cov=ondewo.csi.client.core.async_services_interface \
+  --cov-report=term-missing \
+  --cov-report=xml \
+  --cov-fail-under=100
+```
+
+- **The fresh venv is the load-bearing part.** The workflow installs `pip install -e .` (that is, `requirements.txt`)
+  plus exactly `pytest pytest-cov pytest-asyncio`, and NEVER `requirements-dev.txt`. Your working venv does have the
+  dev requirements, so it carries packages CI lacks and hides this entire failure class — the same way a non-frozen
+  dependency install hides a stale lock file in the `uv`-based repos. Running the suite in your dev venv is not a
+  reproduction of CI.
+- **`python-dotenv` is the live instance of that trap.** It is listed in `requirements-dev.txt` only, never in
+  `requirements.txt`, so it is absent in CI. All eight scripts under `examples/` pre-load `examples/environment.env`,
+  and a module-scope `from dotenv import load_dotenv` therefore passes locally and dies in CI with
+  `ModuleNotFoundError: No module named 'dotenv'`. That is what turned run #49 red, through the three tests in
+  `tests/unit/examples/test_examples.py` that import `keycloak_auth_example`. The README promises an example runs
+  "like any other python file" after installing the library, so the fix belongs in the example, not in CI: guard the
+  import and fall back to the process environment, as `_load_example_environment` in
+  `examples/keycloak_auth_example.py` now does. Do **not** promote `python-dotenv` to `requirements.txt` — that makes
+  it a runtime dependency of every consumer for a convenience the shipped wheel does not even contain (`setup.py`
+  packages `ondewo.*` only, so `examples/` is never distributed). The other seven examples still carry the unguarded
+  import; no test imports them, so they do not break CI today.
+
+### The coverage gate names its modules by hand, and the dotted form FAILS OPEN
+
+`--cov-fail-under=100` reads as absolute but is scoped to the four dotted modules listed above, and the repo holds no
+coverage configuration at all — no `.coveragerc`, no `pyproject.toml`, and `setup.cfg` carries only `[bdist_wheel]` —
+so those CLI arguments are the entire configuration. Two consequences, both measured here rather than assumed:
+
+- **A dotted `--cov=` module the suite never imports vanishes from the report instead of scoring 0%**, and the run
+  stays green. Appending `--cov=ondewo.csi.client.async_client --cov=ondewo.csi.client.async_services_container`
+  (neither is imported anywhere under `tests/unit`) still prints `Required test coverage of 100% reached. Total
+  coverage: 100.00%` and exits 0. The only trace is a non-fatal `CoverageWarning: ... was never imported
+  (module-not-imported)` on stderr. Naming a module in the gate is therefore NOT the same as gating it: after adding
+  one, confirm its row really appears in the `term-missing` table.
+- **The filesystem-scanned form does not fail open.** `--cov=ondewo.csi.client` reports those same two modules at 0%,
+  and the whole hand-written surface as 306 statements at 83%, against the gated subset's 204 statements at 100%. The
+  gap is deliberate — `client.py`, `services_container.py`, both `conversations` services and the two async modules
+  sit outside the gate by the workflow's own comment — but it means "100%" describes the Keycloak/D18 auth surface,
+  not the package.
+
+`flake8` and `mypy` are **not** part of this workflow; they run only through `.pre-commit-config.yaml` and the
+`make flake8` / `make mypy` targets. A green Actions run says nothing about lint or types — run those yourself.
+
 ## What this package actually ships (and what it does not)
 
 This client installs **`ondewo/csi` only**. It contains **no** `ondewo/nlu`, `ondewo/s2t` or
@@ -205,8 +276,36 @@ These bit us during the 6.14.0 release. Keep them in mind when releasing.
 - **Trust the registry, not the log.** `make release_all_clients` wraps each client in `|| echo "Already released …"`, so a _failed_ release is reported as "done". After any release, verify the GitHub release **and** the published package (PyPI / npm) directly.
 - **`npm install failed after 5 attempts` in a release log is usually a red herring** — that text is the echo _inside_ the docker `RUN for i in 1..5; do npm install …` retry loop, not a real failure (`npm install` succeeds → `#10 DONE`). Look further down for the real error (a TTY error, an eslint failure, a `setup.py` error).
 - **Codegen must run TTY-free.** The `docker run` that invokes the proto-compiler must not pass `-it` — non-interactively it fails with `cannot attach stdin to a TTY-enabled container because stdin is not a terminal`. Fix the script (drop `-it`), or run the whole release under a pseudo-TTY: `script -qc 'make …' /dev/null`.
-- **Release Makefiles print secrets.** Some `docker run … -e <TOKEN>=…` recipe lines lack a leading `@`, so `make` echoes the expanded token. Rotate any token printed during a release; fix by prefixing the recipe line with `@`.
-- The release auto-pulls the **latest** `ondewo-proto-compiler` tag.
+- **Release Makefiles can print secrets, and that is the PROJECT OWNER'S call, not yours.** Some
+  `docker run … -e <TOKEN>=…` recipe lines lack a leading `@`, so `make` echoes the expanded token. In
+  THIS repo that was fixed on master by "fix(release): stop make echoing PyPI and GitHub credentials".
+  Where it still happens elsewhere, **do not rotate the credential and do not re-plumb the shared release
+  recipe yourself** — those credentials live in `ondewo-devops-accounts` and are shared by every ondewo
+  repository's release job, so rotating one breaks the next release of every other repo, and
+  `run_release_with_devops` is shared verbatim across the SDKs so a local "improvement" desynchronises
+  them. Report it once and leave it; the decision is recorded in ondewo-vtsi's CLAUDE.md §0.2. What still
+  applies without exception: never write a credential into a file, a commit, a document or a log line
+  yourself, and scrub any scratch file that captured one.
+- **The release does NOT auto-pull the latest `ondewo-proto-compiler` tag — it checks out the PINNED one,
+  and the pin can silently disagree with the committed gitlink.** `checkout_defined_submodule_versions`
+  runs `git -C ondewo-proto-compiler checkout ${ONDEWO_PROTO_COMPILER_GIT_BRANCH}`, so the Makefile
+  variable is authoritative for what gets built while the gitlink is authoritative for what git records.
+  When they disagree the build DOWNGRADES the submodule and the release commit records that downgrade,
+  with nothing failing anywhere. Measured 2026-09-02: the Makefile read `tags/5.12.0` while the gitlink
+  had already moved to `205429a5` = `tags/5.13.0` (commit "Update proto compiler dependency to version
+  5.13.0"), so every build since had been quietly reverting it. **Before any release, assert the two
+  agree:**
+
+  ```bash
+  git -C ondewo-proto-compiler rev-parse "$(grep -oE '^ONDEWO_PROTO_COMPILER_GIT_BRANCH=.*' Makefile \
+    | cut -d= -f2)^{commit}"          # what make will check out
+  git ls-files -s ondewo-proto-compiler | awk '{print $2}'   # what git records
+  ```
+
+  The same trap exists in `ondewo-sip-client-python`, where it was found first. A Python client can take a
+  compiler bump cheaply: `git diff --name-only tags/<old> tags/<new> -- python/` was **empty** for
+  5.12.0 -> 5.14.0, because 5.13.0 and 5.14.0 are Angular/TypeScript presence work. Measure that diff
+  rather than assuming a bump is inert, and rather than assuming it is risky.
 - **npm package names are inconsistent** — e.g. the JS client publishes as `@ondewo/ondewo-nlu-client-js` (double `ondewo`), not `@ondewo/nlu-client-js`. Check `src/package.json`'s `name` before querying npm.
 - **PyPI build needs setuptools.** The release image (`Dockerfile.utils`) is `python:3.12-slim`, which bundles no `setuptools`, so `python setup.py sdist bdist_wheel` dies with `ModuleNotFoundError: No module named 'setuptools'`. `Dockerfile.utils` must `pip install … setuptools wheel`.
 

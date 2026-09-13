@@ -2449,7 +2449,7 @@ wheels = [
 
 [[package]]
 name = "ondewo-csi-client"
-version = "5.4.4"
+version = "5.4.5"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
@@ -2505,7 +2505,7 @@ requires-dist = [
     { name = "mypy-protobuf", marker = "extra == 'dev'" },
     { name = "numpy" },
     { name = "ondewo-client-utils", specifier = ">=3.2.0" },
-    { name = "ondewo-nlu-client", specifier = ">=7.0.4,<7.1.0" },
+    { name = "ondewo-nlu-client", specifier = ">=7.0.5,<7.1.0" },
     { name = "ondewo-s2t-client", specifier = ">=7.4.2,<7.5.0" },
     { name = "ondewo-t2s-client", specifier = ">=6.6.3,<6.7.0" },
     { name = "pre-commit", marker = "extra == 'dev'" },
@@ -2527,7 +2527,7 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "ondewo-nlu-client"
-version = "7.0.4"
+version = "7.0.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "google-api-core" },
@@ -2538,9 +2538,9 @@ dependencies = [
     { name = "protobuf" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/36/2d/9dcf4991614ae90966def3bf24c8555dc09832dda93fe898a20e96d598b4/ondewo_nlu_client-7.0.4.tar.gz", hash = "sha256:ce569295f6342d924a1d4cefe6d38df790a8e5e05268425e7965a4152c0faabb", size = 413531, upload-time = "2026-08-21T05:48:11.588Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/98/3c/28743e9a8354c2956bb910bcb2cee39220bc46664a78c44d97ece4d6e911/ondewo_nlu_client-7.0.5.tar.gz", hash = "sha256:ade7d32bd45e843820e23e1ddd3428dda95ef3e16af691832e326bf2f15e5962", size = 416394, upload-time = "2026-09-02T12:35:23.843Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/61/b7/1662191036c7ce83834745b942e8165a2fc75ce6ec240772303efe56362a/ondewo_nlu_client-7.0.4-py3-none-any.whl", hash = "sha256:478d6695173bc5121d95a261347cf493e37961cc474395c08d927ccac28bc550", size = 462486, upload-time = "2026-08-21T05:48:09.301Z" },
+    { url = "https://files.pythonhosted.org/packages/f1/4c/a88ce4d1632e39c2806fb42247d1758a0fdcb37d1609b914295d57fea76b/ondewo_nlu_client-7.0.5-py3-none-any.whl", hash = "sha256:1cc6ad714896d861b55f3afa8708a621024a458bc34eb0d2c5a5ba7cc091ff1f", size = 464528, upload-time = "2026-09-02T12:35:21.981Z" },
 ]
 
 [[package]]
