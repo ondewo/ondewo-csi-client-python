@@ -2,6 +2,20 @@
 
 *****************
 
+## Release ONDEWO CSI Python Client 5.5.0
+
+### Improvements
+
+* Built against [ondewo-csi-api 5.5.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/5.5.0), which tracks ondewo-nlu-api 7.1.0 and ondewo-s2t-api 7.5.0. `ondewo/csi/conversation.proto` is unchanged, so the generated `ondewo/csi` code is identical and this release is wire-compatible with 5.4.5.
+
+### Bug fixes
+
+* **The `ondewo-nlu-client` cap is lifted from `<7.1.0` to `>=7.1.1,<7.2.0`.** That cap is what kept consumers on 7.0.5 and unable to take the keycloak fix in 7.1.1, where a single failed background token refresh no longer kills the refresh thread for the life of the process. The floor is 7.1.1 rather than 7.1.0 deliberately: 7.1.0 was released from a master that had never seen 7.0.5's offline-token hand-off and is therefore a regression against its own predecessor, with no `refresh_token` on `KeycloakTokenProvider` and no such field on `ClientConfig`.
+* **`ondewo-s2t-client` moves to `>=7.5.0,<7.6.0`, in lockstep with the protos this package is generated against.** `conversation.proto` imports `ondewo/s2t/speech-to-text.proto`, so the generated `ondewo/csi/conversation_pb2.py` carries a reference to the s2t descriptor; pairing code generated against s2t-api 7.5.0 with a 7.4.x s2t-client is the descriptor skew that fails at import rather than at call time.
+* `examples/streamer.py` built `TranscribeStreamRequest` with `s2t_pipeline_id`, `spelling_correction` and `ctc_decoding`, none of which that message has taken for some time — the per-request settings live in `TranscribeRequestConfig` now, and `CTCDecoding` was replaced by the `Decoding` enum with the same members. The example was failing the repo's own mypy gate before this release and is migrated with its behaviour preserved.
+
+*****************
+
 ## Release ONDEWO CSI Python Client 5.4.5
 
 ### Improvements

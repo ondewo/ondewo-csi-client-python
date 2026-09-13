@@ -169,10 +169,18 @@ class PyAudioStreamerIn(StreamerInInterface):
             logging.info(f"Sending {len(chunk)} bytes")
             yield TranscribeStreamRequest(
                 audio_chunk=chunk,
-                s2t_pipeline_id=pipeline_id,
-                spelling_correction=False,
-                ctc_decoding=speech_to_text_pb2.CTCDecoding.BEAM_SEARCH_WITH_LM,
                 end_of_stream=False,
+                # The per-request settings moved into TranscribeRequestConfig:
+                # s2t_pipeline_id, the decoding method (CTCDecoding was replaced by
+                # the Decoding enum, same members) and spelling_correction, which
+                # now lives under post_processing.
+                config=speech_to_text_pb2.TranscribeRequestConfig(
+                    s2t_pipeline_id=pipeline_id,
+                    decoding=speech_to_text_pb2.Decoding.BEAM_SEARCH_WITH_LM,
+                    post_processing=speech_to_text_pb2.PostProcessingOptions(
+                        spelling_correction=False,
+                    ),
+                ),
             )
             time.sleep(0.1)
 
@@ -333,10 +341,18 @@ class PySoundIoStreamerIn(StreamerInInterface):
             logging.info(f"Sending {len(data_save)} bytes")
             yield TranscribeStreamRequest(
                 audio_chunk=data_save,
-                s2t_pipeline_id=pipeline_id,
-                spelling_correction=False,
-                ctc_decoding=speech_to_text_pb2.CTCDecoding.BEAM_SEARCH_WITH_LM,
                 end_of_stream=False,
+                # The per-request settings moved into TranscribeRequestConfig:
+                # s2t_pipeline_id, the decoding method (CTCDecoding was replaced by
+                # the Decoding enum, same members) and spelling_correction, which
+                # now lives under post_processing.
+                config=speech_to_text_pb2.TranscribeRequestConfig(
+                    s2t_pipeline_id=pipeline_id,
+                    decoding=speech_to_text_pb2.Decoding.BEAM_SEARCH_WITH_LM,
+                    post_processing=speech_to_text_pb2.PostProcessingOptions(
+                        spelling_correction=False,
+                    ),
+                ),
             )
             data_save = bytes()
             time.sleep(0.1)

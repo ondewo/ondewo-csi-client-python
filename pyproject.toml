@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ondewo-csi-client"
-version = "5.4.5"
+version = "5.5.0"
 description = "ONDEWO Communication System Integration (CSI) Client library for Python"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -34,8 +34,18 @@ dependencies = [
     "loguru",
     "numpy",
     "ondewo-client-utils>=3.2.0",
-    "ondewo-nlu-client>=7.0.5,<7.1.0",
-    "ondewo-s2t-client>=7.4.2,<7.5.0",
+    # >=7.1.1 is load-bearing, not a tidy-up. 7.1.0 was released from a master that had never
+    # seen 7.0.5's offline-token hand-off, so it is a REGRESSION against its own predecessor:
+    # KeycloakTokenProvider takes no refresh_token there and ClientConfig has no such field.
+    # 7.1.1 is the first 7.1.x that carries the hand-off (the release line was merged back) and
+    # it also fixes the refresh thread dying permanently on a single failed token refresh.
+    # The old <7.1.0 cap is what kept ondewo-vtsi on 7.0.5 and unable to take that fix.
+    "ondewo-nlu-client>=7.1.1,<7.2.0",
+    # Held in LOCKSTEP with the s2t protos this package vendors. ondewo-csi-api 5.5.0 tracks
+    # ondewo-s2t-api 7.5.0, so the generated ondewo/s2t code here is 7.5.0 -- pairing that with
+    # a 7.4.x s2t-client is the vendored-proto skew that fails SILENTLY, because one physical
+    # copy of ondewo/s2t survives on disk and the last writer wins.
+    "ondewo-s2t-client>=7.5.0,<7.6.0",
     "ondewo-t2s-client>=6.6.3,<6.7.0",
     "requests",
     "setuptools",

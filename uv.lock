@@ -2449,7 +2449,7 @@ wheels = [
 
 [[package]]
 name = "ondewo-csi-client"
-version = "5.4.5"
+version = "5.5.0"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
@@ -2505,8 +2505,8 @@ requires-dist = [
     { name = "mypy-protobuf", marker = "extra == 'dev'" },
     { name = "numpy" },
     { name = "ondewo-client-utils", specifier = ">=3.2.0" },
-    { name = "ondewo-nlu-client", specifier = ">=7.0.5,<7.1.0" },
-    { name = "ondewo-s2t-client", specifier = ">=7.4.2,<7.5.0" },
+    { name = "ondewo-nlu-client", specifier = ">=7.1.1,<7.2.0" },
+    { name = "ondewo-s2t-client", specifier = ">=7.5.0,<7.6.0" },
     { name = "ondewo-t2s-client", specifier = ">=6.6.3,<6.7.0" },
     { name = "pre-commit", marker = "extra == 'dev'" },
     { name = "pyaudio", marker = "extra == 'dev'", specifier = ">=0.2.12" },
@@ -2527,7 +2527,7 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "ondewo-nlu-client"
-version = "7.0.5"
+version = "7.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "google-api-core" },
@@ -2538,28 +2538,24 @@ dependencies = [
     { name = "protobuf" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/98/3c/28743e9a8354c2956bb910bcb2cee39220bc46664a78c44d97ece4d6e911/ondewo_nlu_client-7.0.5.tar.gz", hash = "sha256:ade7d32bd45e843820e23e1ddd3428dda95ef3e16af691832e326bf2f15e5962", size = 416394, upload-time = "2026-09-02T12:35:23.843Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f8/20/b7820c471405299c32fce4f4d604c0819d4c8241063e5bd171c377b1a3ba/ondewo_nlu_client-7.1.1.tar.gz", hash = "sha256:d2c2ac428c91a5325a145612a85a5fdb89bb6c05b3a86fc9db7b895c4dccabe9", size = 419179, upload-time = "2026-09-13T08:38:15.327Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f1/4c/a88ce4d1632e39c2806fb42247d1758a0fdcb37d1609b914295d57fea76b/ondewo_nlu_client-7.0.5-py3-none-any.whl", hash = "sha256:1cc6ad714896d861b55f3afa8708a621024a458bc34eb0d2c5a5ba7cc091ff1f", size = 464528, upload-time = "2026-09-02T12:35:21.981Z" },
+    { url = "https://files.pythonhosted.org/packages/39/af/4a077b260b1e2cff8317abd5dbcf2f97ebe0607475243409945e392c7291/ondewo_nlu_client-7.1.1-py3-none-any.whl", hash = "sha256:ccea94a734010e4db91892d3005d67e6aae87faf1ed3f2ea80e132ea7bd5237a", size = 466669, upload-time = "2026-09-13T08:38:13.61Z" },
 ]
 
 [[package]]
 name = "ondewo-s2t-client"
-version = "7.4.2"
+version = "7.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "grpcio" },
-    { name = "grpcio-reflection" },
-    { name = "grpcio-tools" },
     { name = "ondewo-client-utils" },
     { name = "protobuf" },
-    { name = "regex" },
     { name = "requests" },
-    { name = "setuptools" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/cd/4a/b801c2188bbb2b6b8e8f12fce8212d36169f6e90a5d0c4f74f20ee55d0d4/ondewo_s2t_client-7.4.2.tar.gz", hash = "sha256:a3aedf8104bfa6828c2c0d0c5c4c2b7a24ac2925eec45655540cea1bf49f956a", size = 68971, upload-time = "2026-08-21T05:50:09.813Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/fa/aa/f5d3f7fd48927414318391765f41efed1b0733a82acc01873a6d167371b0/ondewo_s2t_client-7.5.0.tar.gz", hash = "sha256:b21b8885a1fddb6746518c8bc451229063a8e0793ccc069c21bd8ccf447fc13e", size = 75000, upload-time = "2026-09-07T10:12:06.757Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/12/d2/9ad71f81d7e66d9ba54a7504f487aaf3c24e0d410125c31281a7453f34d3/ondewo_s2t_client-7.4.2-py3-none-any.whl", hash = "sha256:6f420062ab86a03d18c3d123674a985dcba19b37d327d9785c38f73b2dcb34d2", size = 72059, upload-time = "2026-08-21T05:50:08.406Z" },
+    { url = "https://files.pythonhosted.org/packages/06/4c/a50a8edad05db58d89a97d2572399b14c3ac971f78b3a38b314885bbd6f0/ondewo_s2t_client-7.5.0-py3-none-any.whl", hash = "sha256:444519ce7e58687662348d74cf9a9c00ff715caa63fa919147c8468277cf71f9", size = 76689, upload-time = "2026-09-07T10:12:05.318Z" },
 ]
 
 [[package]]
