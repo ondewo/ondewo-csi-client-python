@@ -409,6 +409,10 @@ What the suite pins down, so a new test lands in the right file:
 - `test_clients.py` — `Client` / `AsyncClient` wiring, gRPC option forwarding, and that a secure channel
   without a certificate fails loudly _without_ the `ValueError` printing the password.
 - `test_proto_descriptor_pool.py` — the csi/nlu/s2t/t2s coexistence guarantee.
+- `test_mutual_tls_end_to_end.py` — TLS / mutual TLS through the real `Client` / `AsyncClient` against an
+  in-process server with a per-session PKI (`cryptography`): plain TLS, mTLS, missing / foreign client leaf
+  refused (`UNAVAILABLE`), CRLF PEMs, half pair and insecure + identity refused, nothing secret in `repr`.
+  The channel is built by ondewo-client-utils; csi must keep delegating to it, never build its own.
 
 Async tests are marked `@pytest.mark.asyncio` explicitly (pytest-asyncio runs in its default strict mode;
 there is no `asyncio_mode` setting in `pyproject.toml`). Construct clients with `use_secure_channel=False`:
