@@ -33,6 +33,8 @@ PASSWORD: str = "PLANTED-password-6b21fa"
 GRPC_CERT: str = "PLANTED-BEGIN-CERTIFICATE-91cd3e"
 HOST: str = "planted-host.invalid"
 USER: str = "planted-user@invalid"
+CLIENT_CERT: str = "PLANTED-BEGIN-CLIENT-CERTIFICATE-4f0a77"
+CLIENT_KEY: str = "PLANTED-BEGIN-PRIVATE-KEY-c83d19"
 
 
 def _config(**overrides: Any) -> ClientConfig:
@@ -86,3 +88,15 @@ class TestClientConfigReprRedactsSecrets:
         # sensitive", which is actively misleading when the real fault is that nobody set it.
         rendered: str = repr(_config(grpc_cert=""))
         assert "grpc_cert=''" in rendered
+
+    def test_the_mutual_tls_client_key_is_not_printed(self) -> None:
+        # BaseClientConfig refuses half a client identity, so the key is planted with its certificate.
+        config: ClientConfig = _config(grpc_client_cert=CLIENT_CERT, grpc_client_key=CLIENT_KEY)
+        assert config.grpc_client_key == CLIENT_KEY.encode()
+        assert CLIENT_KEY not in repr(config)
+        assert CLIENT_KEY not in str(config)
+        assert "grpc_client_key='***REDACTED***'" in repr(config)
+
+    def test_an_unset_client_key_is_not_reported_as_present(self) -> None:
+        rendered: str = repr(_config(grpc_client_cert="", grpc_client_key=""))
+        assert "grpc_client_key=''" in rendered

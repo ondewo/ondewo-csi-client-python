@@ -33,7 +33,10 @@ dependencies = [
     "grpcio-tools",
     "loguru",
     "numpy",
-    "ondewo-client-utils>=3.2.0",
+    # 4.1.1 is the first release whose BaseClientConfig carries the mutual-TLS key this SDK must redact; it requires
+    # Python >=3.12, so older interpreters keep the 3.x line (which has no client key to leak).
+    "ondewo-client-utils>=4.1.1; python_version >= '3.12'",
+    "ondewo-client-utils>=3.2.0; python_version < '3.12'",
     # >=7.1.1 is load-bearing, not a tidy-up. 7.1.0 was released from a master that had never
     # seen 7.0.5's offline-token hand-off, so it is a REGRESSION against its own predecessor:
     # KeycloakTokenProvider takes no refresh_token there and ClientConfig has no such field.
