@@ -2,6 +2,18 @@
 
 *****************
 
+## Release ONDEWO CSI Python Client 5.6.0
+
+### New Features
+
+* [[OND233-367]](https://ondewo.atlassian.net/browse/OND233-367) Built against ondewo-csi-api 5.6.0: the new `Conversations.SetCallMediaControl` RPC (`CallMediaControlLevel` / `SetCallMediaControlResponse`) and `ControlStreamResponse.media_control`. `Conversations.set_call_media_control` is added to the sync and the async services.
+
+### Improvements
+
+* Purely additive against 5.5.0: no generated message, field or RPC was renumbered or removed.
+
+*****************
+
 ## Release ONDEWO CSI Python Client 5.5.0
 
 ### Improvements

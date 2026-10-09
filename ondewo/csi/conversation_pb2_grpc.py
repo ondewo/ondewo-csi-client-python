@@ -81,6 +81,11 @@ class ConversationsStub(object):
                 request_serializer=ondewo_dot_csi_dot_conversation__pb2.SetControlStatusRequest.SerializeToString,
                 response_deserializer=ondewo_dot_csi_dot_conversation__pb2.SetControlStatusResponse.FromString,
                 _registered_method=True)
+        self.SetCallMediaControl = channel.unary_unary(
+                '/ondewo.csi.Conversations/SetCallMediaControl',
+                request_serializer=ondewo_dot_csi_dot_conversation__pb2.CallMediaControlLevel.SerializeToString,
+                response_deserializer=ondewo_dot_csi_dot_conversation__pb2.SetCallMediaControlResponse.FromString,
+                _registered_method=True)
 
 
 class ConversationsServicer(object):
@@ -239,6 +244,25 @@ class ConversationsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SetCallMediaControl(self, request, context):
+        """<p>Set the per-call operator media control level: mute the bot and/or pause its listening.</p>
+
+        <p>Pushed by ondewo-sip only, which owns the per-call level and authenticates with its in-container token
+        (the <code>x-ondewo-sip-in-container-token</code> metadatum). A request without a valid token is refused.</p>
+
+        <p>The request carries the FULL effective level, never a toggle. The server applies it only when its
+        <code>generation</code> is strictly greater than the last applied generation and otherwise answers
+        <code>stale=true</code> without changing anything, so a push that arrives after the next call's resync can
+        never re-apply an old call's level. The level is cleared at <code>CALL_ENDED</code>; the generation is kept.</p>
+
+        <p>This RPC never changes the control status of <code>GetControlStream</code> / <code>SetControlStatus</code>
+        (the barge-in slot). A level change is announced on the control stream as a
+        <code>ControlStreamResponse</code> with <code>media_control</code> set.</p>
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ConversationsServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -286,6 +310,11 @@ def add_ConversationsServicer_to_server(servicer, server):
                     servicer.SetControlStatus,
                     request_deserializer=ondewo_dot_csi_dot_conversation__pb2.SetControlStatusRequest.FromString,
                     response_serializer=ondewo_dot_csi_dot_conversation__pb2.SetControlStatusResponse.SerializeToString,
+            ),
+            'SetCallMediaControl': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetCallMediaControl,
+                    request_deserializer=ondewo_dot_csi_dot_conversation__pb2.CallMediaControlLevel.FromString,
+                    response_serializer=ondewo_dot_csi_dot_conversation__pb2.SetCallMediaControlResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -532,6 +561,33 @@ class Conversations(object):
             '/ondewo.csi.Conversations/SetControlStatus',
             ondewo_dot_csi_dot_conversation__pb2.SetControlStatusRequest.SerializeToString,
             ondewo_dot_csi_dot_conversation__pb2.SetControlStatusResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SetCallMediaControl(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/ondewo.csi.Conversations/SetCallMediaControl',
+            ondewo_dot_csi_dot_conversation__pb2.CallMediaControlLevel.SerializeToString,
+            ondewo_dot_csi_dot_conversation__pb2.SetCallMediaControlResponse.FromString,
             options,
             channel_credentials,
             insecure,

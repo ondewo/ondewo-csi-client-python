@@ -46,6 +46,7 @@ from ondewo.csi.client.core import services_interface as sync_interface_module
 from ondewo.csi.client.services.async_conversations import Conversations as AsyncConversations
 from ondewo.csi.client.services.conversations import Conversations as SyncConversations
 from ondewo.csi.conversation_pb2 import (
+    CallMediaControlLevel,
     CheckUpstreamHealthResponse,
     ControlStatus,
     ControlStreamRequest,
@@ -56,6 +57,7 @@ from ondewo.csi.conversation_pb2 import (
     S2sPipelineId,
     S2sStreamRequest,
     S2sStreamResponse,
+    SetCallMediaControlResponse,
     SetControlStatusRequest,
     SetControlStatusResponse,
 )
@@ -87,6 +89,12 @@ UNARY_RPCS: List[Tuple[str, str, Any, Any]] = [
         "SetControlStatus",
         SetControlStatusRequest(control_status=ControlStatus.PLAYBACK_DONE),
         SetControlStatusResponse(),
+    ),
+    (
+        "set_call_media_control",
+        "SetCallMediaControl",
+        CallMediaControlLevel(bot_muted=True, generation=7, reason="operator"),
+        SetCallMediaControlResponse(changed=True),
     ),
 ]
 
