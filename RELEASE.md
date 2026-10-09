@@ -11,6 +11,7 @@
 ### Improvements
 
 * Purely additive against 5.5.0: no generated message, field or RPC was renumbered or removed.
+* Built with ondewo-proto-compiler 5.15.3, whose generated-stub check no longer fails on the hyphenated s2t / t2s protos (`speech-to-text.proto` -> `speech_to_text_pb2.py`); 5.15.2 stopped the build at proto generation. The generated code is unchanged.
 
 *****************
 
