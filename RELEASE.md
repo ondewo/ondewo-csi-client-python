@@ -366,6 +366,23 @@
 
 *****************
 
+## Release ONDEWO CSI Python Client 2.3.1
+
+### New Features
+
+* Update ondewo logging to 3.1.0 and nlu client to 2.4.2
+* Added control message protos
+
+*****************
+
+## Release ONDEWO CSI Python Client 2.3.0
+
+### New Features
+
+* Upgrade to ondewo-nlu-client 2.4.0
+
+*****************
+
 ## Release ONDEWO CSI Python Client 2.2.0
 
 ### New Features
