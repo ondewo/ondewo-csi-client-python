@@ -31,7 +31,7 @@ CURRENT_RELEASE_NOTES=`cat RELEASE.md \
 	| perl -ne 'print if /Release ONDEWO CSI Python Client ${ONDEWO_CSI_VERSION}/../^\*{5}/'`
 
 GH_REPO="https://github.com/ondewo/ondewo-csi-client-python"
-ONDEWO_CSI_API_GIT_BRANCH=157a2c61b13faa3bb8889dd0231630f9da9fbda3
+ONDEWO_CSI_API_GIT_BRANCH=tags/5.6.0
 ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/5.15.3
 ONDEWO_CSI_API_DIR=ondewo-csi-api
 ONDEWO_PROTO_COMPILER_DIR=ondewo-proto-compiler
