@@ -51,9 +51,15 @@ def test_no_recipe_echoes_a_secret() -> None:
     assert re.search(rf"echo\s+\"?\$+[{{(]{SECRET}[}})]\"?(?![ \t]*\|)", MAKEFILE) is None
 
 
-def test_gh_reads_the_token_on_stdin() -> None:
-    """Verify ``gh auth login`` gets the token on stdin, expanded by the shell from the environment."""
-    assert "printf '%s\\n' \"$${GITHUB_GH_TOKEN}\" | gh auth login" in MAKEFILE
+def test_gh_reads_the_token_from_gh_token_and_never_logs_in() -> None:
+    """
+    Verify gh gets the token as ``GH_TOKEN`` per call, and nothing runs ``gh auth login``.
+
+    ``gh auth login`` writes the token to ``~/.config/gh/hosts.yml``, where it outlives the release, and fails
+    outright when ``GH_TOKEN`` is already set in the environment.
+    """
+    assert "gh auth login" not in MAKEFILE
+    assert MAKEFILE.count('GH_TOKEN="$${GITHUB_GH_TOKEN}" docker run --rm -e GH_TOKEN') >= 2
 
 
 def test_docker_never_gets_a_secret_value_on_its_argv() -> None:
@@ -62,12 +68,27 @@ def test_docker_never_gets_a_secret_value_on_its_argv() -> None:
     assert re.search(rf"--build-arg[ \t=]+{SECRET}", MAKEFILE) is None
     assert re.search(r"-e\s+PYPI_USERNAME\s", MAKEFILE) is not None
     assert re.search(r"-e\s+PYPI_PASSWORD\s", MAKEFILE) is not None
-    assert re.search(r"-e\s+GITHUB_GH_TOKEN\s", MAKEFILE) is not None
+    assert re.search(r"-e\s+GH_TOKEN\s", MAKEFILE) is not None
 
 
-def test_the_credentials_are_exported_to_the_recipes() -> None:
-    """Verify the Makefile exports its variables, so ``$${NAME}`` and ``docker run -e NAME`` see the values."""
-    assert re.search(r"^export\s*$", MAKEFILE, flags=re.MULTILINE) is not None
+def test_no_bare_export_hands_the_credentials_to_every_process() -> None:
+    """
+    Verify the Makefile does not ``export`` all its variables, and the credential-free steps drop them.
+
+    A bare ``export`` put every variable, the PyPI password and the GitHub token included, into pytest, the
+    pre-commit hooks and uv. The credentials come from the environment of ``make release`` instead, and every
+    step that needs none runs under ``WITHOUT_CREDENTIALS``.
+    """
+    assert re.search(r"^export\b", MAKEFILE, flags=re.MULTILINE) is None
+    match = re.search(r"^WITHOUT_CREDENTIALS=(.*)$", MAKEFILE, flags=re.MULTILINE)
+    assert match is not None
+    for name in ("GITHUB_GH_TOKEN", "GH_TOKEN", "PYPI_USERNAME", "PYPI_PASSWORD"):
+        assert f"-u {name}" in match.group(1), name
+
+
+def test_the_credentials_have_no_placeholder_defaults() -> None:
+    """Verify no credential gets a placeholder default, which would only move the failure past the preflight."""
+    assert re.search(rf"^{SECRET}\s*\??=", MAKEFILE, flags=re.MULTILINE) is None
 
 
 def test_no_sub_make_gets_a_secret_on_its_argv() -> None:
@@ -77,13 +98,13 @@ def test_no_sub_make_gets_a_secret_on_its_argv() -> None:
 
 
 def test_the_devops_release_hands_the_credentials_over_the_environment() -> None:
-    """Verify ``run_release_with_devops`` loads anchored ``^NAME=`` lines into the environment of the sub-make."""
-    recipe: str = MAKEFILE.split("\nrun_release_with_devops:", 1)[1].split("\n\n", 1)[0]
+    """Verify ``ondewo_release`` loads anchored ``^NAME=`` lines into the environment of ``make release``."""
+    recipe: str = MAKEFILE.split("\nondewo_release:", 1)[1].split("\n\n", 1)[0]
     assert "$(info)" not in recipe
     assert "$(shell" not in recipe
     assert "set -a" in recipe
     assert "grep -h -E '^(GITHUB_GH_TOKEN|PYPI_USERNAME|PYPI_PASSWORD)='" in recipe
-    assert re.search(r"\$\(MAKE\) release\s*$", recipe) is not None
+    assert re.search(r"\bmake release\s*$", recipe) is not None
 
 
 def test_twine_never_gets_the_credentials_on_its_argv() -> None:
@@ -100,6 +121,25 @@ def test_no_image_bakes_a_secret_from_a_build_arg() -> None:
         text: str = dockerfile.read_text(encoding="utf-8")
         assert re.search(rf"^\s*ARG\s+{SECRET}\b", text, flags=re.MULTILINE) is None, dockerfile.name
         assert re.search(rf"^\s*ENV\s+{SECRET}[ \t=]+\S*\$", text, flags=re.MULTILINE) is None, dockerfile.name
+
+
+def test_no_image_declares_a_credential_env_at_all() -> None:
+    """
+    Verify no Dockerfile sets a credential ``ENV``, not even a placeholder.
+
+    ``ENV GITHUB_GH_TOKEN=<GITHUB_GH_TOKEN>`` raised BuildKit's ``SecretsUsedInArgOrEnv`` warning and taught readers
+    that the image carries the token. The token reaches a container at ``docker run`` time, by name.
+    """
+    for dockerfile in DOCKERFILES:
+        text: str = dockerfile.read_text(encoding="utf-8")
+        assert re.search(rf"^\s*ENV\s+{SECRET}\b", text, flags=re.MULTILINE) is None, dockerfile.name
+
+
+def test_the_build_context_excludes_the_devops_accounts_clone() -> None:
+    """Verify ``.dockerignore`` keeps a leftover devops-accounts clone (credentials) out of every image."""
+    ignored: List[str] = (REPO_ROOT / ".dockerignore").read_text(encoding="utf-8").splitlines()
+    assert "ondewo-devops-accounts" in ignored
+    assert ".git" in ignored
 
 
 def test_workflow_run_lines_never_interpolate_a_secret() -> None:
