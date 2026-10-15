@@ -1,0 +1,20 @@
+# The `docker build .` context of Dockerfile.utils. The release clones ondewo-devops-accounts (credentials) into a
+# temporary directory outside the repository, but a clone left here by an older release must never reach an image.
+ondewo-devops-accounts
+.git
+.github
+.venv
+venv*
+node_modules
+build
+dist
+*.egg-info
+**/__pycache__
+.mypy_cache
+.ruff_cache
+.pytest_cache
+/.coverage
+/coverage.xml
+# Submodules: the image builds the package from the generated code under ondewo/, not from the protos.
+ondewo-csi-api
+ondewo-proto-compiler

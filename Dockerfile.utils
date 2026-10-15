@@ -1,15 +1,19 @@
-FROM python:3.12-slim
+# The release toolchain image: uv builds the wheel/sdist, twine uploads it to PyPI, gh creates and reads GitHub
+# releases. Every tool is pinned to an exact version, the base images also to a digest, so two releases of the same
+# commit run the same tools. Credentials are NEVER baked in: `make` forwards them at `docker run` time by name only
+# (`-e NAME`), and only to the containers that use them.
+FROM python:3.12.15-slim@sha256:a6e34c598f2467ed0e9a8d349809fcd8b5c603269512df273a0bb1784edc11b1
+
+ARG TWINE_VERSION=7.0.0
+ARG GH_VERSION=2.101.0
+ARG GH_SHA256=9bca2d1c16825f109907a23307628a2f0698fbf99662b73a5cf0b020293072b8
 
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Vienna
 
-ENV PYPI_USERNAME=<PYPI_USERNAME>
-ENV PYPI_PASSWORD=<PYPI_PASSWORD>
-ENV GITHUB_GH_TOKEN=<GITHUB_GH_TOKEN>
-
 RUN apt-get update -qq  \
-  && apt-get dist-upgrade -qq -y --no-install-recommends --fix-missing make tmux vim sed tree tk-dev curl sudo tzdata \
+  && apt-get dist-upgrade -qq -y --no-install-recommends --fix-missing make sed tree curl ca-certificates tzdata \
   && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime  \
   && echo $TZ > /etc/timezone \
   && dpkg-reconfigure --frontend noninteractive tzdata \
@@ -17,17 +21,18 @@ RUN apt-get update -qq  \
   && apt-get purge -y --auto-remove \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# uv builds the wheel/sdist (setuptools backend, resolved from pyproject.toml + uv.lock);
-# twine uploads to PyPI.
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+# uv builds the wheel/sdist (setuptools backend, resolved from pyproject.toml + uv.lock).
+COPY --from=ghcr.io/astral-sh/uv:0.13.0@sha256:cdc6093146eb3ff6a40107b38f008b789e050e77ad87865e381d9917da55a168 /uv /usr/local/bin/uv
 
-RUN pip install --upgrade pip && pip install twine
+RUN pip install --no-cache-dir --root-user-action=ignore "twine==${TWINE_VERSION}"
 
-RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-    && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-    && sudo apt update \
-    && sudo apt install -y gh
+# gh from the release tarball, checked against the sha256 cli/cli publishes for that version.
+RUN curl -fsSL -o /tmp/gh.tar.gz "https://github.com/cli/cli/releases/download/v${GH_VERSION}/gh_${GH_VERSION}_linux_amd64.tar.gz" \
+  && echo "${GH_SHA256}  /tmp/gh.tar.gz" | sha256sum -c - \
+  && tar -xzf /tmp/gh.tar.gz -C /tmp \
+  && install -m 0755 "/tmp/gh_${GH_VERSION}_linux_amd64/bin/gh" /usr/local/bin/gh \
+  && rm -rf /tmp/gh.tar.gz "/tmp/gh_${GH_VERSION}_linux_amd64" \
+  && gh --version
 
 WORKDIR /home/ondewo/
 
@@ -41,7 +46,7 @@ COPY LICENSE .
 
 COPY MANIFEST.in .
 
-COPY examples .
+COPY examples examples
 
 COPY pyproject.toml .
 
@@ -54,4 +59,4 @@ COPY RELEASE.md .
 COPY ondewo ondewo
 
 # run the container forever
-CMD tail -f /dev/null
+CMD ["tail", "-f", "/dev/null"]
