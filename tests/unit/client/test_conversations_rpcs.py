@@ -25,6 +25,7 @@ endpoint surface, so a newly added RPC that forgets ``metadata=self.metadata`` f
 No channel is opened and no network call is made -- the stub is replaced with a mock.
 """
 
+import inspect
 from typing import (
     Any,
     Callable,
@@ -404,7 +405,10 @@ async def test_async_streaming_rpc_returns_the_iterator_unconsumed(
     make_request: Callable[[], Any],
     make_response: Callable[[], Any],
 ) -> None:
-    """Each async streaming wrapper hands back the stub's iterator without draining it.
+    """Each async streaming wrapper hands back the stub's iterator without awaiting or draining it.
+
+    grpc.aio returns an async iterator for a streaming RPC, and ``await``-ing it raises ``TypeError``, so the
+    wrapper is a plain method that returns the call.
 
     Args:
         monkeypatch (pytest.MonkeyPatch):
@@ -412,7 +416,7 @@ async def test_async_streaming_rpc_returns_the_iterator_unconsumed(
         wrapper (str):
             Name of the method on `Conversations` under test.
         endpoint (str):
-            Name of the gRPC stub method it must await.
+            Name of the gRPC stub method it must call.
         make_request (Callable[[], Any]):
             Builds the request (or request iterator) handed to the wrapper.
         make_response (Callable[[], Any]):
@@ -421,11 +425,12 @@ async def test_async_streaming_rpc_returns_the_iterator_unconsumed(
     service, stub, _ = _async_service(monkeypatch)
     request_message: Any = make_request()
     response_message: Any = make_response()
-    setattr(stub, endpoint, AsyncMock(return_value=response_message))
+    setattr(stub, endpoint, MagicMock(return_value=response_message))
 
-    result: Any = await getattr(service, wrapper)(request_message)
+    assert not inspect.iscoroutinefunction(getattr(type(service), wrapper))
+    result: Any = getattr(service, wrapper)(request_message)
 
-    getattr(stub, endpoint).assert_awaited_once_with(request_message, metadata=BEARER_METADATA)
+    getattr(stub, endpoint).assert_called_once_with(request_message, metadata=BEARER_METADATA)
     assert result is response_message
     assert len(list(result)) == 1
 
