@@ -32,25 +32,20 @@ repos:
         args: [ --fix ]
       - id: ruff-format  # Format (replaces black + autopep8)
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v2.2.0
+  # mypy is a LOCAL hook run through `uv run --no-sync`, so it uses the project's .venv (and its
+  # types-* packages) whether or not that venv is activated. It used to be declared against
+  # mirrors-mypy with `language: system`, which builds no environment and ran a bare `mypy` from
+  # PATH: a `git commit` from a shell without the .venv activated failed with
+  # "Executable mypy not found". `--no-sync` keeps the hook from re-syncing the environment.
+  - repo: local
     hooks:
-      - id: mypy  # Run mypy type checker; note: runs with flag --missing-imports
-        exclude: ondewo
-        args: [ --config-file=pyproject.toml ]
-        # Use language: system to run Mypy git repo's existing virtual environment
-        # instead of mypy's own virtual environment. Necessary to find types-.* packages
-        # Replace language: python in your hook definition with language: system.
-        # Remove the additional_dependencies line and install Mypy into your
-        # environment directly. Now, Pre-commit will not create a separate virtualenv
-        # for the hook and will run it in whatever environment you happen to be in when
-        # you run git commit or pre-commit run => https://jaredkhan.com/blog/mypy-pre-commit
+      - id: mypy
+        name: mypy
+        entry: uv run --no-sync mypy --config-file=pyproject.toml
         language: system
-        # use require_serial so that script
-        # is only called once per commit
+        exclude: ondewo
+        # require_serial so mypy is called once per commit, with every file
         require_serial: true
-        # Print the number of files as sanity-check
-        verbose: true
         types: [ python ]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks

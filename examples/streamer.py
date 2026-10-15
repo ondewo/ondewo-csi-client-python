@@ -211,7 +211,7 @@ class PySoundIoStreamerOut(StreamerOutInterface):
                 # if the response is still being played: calculate the length in bytes, overwrite the output
                 # data with the portion of the response, increase the index and return
                 num_bytes = length * SAMPLEWIDTH * MONO
-                data[:] = self.response[self.idx : self.idx + num_bytes]  # noqa:
+                data[:] = self.response[self.idx : self.idx + num_bytes]
                 self.idx += num_bytes
                 return
 
