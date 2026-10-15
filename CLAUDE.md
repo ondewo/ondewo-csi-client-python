@@ -273,7 +273,7 @@ to the convention. Never force a build by scanning or reindexing.
 
 These bit us during the 6.14.0 release. Keep them in mind when releasing.
 
-- **Trust the registry, not the log.** `make release_all_clients` wraps each client in `|| echo "Already released …"`, so a _failed_ release is reported as "done". After any release, verify the GitHub release **and** the published package (PyPI / npm) directly.
+- **Trust the registry, not the log.** Older drivers wrapped each client in `|| echo "Already released …"`, so a _failed_ release was reported as "done". `make release_verify` is the check now (tag on origin, non-empty GitHub release body, PyPI serves the version); ondewo-csi-api's driver runs it after every client and calls a client released only when it passes.
 - **`npm install failed after 5 attempts` in a release log is usually a red herring** — that text is the echo _inside_ the docker `RUN for i in 1..5; do npm install …` retry loop, not a real failure (`npm install` succeeds → `#10 DONE`). Look further down for the real error (a TTY error, an eslint failure, a `setup.py` error).
 - **Codegen must run TTY-free.** The `docker run` that invokes the proto-compiler must not pass `-it` — non-interactively it fails with `cannot attach stdin to a TTY-enabled container because stdin is not a terminal`. Fix the script (drop `-it`), or run the whole release under a pseudo-TTY: `script -qc 'make …' /dev/null`.
 - **Release Makefiles can print secrets, and that is the PROJECT OWNER'S call, not yours.** Some
@@ -282,8 +282,8 @@ These bit us during the 6.14.0 release. Keep them in mind when releasing.
   Where it still happens elsewhere, **do not rotate the credential and do not re-plumb the shared release
   recipe yourself** — those credentials live in `ondewo-devops-accounts` and are shared by every ondewo
   repository's release job, so rotating one breaks the next release of every other repo, and
-  `run_release_with_devops` is shared verbatim across the SDKs so a local "improvement" desynchronises
-  them. Report it once and leave it; the decision is recorded in ondewo-vtsi's CLAUDE.md §0.2. What still
+  the credential loading of `ondewo_release` follows the release contract shared by every SDK, so a local
+  "improvement" desynchronises them. Report it once and leave it; the decision is recorded in ondewo-vtsi's CLAUDE.md §0.2. What still
   applies without exception: never write a credential into a file, a commit, a document or a log line
   yourself, and scrub any scratch file that captured one.
 - **The release does NOT auto-pull the latest `ondewo-proto-compiler` tag — it checks out the PINNED one,
@@ -307,13 +307,13 @@ These bit us during the 6.14.0 release. Keep them in mind when releasing.
   5.12.0 -> 5.14.0, because 5.13.0 and 5.14.0 are Angular/TypeScript presence work. Measure that diff
   rather than assuming a bump is inert, and rather than assuming it is risky.
 - **npm package names are inconsistent** — e.g. the JS client publishes as `@ondewo/ondewo-nlu-client-js` (double `ondewo`), not `@ondewo/nlu-client-js`. Check `src/package.json`'s `name` before querying npm.
-- **PyPI build needs setuptools.** The release image (`Dockerfile.utils`) is `python:3.12-slim`, which bundles no `setuptools`, so `python setup.py sdist bdist_wheel` dies with `ModuleNotFoundError: No module named 'setuptools'`. `Dockerfile.utils` must `pip install … setuptools wheel`.
+- **The release image builds with `uv build`.** `Dockerfile.utils` pins uv, twine and gh (and its base images by digest); uv fetches the setuptools build backend itself, so the image installs no `setuptools`/`wheel`/`build`.
 
 ## Python tooling — uv + ruff + mypy + pyproject.toml (this session's refactor)
 
 This repo was migrated off `setup.py` / `.flake8` / `mypy.ini` to a single **pyproject.toml** with **uv**, **ruff**, and **mypy**. Going forward:
 
-- **Build backend stays setuptools** (for PyPI compatibility). Build with `python -m build --no-isolation` or `uv build` — NOT `python setup.py sdist bdist_wheel` (setup.py is deleted). `Dockerfile.utils` installs `twine setuptools wheel build`.
+- **Build backend stays setuptools** (for PyPI compatibility). Build with `python -m build --no-isolation` or `uv build` — NOT `python setup.py sdist bdist_wheel` (setup.py is deleted). `Dockerfile.utils` builds with a pinned uv and uploads with a pinned twine.
 - **Dependencies via uv + a committed `uv.lock`.** CI runs `uv sync --extra dev --frozen`. To add/change a dep: edit `[project.dependencies]`/`[project.optional-dependencies].dev` in pyproject.toml then `uv lock`.
 - **Lint is ruff** (`[tool.ruff]`, line-length 120, generated `*_pb2*` excluded) — `uv run ruff check .`. flake8 is gone.
 - **mypy config lives in `[tool.mypy]`.** Do **NOT** re-create `mypy.ini` — it silently _shadows_ the pyproject config. Generated `*_pb2*` modules get `ignore_errors` overrides.
@@ -332,7 +332,7 @@ The repo is now fully on **uv** (not just pyproject.toml):
 - Removed for good: `requirements.txt`, `requirements-dev.txt`, `setup.cfg` — deps + tool config live in `pyproject.toml`. Do **not** re-add them.
 - `Dockerfile.utils` installs uv (`COPY --from=ghcr.io/astral-sh/uv`) and builds with uv; it no longer `COPY`s `requirements.txt`.
 - **`[tool.mypy] python_version` must be `3.12`** wherever numpy 2.x is on the mypy path — its PEP-695 `type X = …` stubs fail to parse on < 3.12.
-- The release `git commit` uses **`--no-verify`** so pre-commit hooks never gate an automated release.
+- The release `git commit` uses **`--no-verify`**: the hooks already ran (`precommit_hooks_run_all_files`) together with `make test` before it, and the commit is `git diff --cached --quiet || git commit ...`, so a clean tree goes on and a commit that fails for a real reason stops the release.
 - **Validated by a real PyPI publish** — `ondewo-t2s-client 6.5.0` was built with `uv build` and uploaded via twine end-to-end; the uv release pipeline works.
 
 ## `ClientConfig` must not print its secrets
@@ -459,3 +459,24 @@ Never write the `[TICKET]` prefix yourself — that yields `[OND211-2418] [OND21
 
 One cosmetic leftover: an orphaned `# Enforce Conventional Commits on the commit message.` comment sits at
 the end of the file, where the hook used to be. It documents nothing now.
+
+## Release contract (`make ondewo_release`)
+
+The README section "Automatic Release Process" is the reference. In short: `spc` → load the credentials and DELETE the
+devops-accounts clone (a `mktemp` dir, or the driver's `DEVOPS_ACCOUNT_DIR`) → `release_preflight` (credentials VALID,
+host tools) → build, hooks, `check_build`, `make test` → local commit → PyPI upload → `verify_pypi` → push, branch,
+tag, GitHub release → `release_verify`. Pinned by `tests/unit/test_release_runs_in_a_fresh_clone.py` and
+`tests/unit/test_release_makefile_hygiene.py`.
+
+- **No bare `export`, no credential defaults.** Credential-free steps run under `WITHOUT_CREDENTIALS`; docker gets a
+  credential by name (`-e NAME`), twine as `TWINE_*`, gh as `GH_TOKEN` per call (never `gh auth login`).
+- **PyPI first.** It is the one step that cannot be undone; a failure after it leaves the version on PyPI, `spc` then
+  refuses a re-run, and the remaining steps are run by hand (`git push`, `make create_release_branch`,
+  `make create_release_tag`, `make release_to_github_via_docker`, `make release_verify`).
+- **No line may carry `=` after `ONDEWO_CSI_VERSION` except its assignment.** Older ondewo-csi-api drivers rewrote every
+  such line wholesale; `test_the_legacy_driver_rewrite_touches_only_the_three_pins` replays that rewrite.
+- **`async_conversations.py` is hand-written** (it carries `ondewo:hand-written-async-service`, which
+  `create_async_services` skips). The generated copy awaited `S2sStream` / `GetControlStream`, and grpc.aio refuses
+  that (`TypeError: object UnaryStreamCall can't be used in 'await' expression`); the streaming wrappers return the
+  call for `async for`. A method added to `conversations.py` must be added there by hand;
+  `tests/unit/client/test_every_rpc_has_a_wrapper.py` fails until it is.
