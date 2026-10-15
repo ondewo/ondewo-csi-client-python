@@ -47,6 +47,7 @@ from ondewo.csi.client.core import services_interface as sync_interface_module
 from ondewo.csi.client.services.async_conversations import Conversations as AsyncConversations
 from ondewo.csi.client.services.conversations import Conversations as SyncConversations
 from ondewo.csi.conversation_pb2 import (
+    DESCRIPTOR,
     CallMediaControlLevel,
     CheckUpstreamHealthResponse,
     ControlStatus,
@@ -111,6 +112,22 @@ STREAMING_RPCS: List[Tuple[str, str, Callable[[], Any], Callable[[], Any]]] = [
     ),
     ("s2s_stream", "S2sStream", lambda: iter([S2sStreamRequest()]), lambda: iter([S2sStreamResponse()])),
 ]
+
+
+def test_the_rpc_tables_cover_every_rpc_of_the_service() -> None:
+    """``UNARY_RPCS`` / ``STREAMING_RPCS`` name every RPC of the generated ``Conversations`` descriptor, split by kind.
+
+    The tables carry hand-built request/response messages, so they cannot be derived; this check is what makes an RPC
+    a new API release adds fail here until it is exercised, instead of silently going untested.
+    """
+    methods: List[Any] = list(DESCRIPTOR.services_by_name["Conversations"].methods)
+    assert {endpoint for _, endpoint, _, _ in UNARY_RPCS} == {
+        method.name for method in methods if not (method.client_streaming or method.server_streaming)
+    }
+    assert {endpoint for _, endpoint, _, _ in STREAMING_RPCS} == {
+        method.name for method in methods if method.client_streaming or method.server_streaming
+    }
+    assert {"S2sStream", "SetCallMediaControl"} <= {method.name for method in methods}
 
 
 class _FakeProvider:
