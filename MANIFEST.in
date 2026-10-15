@@ -3,4 +3,3 @@ include ondewo/*
 include LICENSE
 include README.md
 include RELEASE.md
-global-exclude *.pyc

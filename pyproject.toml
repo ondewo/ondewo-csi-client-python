@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=77.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,13 +8,15 @@ version = "5.6.0"
 description = "ONDEWO Communication System Integration (CSI) Client library for Python"
 readme = "README.md"
 requires-python = ">=3.10"
+# PEP 639: an SPDX expression plus the shipped license file; the License classifier is deprecated (setuptools >= 77).
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 authors = [
     { name = "ONDEWO GmbH", email = "office@ondewo.com" },
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
