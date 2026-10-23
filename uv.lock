@@ -2535,7 +2535,7 @@ requires-dist = [
     { name = "numpy" },
     { name = "ondewo-client-utils", marker = "python_full_version < '3.12'", specifier = ">=3.2.0" },
     { name = "ondewo-client-utils", marker = "python_full_version >= '3.12'", specifier = ">=4.1.1" },
-    { name = "ondewo-nlu-client", specifier = ">=7.1.1,<7.2.0" },
+    { name = "ondewo-nlu-client", specifier = ">=7.4.0,<7.5.0" },
     { name = "ondewo-s2t-client", specifier = ">=7.5.0,<7.6.0" },
     { name = "ondewo-t2s-client", specifier = ">=6.6.3,<6.7.0" },
     { name = "pre-commit", marker = "extra == 'dev'" },
@@ -2557,7 +2557,7 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "ondewo-nlu-client"
-version = "7.1.1"
+version = "7.4.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "google-api-core" },
@@ -2569,9 +2569,9 @@ dependencies = [
     { name = "protobuf" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f8/20/b7820c471405299c32fce4f4d604c0819d4c8241063e5bd171c377b1a3ba/ondewo_nlu_client-7.1.1.tar.gz", hash = "sha256:d2c2ac428c91a5325a145612a85a5fdb89bb6c05b3a86fc9db7b895c4dccabe9", size = 419179, upload-time = "2026-09-13T08:38:15.327Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/25/c0/fa029d9d008010fadb93af2108b943a0851b71e3faa9ab9d01e06f5ce6b4/ondewo_nlu_client-7.4.0.tar.gz", hash = "sha256:bda38e71b796cc5c2ecb41c71c5061ed89d1cdf03432708b7590c97971bd0f23", size = 426644, upload-time = "2026-10-16T23:07:42.217Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/39/af/4a077b260b1e2cff8317abd5dbcf2f97ebe0607475243409945e392c7291/ondewo_nlu_client-7.1.1-py3-none-any.whl", hash = "sha256:ccea94a734010e4db91892d3005d67e6aae87faf1ed3f2ea80e132ea7bd5237a", size = 466669, upload-time = "2026-09-13T08:38:13.61Z" },
+    { url = "https://files.pythonhosted.org/packages/d3/79/dd6e5717cedb202de310520147632472713929352b2175efcee2e97ee47d/ondewo_nlu_client-7.4.0-py3-none-any.whl", hash = "sha256:83eb0eceef03fab42f45e745040e65b3460057cbcc651e17cc9095a633718795", size = 472654, upload-time = "2026-10-16T23:07:40.306Z" },
 ]
 
 [[package]]

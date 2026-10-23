@@ -2,6 +2,15 @@
 
 *****************
 
+## Release ONDEWO CSI Python Client 5.7.0
+
+### Improvements
+
+* Tracking API Version [5.7.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/5.7.0) ( [Documentation](https://ondewo.github.io/ondewo-csi-api/) )
+* `ondewo-nlu-client` moves to `>=7.4.0,<7.5.0` (was `>=7.1.1,<7.2.0`), in lockstep with ondewo-nlu-api 7.4.0 that csi-api 5.7.0 tracks. The old cap held every consumer on nlu-client 7.1.x.
+
+*****************
+
 ## Release ONDEWO CSI Python Client 5.6.2
 
 ### Improvements

@@ -39,13 +39,12 @@ dependencies = [
     # Python >=3.12, so older interpreters keep the 3.x line (which has no client key to leak).
     "ondewo-client-utils>=4.1.1; python_version >= '3.12'",
     "ondewo-client-utils>=3.2.0; python_version < '3.12'",
-    # >=7.1.1 is load-bearing, not a tidy-up. 7.1.0 was released from a master that had never
-    # seen 7.0.5's offline-token hand-off, so it is a REGRESSION against its own predecessor:
-    # KeycloakTokenProvider takes no refresh_token there and ClientConfig has no such field.
-    # 7.1.1 is the first 7.1.x that carries the hand-off (the release line was merged back) and
-    # it also fixes the refresh thread dying permanently on a single failed token refresh.
-    # The old <7.1.0 cap is what kept ondewo-vtsi on 7.0.5 and unable to take that fix.
-    "ondewo-nlu-client>=7.1.1,<7.2.0",
+    # Held in LOCKSTEP with the nlu protos ondewo-csi-api 5.7.0 tracks (ondewo-nlu-api 7.4.0): the generated
+    # conversation_pb2.py imports ondewo/nlu/session.proto and context.proto by name, and consumers that also install
+    # ondewo-vtsi-client (which vendors ondewo/nlu) need the same 7.4 line on both sides. The old <7.2.0 cap is what
+    # held ondewo-vtsi, ondewo-sip and ondewo-csi on 7.1.x. The 7.1.1 floor's reason (the offline-token hand-off and
+    # the refresh thread surviving a failed refresh) is carried by every 7.4.x release.
+    "ondewo-nlu-client>=7.4.0,<7.5.0",
     # Held in LOCKSTEP with the s2t protos this package vendors. ondewo-csi-api 5.5.0 tracks
     # ondewo-s2t-api 7.5.0, so the generated ondewo/s2t code here is 7.5.0 -- pairing that with
     # a 7.4.x s2t-client is the vendored-proto skew that fails SILENTLY, because one physical
