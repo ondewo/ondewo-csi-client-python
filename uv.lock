@@ -2477,7 +2477,7 @@ wheels = [
 
 [[package]]
 name = "ondewo-csi-client"
-version = "5.7.0"
+version = "5.8.0"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
@@ -2535,7 +2535,7 @@ requires-dist = [
     { name = "numpy" },
     { name = "ondewo-client-utils", marker = "python_full_version < '3.12'", specifier = ">=3.2.0" },
     { name = "ondewo-client-utils", marker = "python_full_version >= '3.12'", specifier = ">=4.1.1" },
-    { name = "ondewo-nlu-client", specifier = ">=7.4.0,<7.5.0" },
+    { name = "ondewo-nlu-client", specifier = ">=7.4.0,<7.6.0" },
     { name = "ondewo-s2t-client", specifier = ">=7.5.0,<7.6.0" },
     { name = "ondewo-t2s-client", specifier = ">=6.6.3,<6.7.0" },
     { name = "pre-commit", marker = "extra == 'dev'" },

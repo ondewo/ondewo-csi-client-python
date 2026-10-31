@@ -62,6 +62,39 @@ class _ControlStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._
     """Status reported by the client to the server via <code>SetControlStatus</code> that playback of an utterance has completed"""
     CALL_ENDED: _ControlStatus.ValueType  # 8
     """Status reported by ondewo-sip to the server via <code>SetControlStatus</code> that the phone call has ENDED and the server must reset ALL per-call state in place (persistent-listener model). It is a command, not a state: it is never pushed onto the control stream"""
+    PLAYBACK_CUT: _ControlStatus.ValueType  # 9
+    """<p>Status reported by the client to the server via <code>SetControlStatus</code>, with
+    <code>SetControlStatusRequest.playback_cut</code> set, after it aborted playback for a <code>BARGE_IN</code>
+    whose <code>ControlStreamResponse</code> carried a non-zero <code>playback_cut_request_id</code>. It reports
+    how much of the cut audio the caller can have heard.</p>
+
+    <p>Like <code>CALL_ENDED</code> it is a report, not a state: the server never assigns it to the control status,
+    never pushes it onto the control stream and leaves a pending <code>BARGE_IN</code> latched. The request must
+    carry the in-container token (the <code>x-ondewo-sip-in-container-token</code> metadatum). A client sends it
+    only after reading a non-zero <code>playback_cut_request_id</code>, so a server that does not consume cuts
+    never receives it.</p>
+
+    <p>How the server answers, checked in this order:</p>
+    <ul>
+      <li>Token missing or not equal to the server's: <code>UNAUTHENTICATED</code>, nothing is recorded. A
+      server with NO token configured (a standalone server, or one relaunched without its token) refuses every
+      cut this way and never requests one: it sends <code>playback_cut_request_id = 0</code> and keeps its own
+      estimate. The client must not retry an <code>UNAUTHENTICATED</code> cut.</li>
+      <li><code>playback_cut</code> not set: <code>INVALID_ARGUMENT</code>, nothing is recorded. The client must
+      not retry it.</li>
+      <li><code>playback_cut_request_id</code> not pending on the current control stream (zero, unknown, already
+      answered, superseded by a newer <code>BARGE_IN</code>, from a previous stream or a previous call): OK, the
+      cut is dropped and the server keeps its own estimate.</li>
+      <li>Otherwise: OK, the cut is recorded and the id stops being pending.</li>
+    </ul>
+
+    <p>An OK answer carries the control status the server holds, unchanged:
+    <code>old_control_status == new_control_status</code>, in practice <code>BARGE_IN</code> while it is still
+    latched. It does not say whether the cut was recorded or dropped; nothing on the client depends on that.
+    Any other status (<code>UNAVAILABLE</code>, <code>DEADLINE_EXCEEDED</code>, ...) means the cut may or may not
+    have arrived; the client may retry it with the same <code>playback_cut_request_id</code>, because a second copy
+    of an answered id is dropped.</p>
+    """
 
 class ControlStatus(_ControlStatus, metaclass=_ControlStatusEnumTypeWrapper):
     """Control status."""
@@ -84,6 +117,39 @@ PLAYBACK_DONE: ControlStatus.ValueType  # 7
 """Status reported by the client to the server via <code>SetControlStatus</code> that playback of an utterance has completed"""
 CALL_ENDED: ControlStatus.ValueType  # 8
 """Status reported by ondewo-sip to the server via <code>SetControlStatus</code> that the phone call has ENDED and the server must reset ALL per-call state in place (persistent-listener model). It is a command, not a state: it is never pushed onto the control stream"""
+PLAYBACK_CUT: ControlStatus.ValueType  # 9
+"""<p>Status reported by the client to the server via <code>SetControlStatus</code>, with
+<code>SetControlStatusRequest.playback_cut</code> set, after it aborted playback for a <code>BARGE_IN</code>
+whose <code>ControlStreamResponse</code> carried a non-zero <code>playback_cut_request_id</code>. It reports
+how much of the cut audio the caller can have heard.</p>
+
+<p>Like <code>CALL_ENDED</code> it is a report, not a state: the server never assigns it to the control status,
+never pushes it onto the control stream and leaves a pending <code>BARGE_IN</code> latched. The request must
+carry the in-container token (the <code>x-ondewo-sip-in-container-token</code> metadatum). A client sends it
+only after reading a non-zero <code>playback_cut_request_id</code>, so a server that does not consume cuts
+never receives it.</p>
+
+<p>How the server answers, checked in this order:</p>
+<ul>
+  <li>Token missing or not equal to the server's: <code>UNAUTHENTICATED</code>, nothing is recorded. A
+  server with NO token configured (a standalone server, or one relaunched without its token) refuses every
+  cut this way and never requests one: it sends <code>playback_cut_request_id = 0</code> and keeps its own
+  estimate. The client must not retry an <code>UNAUTHENTICATED</code> cut.</li>
+  <li><code>playback_cut</code> not set: <code>INVALID_ARGUMENT</code>, nothing is recorded. The client must
+  not retry it.</li>
+  <li><code>playback_cut_request_id</code> not pending on the current control stream (zero, unknown, already
+  answered, superseded by a newer <code>BARGE_IN</code>, from a previous stream or a previous call): OK, the
+  cut is dropped and the server keeps its own estimate.</li>
+  <li>Otherwise: OK, the cut is recorded and the id stops being pending.</li>
+</ul>
+
+<p>An OK answer carries the control status the server holds, unchanged:
+<code>old_control_status == new_control_status</code>, in practice <code>BARGE_IN</code> while it is still
+latched. It does not say whether the cut was recorded or dropped; nothing on the client depends on that.
+Any other status (<code>UNAVAILABLE</code>, <code>DEADLINE_EXCEEDED</code>, ...) means the cut may or may not
+have arrived; the client may retry it with the same <code>playback_cut_request_id</code>, because a second copy
+of an answered id is dropped.</p>
+"""
 global___ControlStatus = ControlStatus
 
 class _ControlMessageServiceName:
@@ -1181,6 +1247,7 @@ class S2sStreamResponse(google.protobuf.message.Message):
     CHUNK_INDEX_FIELD_NUMBER: builtins.int
     LAST_CHUNK_FIELD_NUMBER: builtins.int
     TURN_EPOCH_FIELD_NUMBER: builtins.int
+    RESPONSE_SEQUENCE_FIELD_NUMBER: builtins.int
     utterance_id: builtins.str
     """Optional. Identifier of the utterance this response belongs to. All chunks of one synthesized utterance share the same <code>utterance_id</code>"""
     chunk_index: builtins.int
@@ -1189,6 +1256,15 @@ class S2sStreamResponse(google.protobuf.message.Message):
     """Optional. If <code>true</code>, this is the last chunk of the utterance identified by <code>utterance_id</code>"""
     turn_epoch: builtins.int
     """Optional. Monotonic turn epoch of the conversation turn that produced this response. Used by consumers to fence stale audio of an interrupted turn"""
+    response_sequence: builtins.int
+    """<p>Optional. One-based sequence number of this response on its <code>S2sStream</code>, assigned by the server
+    when it yields the response and counted over EVERY response of the stream (audio, NLU and SIP trigger), so it
+    is independent of whether anything is stored or framed. <code>0</code> means the server does not number its
+    responses (an older server).</p>
+
+    <p>It names a response that has no <code>utterance_id</code> (the greeting, a merged utterance, a filler,
+    the apology) in <code>PlaybackCut.response_sequence</code> and in a <code>PLAYBACK_DONE</code> report.</p>
+    """
     @property
     def detect_intent_response(self) -> ondewo.nlu.session_pb2.DetectIntentResponse:
         """full NLU detect intent response"""
@@ -1211,9 +1287,10 @@ class S2sStreamResponse(google.protobuf.message.Message):
         chunk_index: builtins.int = ...,
         last_chunk: builtins.bool = ...,
         turn_epoch: builtins.int = ...,
+        response_sequence: builtins.int = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["detect_intent_response", b"detect_intent_response", "response", b"response", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["chunk_index", b"chunk_index", "detect_intent_response", b"detect_intent_response", "last_chunk", b"last_chunk", "response", b"response", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response", "turn_epoch", b"turn_epoch", "utterance_id", b"utterance_id"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["chunk_index", b"chunk_index", "detect_intent_response", b"detect_intent_response", "last_chunk", b"last_chunk", "response", b"response", "response_sequence", b"response_sequence", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response", "turn_epoch", b"turn_epoch", "utterance_id", b"utterance_id"]) -> None: ...
     def WhichOneof(self, oneof_group: typing.Literal["response", b"response"]) -> typing.Literal["detect_intent_response", "synthesize_response", "sip_trigger"] | None: ...
 
 global___S2sStreamResponse = S2sStreamResponse
@@ -1344,10 +1421,22 @@ class ControlStreamResponse(google.protobuf.message.Message):
     CONTROL_STATUS_FIELD_NUMBER: builtins.int
     EPOCH_FIELD_NUMBER: builtins.int
     MEDIA_CONTROL_FIELD_NUMBER: builtins.int
+    PLAYBACK_CUT_REQUEST_ID_FIELD_NUMBER: builtins.int
     control_status: global___ControlStatus.ValueType
     """Control status"""
     epoch: builtins.int
     """Monotonic barge-in epoch/sequence number so control status transitions are correlatable with the <code>S2sStreamResponse</code> <code>turn_epoch</code> and a second barge-in during a resumed remainder can never be coalesced away"""
+    playback_cut_request_id: builtins.int
+    """<p>Optional. Non-zero only on a <code>BARGE_IN</code> transition sent by a server that consumes
+    <code>PlaybackCut</code>: the server asks the client to report the cut with <code>PLAYBACK_CUT</code> and to
+    echo this value in <code>PlaybackCut.playback_cut_request_id</code>. The value is the server's
+    process-lifetime, never rewound sequence number of that transition, so every barge-in (including a second one
+    during a resumed remainder, which keeps its epoch) has its own id.</p>
+
+    <p><code>0</code> means no cut is requested: an older server, a server with no in-container token
+    configured, the seed of a new control stream, a media-control message, or any status other than
+    <code>BARGE_IN</code>.</p>
+    """
     @property
     def media_control(self) -> global___CallMediaControlLevel:
         """<p>Optional. The per-call operator media control level. Set ONLY on media-control messages: pushed when the
@@ -1367,9 +1456,10 @@ class ControlStreamResponse(google.protobuf.message.Message):
         control_status: global___ControlStatus.ValueType = ...,
         epoch: builtins.int = ...,
         media_control: global___CallMediaControlLevel | None = ...,
+        playback_cut_request_id: builtins.int = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["media_control", b"media_control"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["control_status", b"control_status", "epoch", b"epoch", "media_control", b"media_control"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["control_status", b"control_status", "epoch", b"epoch", "media_control", b"media_control", "playback_cut_request_id", b"playback_cut_request_id"]) -> None: ...
 
 global___ControlStreamResponse = ControlStreamResponse
 
@@ -1380,20 +1470,121 @@ class SetControlStatusRequest(google.protobuf.message.Message):
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
     CONTROL_STATUS_FIELD_NUMBER: builtins.int
+    PLAYBACK_CUT_FIELD_NUMBER: builtins.int
+    UTTERANCE_ID_FIELD_NUMBER: builtins.int
+    RESPONSE_SEQUENCE_FIELD_NUMBER: builtins.int
     control_status: global___ControlStatus.ValueType
     """Control status"""
+    utterance_id: builtins.str
+    """<p>Optional. Set only with <code>PLAYBACK_DONE</code>: the <code>S2sStreamResponse.utterance_id</code> of the
+    utterance whose playback completed. Empty for a response that carries no <code>utterance_id</code>; that one
+    is named by <code>response_sequence</code>.</p>
+    """
+    response_sequence: builtins.int
+    """<p>Optional. Set only with <code>PLAYBACK_DONE</code>: the <code>S2sStreamResponse.response_sequence</code> of
+    the last response of the completed utterance. <code>0</code> if the server does not number its responses.</p>
+    """
+    @property
+    def playback_cut(self) -> global___PlaybackCut:
+        """Optional. Set if and only if <code>control_status</code> is <code>PLAYBACK_CUT</code>. A
+        <code>PLAYBACK_CUT</code> without it is answered <code>INVALID_ARGUMENT</code>; any other status ignores it
+        """
+
     def __init__(
         self,
         *,
         control_status: global___ControlStatus.ValueType = ...,
+        playback_cut: global___PlaybackCut | None = ...,
+        utterance_id: builtins.str = ...,
+        response_sequence: builtins.int = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["control_status", b"control_status"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["playback_cut", b"playback_cut"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["control_status", b"control_status", "playback_cut", b"playback_cut", "response_sequence", b"response_sequence", "utterance_id", b"utterance_id"]) -> None: ...
 
 global___SetControlStatusRequest = SetControlStatusRequest
 
 @typing.final
+class PlaybackCut(google.protobuf.message.Message):
+    """<p>Where playback stood when the client aborted it for a <code>BARGE_IN</code>, reported with
+    <code>PLAYBACK_CUT</code>. All audio positions refer to the response named by <code>utterance_id</code> /
+    <code>response_sequence</code> and are measured by the client on the thread that owns the audio connection.</p>
+
+    <p>The client reports raw values only. The server computes the played prefix in one place as
+    <code>written_audio_us - min(queued_audio_us, written_audio_us)</code>: the audio handed to the audio device
+    minus the audio that was still queued in it and was flushed.</p>
+    """
+
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    PLAYBACK_CUT_REQUEST_ID_FIELD_NUMBER: builtins.int
+    BARGE_IN_EPOCH_FIELD_NUMBER: builtins.int
+    UTTERANCE_ID_FIELD_NUMBER: builtins.int
+    CHUNK_INDEX_FIELD_NUMBER: builtins.int
+    RESPONSE_SEQUENCE_FIELD_NUMBER: builtins.int
+    WRITTEN_AUDIO_US_FIELD_NUMBER: builtins.int
+    QUEUED_AUDIO_US_FIELD_NUMBER: builtins.int
+    QUEUED_AUDIO_ESTIMATED_FIELD_NUMBER: builtins.int
+    CUT_MONOTONIC_NS_FIELD_NUMBER: builtins.int
+    REMAINDER_HELD_FIELD_NUMBER: builtins.int
+    playback_cut_request_id: builtins.int
+    """The <code>ControlStreamResponse.playback_cut_request_id</code> of the <code>BARGE_IN</code> this cut answers.
+    The server records a cut only while this id is pending on the current stream; any other id is answered OK and
+    dropped (see <code>PLAYBACK_CUT</code>)
+    """
+    barge_in_epoch: builtins.int
+    """The <code>ControlStreamResponse.epoch</code> of that <code>BARGE_IN</code>"""
+    utterance_id: builtins.str
+    """The <code>S2sStreamResponse.utterance_id</code> playing at the cut. Empty if that response has none, or if
+    nothing was playing
+    """
+    chunk_index: builtins.int
+    """The <code>S2sStreamResponse.chunk_index</code> playing at the cut"""
+    response_sequence: builtins.int
+    """The <code>S2sStreamResponse.response_sequence</code> playing at the cut. <code>0</code> if nothing was playing
+    or the server does not number its responses
+    """
+    written_audio_us: builtins.int
+    """Microseconds of audio of that utterance (or of that single response, if it has no <code>utterance_id</code>)
+    handed to the audio device since it started playing, across a resumed remainder
+    """
+    queued_audio_us: builtins.int
+    """Microseconds of audio still queued in the audio device at the cut, read once just before the queue was
+    flushed. If the device latency could not be read, the client sends its configured target buffer length
+    instead and sets <code>queued_audio_estimated</code>
+    """
+    queued_audio_estimated: builtins.bool
+    """<code>true</code> if <code>queued_audio_us</code> is the configured target buffer length rather than a
+    latency read
+    """
+    cut_monotonic_ns: builtins.int
+    """<code>CLOCK_MONOTONIC</code> time of the cut in nanoseconds. The client runs on the same host as the server,
+    so the server can compare it with its own monotonic clock
+    """
+    remainder_held: builtins.bool
+    """<code>true</code> if the client kept the un-played remainder so that <code>RESUME_PLAYBACK</code> can play it"""
+    def __init__(
+        self,
+        *,
+        playback_cut_request_id: builtins.int = ...,
+        barge_in_epoch: builtins.int = ...,
+        utterance_id: builtins.str = ...,
+        chunk_index: builtins.int = ...,
+        response_sequence: builtins.int = ...,
+        written_audio_us: builtins.int = ...,
+        queued_audio_us: builtins.int = ...,
+        queued_audio_estimated: builtins.bool = ...,
+        cut_monotonic_ns: builtins.int = ...,
+        remainder_held: builtins.bool = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["barge_in_epoch", b"barge_in_epoch", "chunk_index", b"chunk_index", "cut_monotonic_ns", b"cut_monotonic_ns", "playback_cut_request_id", b"playback_cut_request_id", "queued_audio_estimated", b"queued_audio_estimated", "queued_audio_us", b"queued_audio_us", "remainder_held", b"remainder_held", "response_sequence", b"response_sequence", "utterance_id", b"utterance_id", "written_audio_us", b"written_audio_us"]) -> None: ...
+
+global___PlaybackCut = PlaybackCut
+
+@typing.final
 class SetControlStatusResponse(google.protobuf.message.Message):
-    """Response of setting the control status with the old and new status objects."""
+    """Response of setting the control status with the old and new status objects. For a report that is not a state
+    (<code>PLAYBACK_CUT</code>) both fields carry the status the server holds, unchanged.
+    """
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 

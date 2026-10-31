@@ -19,12 +19,14 @@
 
 # MUST BE THE SAME AS API in Mayor and Minor Version Number
 # example: API 2.9.0 --> Client 2.9.X
-ONDEWO_CSI_VERSION=5.7.0
+ONDEWO_CSI_VERSION=5.8.0
 # The version as an anchored-regex fragment (dots escaped), for every heading / version match below. No line but the
 # assignment above may carry an equals sign AFTER the version variable's name: older ondewo-csi-api release drivers
 # rewrote every such line wholesale (tests/unit/test_release_runs_in_a_fresh_clone.py replays that rewrite).
 RELEASE_VERSION_RE=$(subst .,\.,${ONDEWO_CSI_VERSION})
-ONDEWO_CSI_API_GIT_BRANCH=tags/5.7.0
+# Development pin: the 40-character commit of ondewo-csi-api's feature/OND236-120-barge-in-cancel that carries
+# csi-api 5.8.0. Move it to tags/5.8.0 once that tag exists.
+ONDEWO_CSI_API_GIT_BRANCH=fe847b4831a2a2490efb589822509b9475df1a7a
 ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/5.15.7
 PYPI_PACKAGE=ondewo-csi-client
 
