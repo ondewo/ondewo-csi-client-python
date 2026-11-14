@@ -1692,6 +1692,71 @@ class SetCallMediaControlResponse(google.protobuf.message.Message):
 global___SetCallMediaControlResponse = SetCallMediaControlResponse
 
 @typing.final
+class CallerDtmfRequest(google.protobuf.message.Message):
+    """<p>One DTMF key the caller pressed, sent by ondewo-sip to <code>SetCallerDtmf</code>.</p>"""
+
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    CALL_ID_FIELD_NUMBER: builtins.int
+    SEQUENCE_FIELD_NUMBER: builtins.int
+    DIGIT_FIELD_NUMBER: builtins.int
+    DURATION_MS_FIELD_NUMBER: builtins.int
+    RECEIVED_UNIX_NS_FIELD_NUMBER: builtins.int
+    call_id: builtins.str
+    """<p>ondewo-sip's id of the call the key belongs to (<code>SipStatus.call_id</code>). A key of another call
+    than the server's current one is refused.</p>
+    """
+    sequence: builtins.int
+    """<p>1 for the first key of the call, then +1 per key ondewo-sip admitted. A sequence number not greater than
+    the last one accepted for the call is refused.</p>
+    """
+    digit: builtins.str
+    """<p>The key: one of <code>0</code>-<code>9</code>, <code>*</code>, <code>#</code>, <code>A</code>-<code>D</code>.
+    Never logged in clear.</p>
+    """
+    duration_ms: builtins.int
+    """<p>How long the key was held, in milliseconds; 0 when unknown.</p>"""
+    received_unix_ns: builtins.int
+    """<p>When ondewo-sip received the key, in nanoseconds since the Unix epoch (for the key-to-audio latency).</p>"""
+    def __init__(
+        self,
+        *,
+        call_id: builtins.str = ...,
+        sequence: builtins.int = ...,
+        digit: builtins.str = ...,
+        duration_ms: builtins.int = ...,
+        received_unix_ns: builtins.int = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["call_id", b"call_id", "digit", b"digit", "duration_ms", b"duration_ms", "received_unix_ns", b"received_unix_ns", "sequence", b"sequence"]) -> None: ...
+
+global___CallerDtmfRequest = CallerDtmfRequest
+
+@typing.final
+class CallerDtmfResponse(google.protobuf.message.Message):
+    """<p>Response of <code>SetCallerDtmf</code>.</p>"""
+
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    ACCEPTED_FIELD_NUMBER: builtins.int
+    REASON_FIELD_NUMBER: builtins.int
+    accepted: builtins.bool
+    """<p><code>true</code> if the server took the key as caller input.</p>"""
+    reason: builtins.str
+    """<p>Empty when accepted. Otherwise a stable token: <code>disabled</code>, <code>no-call</code>,
+    <code>other-call</code>, <code>stale-sequence</code>, <code>invalid-digit</code>, <code>listening-paused</code>,
+    <code>amd-in-progress</code> or <code>undeclared</code>.</p>
+    """
+    def __init__(
+        self,
+        *,
+        accepted: builtins.bool = ...,
+        reason: builtins.str = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["accepted", b"accepted", "reason", b"reason"]) -> None: ...
+
+global___CallerDtmfResponse = CallerDtmfResponse
+
+@typing.final
 class Condition(google.protobuf.message.Message):
     """A condition message with its type and value.
     A Condition can be of various types.

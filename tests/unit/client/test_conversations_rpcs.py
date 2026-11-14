@@ -48,6 +48,8 @@ from ondewo.csi.client.services.async_conversations import Conversations as Asyn
 from ondewo.csi.client.services.conversations import Conversations as SyncConversations
 from ondewo.csi.conversation_pb2 import (
     DESCRIPTOR,
+    CallerDtmfRequest,
+    CallerDtmfResponse,
     CallMediaControlLevel,
     CheckUpstreamHealthResponse,
     ControlStatus,
@@ -97,6 +99,12 @@ UNARY_RPCS: List[Tuple[str, str, Any, Any]] = [
         "SetCallMediaControl",
         CallMediaControlLevel(bot_muted=True, generation=7, reason="operator"),
         SetCallMediaControlResponse(changed=True),
+    ),
+    (
+        "set_caller_dtmf",
+        "SetCallerDtmf",
+        CallerDtmfRequest(call_id="call-1", sequence=3, digit="#", duration_ms=120, received_unix_ns=1),
+        CallerDtmfResponse(accepted=True),
     ),
 ]
 

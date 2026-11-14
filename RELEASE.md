@@ -6,7 +6,7 @@
 
 ### New Features
 
-* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) Built against ondewo-csi-api 5.8.0: `ControlStatus.PLAYBACK_CUT = 9`, the `PlaybackCut` message carried in `SetControlStatusRequest.playback_cut`, `ControlStreamResponse.playback_cut_request_id`, `S2sStreamResponse.response_sequence` and the `PLAYBACK_DONE` fields `SetControlStatusRequest.utterance_id` / `response_sequence`. No RPC was added, so the sync and async services are unchanged.
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) Built against ondewo-csi-api 5.8.0: `ControlStatus.PLAYBACK_CUT = 9`, the `PlaybackCut` message carried in `SetControlStatusRequest.playback_cut`, `ControlStreamResponse.playback_cut_request_id`, `S2sStreamResponse.response_sequence` and the `PLAYBACK_DONE` fields `SetControlStatusRequest.utterance_id` / `response_sequence`. It also adds the `Conversations.SetCallerDtmf` RPC (`CallerDtmfRequest` / `CallerDtmfResponse`), through which ondewo-sip reports each DTMF key a caller presses; `Conversations.set_caller_dtmf` is added to the sync and the async services.
 
 ### Improvements
 

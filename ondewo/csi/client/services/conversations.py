@@ -17,6 +17,8 @@ from google.protobuf.empty_pb2 import Empty
 
 from ondewo.csi.client.core.services_interface import ServicesInterface
 from ondewo.csi.conversation_pb2 import (
+    CallerDtmfRequest,
+    CallerDtmfResponse,
     CallMediaControlLevel,
     CheckUpstreamHealthResponse,
     ControlStreamRequest,
@@ -84,4 +86,8 @@ class Conversations(ServicesInterface):
 
     def set_call_media_control(self, request: CallMediaControlLevel) -> SetCallMediaControlResponse:
         response: SetCallMediaControlResponse = self.stub.SetCallMediaControl(request, metadata=self.metadata)
+        return response
+
+    def set_caller_dtmf(self, request: CallerDtmfRequest) -> CallerDtmfResponse:
+        response: CallerDtmfResponse = self.stub.SetCallerDtmf(request, metadata=self.metadata)
         return response

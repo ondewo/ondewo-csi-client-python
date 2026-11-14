@@ -86,6 +86,11 @@ class ConversationsStub(object):
                 request_serializer=ondewo_dot_csi_dot_conversation__pb2.CallMediaControlLevel.SerializeToString,
                 response_deserializer=ondewo_dot_csi_dot_conversation__pb2.SetCallMediaControlResponse.FromString,
                 _registered_method=True)
+        self.SetCallerDtmf = channel.unary_unary(
+                '/ondewo.csi.Conversations/SetCallerDtmf',
+                request_serializer=ondewo_dot_csi_dot_conversation__pb2.CallerDtmfRequest.SerializeToString,
+                response_deserializer=ondewo_dot_csi_dot_conversation__pb2.CallerDtmfResponse.FromString,
+                _registered_method=True)
 
 
 class ConversationsServicer(object):
@@ -263,6 +268,23 @@ class ConversationsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SetCallerDtmf(self, request, context):
+        """<p>Report one DTMF key the caller pressed on the current call.</p>
+
+        <p>Sent by ondewo-sip only, one request per key in the order received, authenticated with its in-container
+        token (the <code>x-ondewo-sip-in-container-token</code> metadatum). A request without a valid token is refused
+        with <code>UNAUTHENTICATED</code>.</p>
+
+        <p>The server turns keys into caller input: a key pressed while the bot speaks is a barge-in, a key of a
+        declared menu commits a turn at once, and a key string is collected until its terminator, its maximum length
+        or its inter-digit timeout. A key of another call, a repeated or older sequence number, or a key while the
+        server takes no keys is answered <code>accepted=false</code> with a reason token and changes nothing. Neither
+        side ever logs the digit in clear.</p>
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ConversationsServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -315,6 +337,11 @@ def add_ConversationsServicer_to_server(servicer, server):
                     servicer.SetCallMediaControl,
                     request_deserializer=ondewo_dot_csi_dot_conversation__pb2.CallMediaControlLevel.FromString,
                     response_serializer=ondewo_dot_csi_dot_conversation__pb2.SetCallMediaControlResponse.SerializeToString,
+            ),
+            'SetCallerDtmf': grpc.unary_unary_rpc_method_handler(
+                    servicer.SetCallerDtmf,
+                    request_deserializer=ondewo_dot_csi_dot_conversation__pb2.CallerDtmfRequest.FromString,
+                    response_serializer=ondewo_dot_csi_dot_conversation__pb2.CallerDtmfResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -588,6 +615,33 @@ class Conversations(object):
             '/ondewo.csi.Conversations/SetCallMediaControl',
             ondewo_dot_csi_dot_conversation__pb2.CallMediaControlLevel.SerializeToString,
             ondewo_dot_csi_dot_conversation__pb2.SetCallMediaControlResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SetCallerDtmf(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/ondewo.csi.Conversations/SetCallerDtmf',
+            ondewo_dot_csi_dot_conversation__pb2.CallerDtmfRequest.SerializeToString,
+            ondewo_dot_csi_dot_conversation__pb2.CallerDtmfResponse.FromString,
             options,
             channel_credentials,
             insecure,

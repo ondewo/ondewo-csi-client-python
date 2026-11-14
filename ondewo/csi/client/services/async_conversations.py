@@ -32,6 +32,8 @@ from google.protobuf.empty_pb2 import Empty
 
 from ondewo.csi.client.core.async_services_interface import AsyncServicesInterface
 from ondewo.csi.conversation_pb2 import (
+    CallerDtmfRequest,
+    CallerDtmfResponse,
     CallMediaControlLevel,
     CheckUpstreamHealthResponse,
     ControlStreamRequest,
@@ -135,4 +137,8 @@ class Conversations(AsyncServicesInterface):
 
     async def set_call_media_control(self, request: CallMediaControlLevel) -> SetCallMediaControlResponse:
         response: SetCallMediaControlResponse = await self.stub.SetCallMediaControl(request, metadata=self.metadata)
+        return response
+
+    async def set_caller_dtmf(self, request: CallerDtmfRequest) -> CallerDtmfResponse:
+        response: CallerDtmfResponse = await self.stub.SetCallerDtmf(request, metadata=self.metadata)
         return response

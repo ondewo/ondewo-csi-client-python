@@ -26,7 +26,7 @@ ONDEWO_CSI_VERSION=5.8.0
 RELEASE_VERSION_RE=$(subst .,\.,${ONDEWO_CSI_VERSION})
 # Development pin: the 40-character commit of ondewo-csi-api's feature/OND236-120-barge-in-cancel that carries
 # csi-api 5.8.0. Move it to tags/5.8.0 once that tag exists.
-ONDEWO_CSI_API_GIT_BRANCH=fe847b4831a2a2490efb589822509b9475df1a7a
+ONDEWO_CSI_API_GIT_BRANCH=079ae937da4a95f7fb5af1eb0449c07028eb8b2a
 ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/5.15.7
 PYPI_PACKAGE=ondewo-csi-client
 
