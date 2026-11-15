@@ -25,7 +25,7 @@ ONDEWO_CSI_VERSION=5.7.0
 # rewrote every such line wholesale (tests/unit/test_release_runs_in_a_fresh_clone.py replays that rewrite).
 RELEASE_VERSION_RE=$(subst .,\.,${ONDEWO_CSI_VERSION})
 ONDEWO_CSI_API_GIT_BRANCH=tags/5.7.0
-ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/5.15.7
+ONDEWO_PROTO_COMPILER_GIT_BRANCH=tags/5.16.0
 PYPI_PACKAGE=ondewo-csi-client
 
 # The credentials have NO defaults: GITHUB_GH_TOKEN (push access to this repository), PYPI_USERNAME and
