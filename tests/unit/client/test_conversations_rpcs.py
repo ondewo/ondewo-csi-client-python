@@ -64,6 +64,10 @@ from ondewo.csi.conversation_pb2 import (
     SetCallMediaControlResponse,
     SetControlStatusRequest,
     SetControlStatusResponse,
+    WarmTransferOutcome,
+    WarmTransferOutcomeNotice,
+    WarmTransferOutcomeNoticeResponse,
+    WarmTransferOutcomeNoticeStatus,
 )
 from ondewo.csi.conversation_pb2_grpc import ConversationsStub
 
@@ -105,6 +109,20 @@ UNARY_RPCS: List[Tuple[str, str, Any, Any]] = [
         "SetCallerDtmf",
         CallerDtmfRequest(call_id="call-1", sequence=3, digit="#", duration_ms=120, received_unix_ns=1),
         CallerDtmfResponse(accepted=True),
+    ),
+    (
+        "deliver_warm_transfer_outcome_notice",
+        "DeliverWarmTransferOutcomeNotice",
+        WarmTransferOutcomeNotice(
+            request_id="notice-1",
+            outcome=WarmTransferOutcome.WARM_TRANSFER_OUTCOME_DECLINED,
+            callee_display_name="Sales",
+            cause="declined",
+            fallback_text="The colleague cannot take the call right now.",
+        ),
+        WarmTransferOutcomeNoticeResponse(
+            status=WarmTransferOutcomeNoticeStatus.WARM_TRANSFER_OUTCOME_NOTICE_STATUS_QUEUED
+        ),
     ),
 ]
 

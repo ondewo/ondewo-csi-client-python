@@ -152,6 +152,86 @@ of an answered id is dropped.</p>
 """
 global___ControlStatus = ControlStatus
 
+class _WarmTransferOutcome:
+    ValueType = typing.NewType("ValueType", builtins.int)
+    V: typing_extensions.TypeAlias = ValueType
+
+class _WarmTransferOutcomeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_WarmTransferOutcome.ValueType], builtins.type):
+    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    WARM_TRANSFER_OUTCOME_UNSPECIFIED: _WarmTransferOutcome.ValueType  # 0
+    """<p>Not set. A notice with this outcome is answered <code>INVALID</code>.</p>"""
+    WARM_TRANSFER_OUTCOME_DECLINED: _WarmTransferOutcome.ValueType  # 1
+    """<p>The transfer target declined the call. The caller stays with the bot.</p>"""
+    WARM_TRANSFER_OUTCOME_UNREACHABLE: _WarmTransferOutcome.ValueType  # 2
+    """<p>The transfer target could not be reached: busy, no answer, no decision in time, or the intro could not
+    run. The caller stays with the bot.</p>
+    """
+    WARM_TRANSFER_OUTCOME_DELEGATION_EXPIRED: _WarmTransferOutcome.ValueType  # 3
+    """<p>A transfer the bot asked for was handed to ondewo-vtsi and never claimed in time. ondewo-sip sent no
+    transfer. The server runs its failed-transfer action (<code>CSI_TRANSFER_FAILED_ACTION</code>) instead of
+    speaking a notice.</p>
+    """
+
+class WarmTransferOutcome(_WarmTransferOutcome, metaclass=_WarmTransferOutcomeEnumTypeWrapper):
+    """<p>Outcome of a warm transfer that did not hand the caller over.</p>"""
+
+WARM_TRANSFER_OUTCOME_UNSPECIFIED: WarmTransferOutcome.ValueType  # 0
+"""<p>Not set. A notice with this outcome is answered <code>INVALID</code>.</p>"""
+WARM_TRANSFER_OUTCOME_DECLINED: WarmTransferOutcome.ValueType  # 1
+"""<p>The transfer target declined the call. The caller stays with the bot.</p>"""
+WARM_TRANSFER_OUTCOME_UNREACHABLE: WarmTransferOutcome.ValueType  # 2
+"""<p>The transfer target could not be reached: busy, no answer, no decision in time, or the intro could not
+run. The caller stays with the bot.</p>
+"""
+WARM_TRANSFER_OUTCOME_DELEGATION_EXPIRED: WarmTransferOutcome.ValueType  # 3
+"""<p>A transfer the bot asked for was handed to ondewo-vtsi and never claimed in time. ondewo-sip sent no
+transfer. The server runs its failed-transfer action (<code>CSI_TRANSFER_FAILED_ACTION</code>) instead of
+speaking a notice.</p>
+"""
+global___WarmTransferOutcome = WarmTransferOutcome
+
+class _WarmTransferOutcomeNoticeStatus:
+    ValueType = typing.NewType("ValueType", builtins.int)
+    V: typing_extensions.TypeAlias = ValueType
+
+class _WarmTransferOutcomeNoticeStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_WarmTransferOutcomeNoticeStatus.ValueType], builtins.type):
+    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    WARM_TRANSFER_OUTCOME_NOTICE_STATUS_UNSPECIFIED: _WarmTransferOutcomeNoticeStatus.ValueType  # 0
+    """<p>Never sent by the server.</p>"""
+    WARM_TRANSFER_OUTCOME_NOTICE_STATUS_QUEUED: _WarmTransferOutcomeNoticeStatus.ValueType  # 1
+    """<p>The notice was queued for the current call and will be spoken unless the call ends first.</p>"""
+    WARM_TRANSFER_OUTCOME_NOTICE_STATUS_DUPLICATE: _WarmTransferOutcomeNoticeStatus.ValueType  # 2
+    """<p>A notice with this <code>request_id</code> was already taken on this call. Nothing changed.</p>"""
+    WARM_TRANSFER_OUTCOME_NOTICE_STATUS_DISABLED: _WarmTransferOutcomeNoticeStatus.ValueType  # 3
+    """<p>The server takes no notices (<code>CSI_WARM_TRANSFER_OUTCOME_ACTIVE</code> is not <code>true</code>).
+    Nothing changed.</p>
+    """
+    WARM_TRANSFER_OUTCOME_NOTICE_STATUS_INVALID: _WarmTransferOutcomeNoticeStatus.ValueType  # 4
+    """<p>The notice breaks a rule of <code>WarmTransferOutcomeNotice</code>: an empty or over-long
+    <code>request_id</code>, an unspecified or unknown <code>outcome</code>, or a field over its bound. Nothing
+    changed; the sender must not retry it unchanged.</p>
+    """
+
+class WarmTransferOutcomeNoticeStatus(_WarmTransferOutcomeNoticeStatus, metaclass=_WarmTransferOutcomeNoticeStatusEnumTypeWrapper):
+    """<p>How the server took a <code>WarmTransferOutcomeNotice</code>.</p>"""
+
+WARM_TRANSFER_OUTCOME_NOTICE_STATUS_UNSPECIFIED: WarmTransferOutcomeNoticeStatus.ValueType  # 0
+"""<p>Never sent by the server.</p>"""
+WARM_TRANSFER_OUTCOME_NOTICE_STATUS_QUEUED: WarmTransferOutcomeNoticeStatus.ValueType  # 1
+"""<p>The notice was queued for the current call and will be spoken unless the call ends first.</p>"""
+WARM_TRANSFER_OUTCOME_NOTICE_STATUS_DUPLICATE: WarmTransferOutcomeNoticeStatus.ValueType  # 2
+"""<p>A notice with this <code>request_id</code> was already taken on this call. Nothing changed.</p>"""
+WARM_TRANSFER_OUTCOME_NOTICE_STATUS_DISABLED: WarmTransferOutcomeNoticeStatus.ValueType  # 3
+"""<p>The server takes no notices (<code>CSI_WARM_TRANSFER_OUTCOME_ACTIVE</code> is not <code>true</code>).
+Nothing changed.</p>
+"""
+WARM_TRANSFER_OUTCOME_NOTICE_STATUS_INVALID: WarmTransferOutcomeNoticeStatus.ValueType  # 4
+"""<p>The notice breaks a rule of <code>WarmTransferOutcomeNotice</code>: an empty or over-long
+<code>request_id</code>, an unspecified or unknown <code>outcome</code>, or a field over its bound. Nothing
+changed; the sender must not retry it unchanged.</p>
+"""
+global___WarmTransferOutcomeNoticeStatus = WarmTransferOutcomeNoticeStatus
+
 class _ControlMessageServiceName:
     ValueType = typing.NewType("ValueType", builtins.int)
     V: typing_extensions.TypeAlias = ValueType
@@ -1744,7 +1824,8 @@ class CallerDtmfResponse(google.protobuf.message.Message):
     reason: builtins.str
     """<p>Empty when accepted. Otherwise a stable token: <code>disabled</code>, <code>no-call</code>,
     <code>other-call</code>, <code>stale-sequence</code>, <code>invalid-digit</code>, <code>listening-paused</code>,
-    <code>amd-in-progress</code> or <code>undeclared</code>.</p>
+    <code>amd-in-progress</code>, <code>undeclared</code> or <code>invalid-key</code> (a menu key outside the menu's
+    options while the menu ignores such keys).</p>
     """
     def __init__(
         self,
@@ -1755,6 +1836,87 @@ class CallerDtmfResponse(google.protobuf.message.Message):
     def ClearField(self, field_name: typing.Literal["accepted", b"accepted", "reason", b"reason"]) -> None: ...
 
 global___CallerDtmfResponse = CallerDtmfResponse
+
+@typing.final
+class WarmTransferOutcomeNotice(google.protobuf.message.Message):
+    """<p>A warm-transfer outcome the bot must tell the caller, sent by ondewo-sip to
+    <code>DeliverWarmTransferOutcomeNotice</code>.</p>
+
+    <p>The server takes each <code>request_id</code> at most once per call, and forgets the call's notices at
+    <code>CALL_ENDED</code>. A queued <code>DECLINED</code> or <code>UNREACHABLE</code> notice is committed as a
+    <code>[TRANSFER:DECLINED]</code> / <code>[TRANSFER:UNREACHABLE]</code> caller turn when the NLU server advertised
+    the <code>x-ondewo-cai-warm-intro: 1</code> capability on the call, so the NLU answers it. Otherwise (the capability
+    is unknown or absent), the server speaks <code>fallback_text</code> itself as a bot utterance. Either way it is an
+    ordinary utterance the caller can interrupt. No field carries the decline reason, and the server logs none of
+    the texts.</p>
+    """
+
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    REQUEST_ID_FIELD_NUMBER: builtins.int
+    OUTCOME_FIELD_NUMBER: builtins.int
+    INTRO_SESSION_FIELD_NUMBER: builtins.int
+    CALLEE_DISPLAY_NAME_FIELD_NUMBER: builtins.int
+    CAUSE_FIELD_NUMBER: builtins.int
+    FALLBACK_TEXT_FIELD_NUMBER: builtins.int
+    request_id: builtins.str
+    """<p>ondewo-vtsi's transfer request id, or ondewo-sip's delegated request id for
+    <code>WARM_TRANSFER_OUTCOME_DELEGATION_EXPIRED</code>. 1 to 128 characters. A second notice with the same id
+    on the same call is answered <code>DUPLICATE</code> and changes nothing.</p>
+    """
+    outcome: global___WarmTransferOutcome.ValueType
+    """<p>What happened to the transfer. <code>WARM_TRANSFER_OUTCOME_UNSPECIFIED</code> is answered
+    <code>INVALID</code>.</p>
+    """
+    intro_session: builtins.str
+    """<p>NLU session name of the intro session, which holds the decline reason. Only with
+    <code>WARM_TRANSFER_OUTCOME_DECLINED</code>, and empty when the target gave no reason; ignored with any other
+    outcome.</p>
+    """
+    callee_display_name: builtins.str
+    """<p>Display name of the transfer target, at most 128 characters. May be empty.</p>"""
+    cause: builtins.str
+    """<p>Bounded lowercase token naming the cause, at most 64 characters, e.g. <code>voicemail-suspected</code>,
+    <code>target-hung-up</code> or <code>no-free-listener</code>. For logs and telemetry only.</p>
+    """
+    fallback_text: builtins.str
+    """<p>The sentence the bot speaks when it cannot commit the notice as a turn: rendered by ondewo-vtsi from its
+    template, with the target's display name and without any decline reason. At most 1024 characters. Empty with
+    <code>WARM_TRANSFER_OUTCOME_DELEGATION_EXPIRED</code>.</p>
+    """
+    def __init__(
+        self,
+        *,
+        request_id: builtins.str = ...,
+        outcome: global___WarmTransferOutcome.ValueType = ...,
+        intro_session: builtins.str = ...,
+        callee_display_name: builtins.str = ...,
+        cause: builtins.str = ...,
+        fallback_text: builtins.str = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["callee_display_name", b"callee_display_name", "cause", b"cause", "fallback_text", b"fallback_text", "intro_session", b"intro_session", "outcome", b"outcome", "request_id", b"request_id"]) -> None: ...
+
+global___WarmTransferOutcomeNotice = WarmTransferOutcomeNotice
+
+@typing.final
+class WarmTransferOutcomeNoticeResponse(google.protobuf.message.Message):
+    """<p>Response of <code>DeliverWarmTransferOutcomeNotice</code>.</p>"""
+
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    STATUS_FIELD_NUMBER: builtins.int
+    status: global___WarmTransferOutcomeNoticeStatus.ValueType
+    """<p>How the server took the notice. The checks run in this order: <code>DISABLED</code>,
+    <code>INVALID</code>, <code>DUPLICATE</code>, then <code>QUEUED</code>.</p>
+    """
+    def __init__(
+        self,
+        *,
+        status: global___WarmTransferOutcomeNoticeStatus.ValueType = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["status", b"status"]) -> None: ...
+
+global___WarmTransferOutcomeNoticeResponse = WarmTransferOutcomeNoticeResponse
 
 @typing.final
 class Condition(google.protobuf.message.Message):

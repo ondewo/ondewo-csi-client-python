@@ -91,6 +91,11 @@ class ConversationsStub(object):
                 request_serializer=ondewo_dot_csi_dot_conversation__pb2.CallerDtmfRequest.SerializeToString,
                 response_deserializer=ondewo_dot_csi_dot_conversation__pb2.CallerDtmfResponse.FromString,
                 _registered_method=True)
+        self.DeliverWarmTransferOutcomeNotice = channel.unary_unary(
+                '/ondewo.csi.Conversations/DeliverWarmTransferOutcomeNotice',
+                request_serializer=ondewo_dot_csi_dot_conversation__pb2.WarmTransferOutcomeNotice.SerializeToString,
+                response_deserializer=ondewo_dot_csi_dot_conversation__pb2.WarmTransferOutcomeNoticeResponse.FromString,
+                _registered_method=True)
 
 
 class ConversationsServicer(object):
@@ -285,6 +290,27 @@ class ConversationsServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def DeliverWarmTransferOutcomeNotice(self, request, context):
+        """<p>Deliver the outcome of a warm transfer that did NOT hand the caller over, so the bot can tell the
+        caller.</p>
+
+        <p>Sent by ondewo-sip only, authenticated with its in-container token (the
+        <code>x-ondewo-sip-in-container-token</code> metadatum). A request without a valid token is refused with
+        <code>UNAUTHENTICATED</code>. ondewo-sip sends it whenever a notice is attached to the release of the
+        participant hold, after the level push of <code>SetCallMediaControl</code> or on its own when the level did not
+        change, and re-sends a notice it holds as pending (resync) by this RPC only, never inside a level. It clears
+        its pending notice on <code>QUEUED</code> or <code>DUPLICATE</code>.</p>
+
+        <p>A queued notice is never dropped by the server, except by <code>CALL_ENDED</code>: there is no caller left
+        to tell. It is spoken once the bot is unmuted, its listening is not paused and no utterance is in flight. See
+        <code>WarmTransferOutcomeNotice</code> for how. This RPC has no generation, never changes the control status of
+        <code>GetControlStream</code> / <code>SetControlStatus</code> and is never announced on the control stream. A
+        server built against a CSI API before 5.9.0 answers <code>UNIMPLEMENTED</code>.</p>
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ConversationsServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -342,6 +368,11 @@ def add_ConversationsServicer_to_server(servicer, server):
                     servicer.SetCallerDtmf,
                     request_deserializer=ondewo_dot_csi_dot_conversation__pb2.CallerDtmfRequest.FromString,
                     response_serializer=ondewo_dot_csi_dot_conversation__pb2.CallerDtmfResponse.SerializeToString,
+            ),
+            'DeliverWarmTransferOutcomeNotice': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeliverWarmTransferOutcomeNotice,
+                    request_deserializer=ondewo_dot_csi_dot_conversation__pb2.WarmTransferOutcomeNotice.FromString,
+                    response_serializer=ondewo_dot_csi_dot_conversation__pb2.WarmTransferOutcomeNoticeResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -642,6 +673,33 @@ class Conversations(object):
             '/ondewo.csi.Conversations/SetCallerDtmf',
             ondewo_dot_csi_dot_conversation__pb2.CallerDtmfRequest.SerializeToString,
             ondewo_dot_csi_dot_conversation__pb2.CallerDtmfResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def DeliverWarmTransferOutcomeNotice(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/ondewo.csi.Conversations/DeliverWarmTransferOutcomeNotice',
+            ondewo_dot_csi_dot_conversation__pb2.WarmTransferOutcomeNotice.SerializeToString,
+            ondewo_dot_csi_dot_conversation__pb2.WarmTransferOutcomeNoticeResponse.FromString,
             options,
             channel_credentials,
             insecure,

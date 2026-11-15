@@ -2,6 +2,20 @@
 
 *****************
 
+## Release ONDEWO CSI Python Client 5.9.0
+
+### New Features
+
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) Built against ondewo-csi-api 5.9.0: the unary `Conversations.DeliverWarmTransferOutcomeNotice` RPC (`WarmTransferOutcomeNotice` / `WarmTransferOutcomeNoticeResponse`) and the top-level enums `WarmTransferOutcome` and `WarmTransferOutcomeNoticeStatus`, through which ondewo-sip hands the bot the outcome of a warm transfer that did not connect. `Conversations.deliver_warm_transfer_outcome_notice` is added to the sync and the async services.
+
+### Improvements
+
+* Tracking API Version [5.9.0](https://github.com/ondewo/ondewo-csi-api/releases/tag/5.9.0) ( [Documentation](https://ondewo.github.io/ondewo-csi-api/) )
+* `ondewo-nlu-client` moves to `>=7.4,<7.7` (was `>=7.4,<7.6`), so the client installs next to nlu-client 7.6.x, which carries the warm-transfer intro RPCs. The generated `ondewo/csi` code still imports only nlu-api 7.4.0 messages.
+* Purely additive against 5.8.0: `CallMediaControlLevel` and `SetCallMediaControlResponse` are unchanged, and no generated message, field, enum value or RPC was renumbered or removed.
+
+*****************
+
 ## Release ONDEWO CSI Python Client 5.8.0
 
 ### New Features

@@ -32,6 +32,8 @@ from ondewo.csi.conversation_pb2 import (
     SetCallMediaControlResponse,
     SetControlStatusRequest,
     SetControlStatusResponse,
+    WarmTransferOutcomeNotice,
+    WarmTransferOutcomeNoticeResponse,
 )
 from ondewo.csi.conversation_pb2_grpc import ConversationsStub
 
@@ -90,4 +92,12 @@ class Conversations(ServicesInterface):
 
     def set_caller_dtmf(self, request: CallerDtmfRequest) -> CallerDtmfResponse:
         response: CallerDtmfResponse = self.stub.SetCallerDtmf(request, metadata=self.metadata)
+        return response
+
+    def deliver_warm_transfer_outcome_notice(
+        self, request: WarmTransferOutcomeNotice
+    ) -> WarmTransferOutcomeNoticeResponse:
+        response: WarmTransferOutcomeNoticeResponse = self.stub.DeliverWarmTransferOutcomeNotice(
+            request, metadata=self.metadata
+        )
         return response
