@@ -30,9 +30,10 @@ dependencies = [
     "dataclasses-json",
     "google-api-core",
     "googleapis-common-protos",
-    "grpcio",
-    "grpcio-reflection",
-    "grpcio-tools",
+    # The generated stubs come from ondewo-proto-compiler 5.17.0: every _pb2.py refuses a protobuf runtime older
+    # than its 7.35.1 gencode and every _pb2_grpc.py a grpcio older than 1.85.1, at import. grpcio-tools,
+    # grpcio-reflection and mypy-protobuf are build tools of the compiler image, never imported at runtime.
+    "grpcio>=1.85.1",
     "loguru",
     "numpy",
     # 4.1.1 is the first release whose BaseClientConfig carries the mutual-TLS key this SDK must redact; it requires
@@ -46,12 +47,13 @@ dependencies = [
     # ondewo/nlu) still need one line on both sides. The 7.1.1 floor's reason (the offline-token hand-off and the
     # refresh thread surviving a failed refresh) is carried by every 7.4.x release.
     "ondewo-nlu-client>=7.4,<7.7",
-    # Held in LOCKSTEP with the s2t protos this package vendors. ondewo-csi-api 5.5.0 tracks
-    # ondewo-s2t-api 7.5.0, so the generated ondewo/s2t code here is 7.5.0 -- pairing that with
-    # a 7.4.x s2t-client is the vendored-proto skew that fails SILENTLY, because one physical
-    # copy of ondewo/s2t survives on disk and the last writer wins.
-    "ondewo-s2t-client>=7.5.0,<7.6.0",
+    # Held in LOCKSTEP with the s2t protos ondewo-csi-api vendors: csi-api 5.9.0 tracks ondewo-s2t-api 7.6.0,
+    # whose speech-to-text.proto conversation.proto imports -- pairing that with a 7.5.x s2t-client is the
+    # vendored-proto skew that fails SILENTLY, because one physical copy of ondewo/s2t survives on disk and
+    # the last writer wins.
+    "ondewo-s2t-client>=7.6.0,<7.7.0",
     "ondewo-t2s-client>=6.6.3,<6.7.0",
+    "protobuf>=7.35.1,<8",
     "requests",
     "setuptools",
 ]

@@ -6,7 +6,7 @@ import warnings
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 from ondewo.csi import conversation_pb2 as ondewo_dot_csi_dot_conversation__pb2
 
-GRPC_GENERATED_VERSION = '1.67.1'
+GRPC_GENERATED_VERSION = '1.85.1'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
 
@@ -19,14 +19,14 @@ except ImportError:
 if _version_not_supported:
     raise RuntimeError(
         f'The grpc package installed is at version {GRPC_VERSION},'
-        + f' but the generated code in ondewo/csi/conversation_pb2_grpc.py depends on'
+        + ' but the generated code in ondewo/csi/conversation_pb2_grpc.py depends on'
         + f' grpcio>={GRPC_GENERATED_VERSION}.'
         + f' Please upgrade your grpc module to grpcio>={GRPC_GENERATED_VERSION}'
         + f' or downgrade your generated code using grpcio-tools<={GRPC_VERSION}.'
     )
 
 
-class ConversationsStub(object):
+class ConversationsStub:
     """<p>Endpoints of CSI service.</p>
     """
 
@@ -98,7 +98,7 @@ class ConversationsStub(object):
                 _registered_method=True)
 
 
-class ConversationsServicer(object):
+class ConversationsServicer:
     """<p>Endpoints of CSI service.</p>
     """
 
@@ -382,7 +382,7 @@ def add_ConversationsServicer_to_server(servicer, server):
 
 
  # This class is part of an EXPERIMENTAL API.
-class Conversations(object):
+class Conversations:
     """<p>Endpoints of CSI service.</p>
     """
 

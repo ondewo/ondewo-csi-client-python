@@ -14,6 +14,12 @@
 * `ondewo-nlu-client` moves to `>=7.4,<7.7` (was `>=7.4,<7.6`), so the client installs next to nlu-client 7.6.x, which carries the warm-transfer intro RPCs. The generated `ondewo/csi` code still imports only nlu-api 7.4.0 messages.
 * Purely additive against 5.8.0: `CallMediaControlLevel` and `SetCallMediaControlResponse` are unchanged, and no generated message, field, enum value or RPC was renumbered or removed.
 
+### Breaking Changes
+
+* Generated with ondewo-proto-compiler 5.17.0 (was 5.16.0): `conversation_pb2.py` carries `# Protobuf Python Version: 7.35.1` and `conversation_pb2_grpc.py` `GRPC_GENERATED_VERSION = '1.85.1'`, and both refuse an older runtime at import. The new runtime floors are `protobuf>=7.35.1,<8` and `grpcio>=1.85.1` (Python >= 3.10); the `.pyi` stubs come from mypy-protobuf 5.1.0.
+* `grpcio-tools` and `grpcio-reflection` are no longer runtime dependencies: they are build tools of the compiler image, and nothing in this package imports them.
+* `ondewo-s2t-client` moves to `>=7.6.0,<7.7.0` (was `>=7.5.0,<7.6.0`), in lockstep with ondewo-s2t-api 7.6.0 that csi-api 5.9.0 vendors.
+
 *****************
 
 ## Release ONDEWO CSI Python Client 5.8.0

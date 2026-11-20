@@ -16,34 +16,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import builtins
-import collections.abc
-import google.protobuf.descriptor
-import google.protobuf.internal.containers
-import google.protobuf.internal.enum_type_wrapper
-import google.protobuf.message
-import google.protobuf.struct_pb2
-import google.rpc.status_pb2
-import ondewo.nlu.context_pb2
-import ondewo.nlu.session_pb2
-import ondewo.s2t.speech_to_text_pb2
-import ondewo.t2s.text_to_speech_pb2
+from collections import abc as _abc
+from google.protobuf import descriptor as _descriptor
+from google.protobuf import message as _message
+from google.protobuf import struct_pb2 as _struct_pb2
+from google.protobuf.internal import containers as _containers
+from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
+from google.rpc import status_pb2 as _status_pb2
+from ondewo.nlu import context_pb2 as _context_pb2
+from ondewo.nlu import session_pb2 as _session_pb2
+from ondewo.s2t import speech_to_text_pb2 as _speech_to_text_pb2
+from ondewo.t2s import text_to_speech_pb2 as _text_to_speech_pb2
+import builtins as _builtins
 import sys
-import typing
+import typing as _typing
 
-if sys.version_info >= (3, 10):
-    import typing as typing_extensions
+if sys.version_info >= (3, 11):
+    from typing import TypeAlias as _TypeAlias, Never as _Never
 else:
-    import typing_extensions
+    from typing_extensions import TypeAlias as _TypeAlias, Never as _Never
 
-DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
+DESCRIPTOR: _descriptor.FileDescriptor
 
 class _ControlStatus:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _ControlStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ControlStatus.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _ControlStatusEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_ControlStatus.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     OK: _ControlStatus.ValueType  # 0
     """Status that control stream is ok"""
     EMERGENCY_STOP: _ControlStatus.ValueType  # 1
@@ -150,14 +150,14 @@ Any other status (<code>UNAVAILABLE</code>, <code>DEADLINE_EXCEEDED</code>, ...)
 have arrived; the client may retry it with the same <code>playback_cut_request_id</code>, because a second copy
 of an answered id is dropped.</p>
 """
-global___ControlStatus = ControlStatus
+Global___ControlStatus: _TypeAlias = ControlStatus  # noqa: Y015
 
 class _WarmTransferOutcome:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _WarmTransferOutcomeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_WarmTransferOutcome.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _WarmTransferOutcomeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_WarmTransferOutcome.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     WARM_TRANSFER_OUTCOME_UNSPECIFIED: _WarmTransferOutcome.ValueType  # 0
     """<p>Not set. A notice with this outcome is answered <code>INVALID</code>.</p>"""
     WARM_TRANSFER_OUTCOME_DECLINED: _WarmTransferOutcome.ValueType  # 1
@@ -188,14 +188,14 @@ WARM_TRANSFER_OUTCOME_DELEGATION_EXPIRED: WarmTransferOutcome.ValueType  # 3
 transfer. The server runs its failed-transfer action (<code>CSI_TRANSFER_FAILED_ACTION</code>) instead of
 speaking a notice.</p>
 """
-global___WarmTransferOutcome = WarmTransferOutcome
+Global___WarmTransferOutcome: _TypeAlias = WarmTransferOutcome  # noqa: Y015
 
 class _WarmTransferOutcomeNoticeStatus:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _WarmTransferOutcomeNoticeStatusEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_WarmTransferOutcomeNoticeStatus.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _WarmTransferOutcomeNoticeStatusEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_WarmTransferOutcomeNoticeStatus.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     WARM_TRANSFER_OUTCOME_NOTICE_STATUS_UNSPECIFIED: _WarmTransferOutcomeNoticeStatus.ValueType  # 0
     """<p>Never sent by the server.</p>"""
     WARM_TRANSFER_OUTCOME_NOTICE_STATUS_QUEUED: _WarmTransferOutcomeNoticeStatus.ValueType  # 1
@@ -230,14 +230,14 @@ WARM_TRANSFER_OUTCOME_NOTICE_STATUS_INVALID: WarmTransferOutcomeNoticeStatus.Val
 <code>request_id</code>, an unspecified or unknown <code>outcome</code>, or a field over its bound. Nothing
 changed; the sender must not retry it unchanged.</p>
 """
-global___WarmTransferOutcomeNoticeStatus = WarmTransferOutcomeNoticeStatus
+Global___WarmTransferOutcomeNoticeStatus: _TypeAlias = WarmTransferOutcomeNoticeStatus  # noqa: Y015
 
 class _ControlMessageServiceName:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _ControlMessageServiceNameEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ControlMessageServiceName.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _ControlMessageServiceNameEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_ControlMessageServiceName.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     UNKNOWNNAME: _ControlMessageServiceName.ValueType  # 0
     """Unknown control message service name"""
     ondewo_s2t: _ControlMessageServiceName.ValueType  # 1
@@ -274,14 +274,14 @@ ondewo_csi: ControlMessageServiceName.ValueType  # 6
 """CSI control message service name"""
 ondewo_survey: ControlMessageServiceName.ValueType  # 7
 """Survey control message service name"""
-global___ControlMessageServiceName = ControlMessageServiceName
+Global___ControlMessageServiceName: _TypeAlias = ControlMessageServiceName  # noqa: Y015
 
 class _ControlMessageServiceMethod:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _ControlMessageServiceMethodEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ControlMessageServiceMethod.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _ControlMessageServiceMethodEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_ControlMessageServiceMethod.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     UNKNOWNMETHOD: _ControlMessageServiceMethod.ValueType  # 0
     """Unknown method (default)"""
     update_config: _ControlMessageServiceMethod.ValueType  # 1
@@ -1142,14 +1142,14 @@ detect_intent: ControlMessageServiceMethod.ValueType  # 18
 }
 </code></pre>
 """
-global___ControlMessageServiceMethod = ControlMessageServiceMethod
+Global___ControlMessageServiceMethod: _TypeAlias = ControlMessageServiceMethod  # noqa: Y015
 
 class _ConditionType:
-    ValueType = typing.NewType("ValueType", builtins.int)
-    V: typing_extensions.TypeAlias = ValueType
+    ValueType = _typing.NewType("ValueType", _builtins.int)
+    V: _TypeAlias = ValueType  # noqa: Y015
 
-class _ConditionTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[_ConditionType.ValueType], builtins.type):
-    DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+class _ConditionTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[_ConditionType.ValueType], _builtins.type):
+    DESCRIPTOR: _descriptor.EnumDescriptor
     UNKNOWTYPE: _ConditionType.ValueType  # 0
     """Unknown type"""
     immediate: _ConditionType.ValueType  # 1
@@ -1174,96 +1174,113 @@ datetime: ConditionType.ValueType  # 3
 """Date and time when a control message should be executed. Example value need be given as a string in the format: <pre><code>value=&quot;2021-12-23T13:45:00.000Z&quot;</code></pre>"""
 interactions: ConditionType.ValueType  # 4
 """Number of interactions of the user with an ONDEWO AI agent after a control message should be executed. Example value need be given as a string in the format: <pre><code>value=&quot;4&quot;</code></pre>"""
-global___ConditionType = ConditionType
+Global___ConditionType: _TypeAlias = ConditionType  # noqa: Y015
 
-@typing.final
-class S2sPipeline(google.protobuf.message.Message):
+@_typing.final
+class S2sPipeline(_message.Message):
     """The top-level message sent by client to <code>CreateS2sPipeline</code> and <code>UpdateS2sPipeline</code> endpoints and received from <code>GetS2sPipeline</code> endpoint."""
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    S2T_PIPELINE_ID_FIELD_NUMBER: builtins.int
-    NLU_PROJECT_ID_FIELD_NUMBER: builtins.int
-    NLU_LANGUAGE_CODE_FIELD_NUMBER: builtins.int
-    T2S_PIPELINE_ID_FIELD_NUMBER: builtins.int
-    id: builtins.str
+    ID_FIELD_NUMBER: _builtins.int
+    S2T_PIPELINE_ID_FIELD_NUMBER: _builtins.int
+    NLU_PROJECT_ID_FIELD_NUMBER: _builtins.int
+    NLU_LANGUAGE_CODE_FIELD_NUMBER: _builtins.int
+    T2S_PIPELINE_ID_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
     """Required. CSI pipeline identifier consisting of S2T, NLU and T2S configuration. ID can be any non-empty string."""
-    s2t_pipeline_id: builtins.str
+    s2t_pipeline_id: _builtins.str
     """Required. S2T pipeline ID, e.g. "german_general" """
-    nlu_project_id: builtins.str
+    nlu_project_id: _builtins.str
     """Required. NLU project ID, usually a hash, e.g. "ae33586b-x2s2-494a-aa73-1af0589cfc56"."""
-    nlu_language_code: builtins.str
+    nlu_language_code: _builtins.str
     """Required. Language code present in the corresponding NLU project, e.g. "de"."""
-    t2s_pipeline_id: builtins.str
+    t2s_pipeline_id: _builtins.str
     """Required. T2S pipeline ID, e.g. "kerstin"."""
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
-        s2t_pipeline_id: builtins.str = ...,
-        nlu_project_id: builtins.str = ...,
-        nlu_language_code: builtins.str = ...,
-        t2s_pipeline_id: builtins.str = ...,
+        id: _builtins.str = ...,
+        s2t_pipeline_id: _builtins.str = ...,
+        nlu_project_id: _builtins.str = ...,
+        nlu_language_code: _builtins.str = ...,
+        t2s_pipeline_id: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["id", b"id", "nlu_language_code", b"nlu_language_code", "nlu_project_id", b"nlu_project_id", "s2t_pipeline_id", b"s2t_pipeline_id", "t2s_pipeline_id", b"t2s_pipeline_id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id", "nlu_language_code", b"nlu_language_code", "nlu_project_id", b"nlu_project_id", "s2t_pipeline_id", b"s2t_pipeline_id", "t2s_pipeline_id", b"t2s_pipeline_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___S2sPipeline = S2sPipeline
+Global___S2sPipeline: _TypeAlias = S2sPipeline  # noqa: Y015
 
-@typing.final
-class S2sPipelineId(google.protobuf.message.Message):
+@_typing.final
+class S2sPipelineId(_message.Message):
     """The top-level message sent by client to <code>GetS2sPipeline</code> and <code>DeleteS2sPipeline</code> endpoints."""
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ID_FIELD_NUMBER: builtins.int
-    id: builtins.str
+    ID_FIELD_NUMBER: _builtins.int
+    id: _builtins.str
     """Required. CSI pipeline identifier."""
     def __init__(
         self,
         *,
-        id: builtins.str = ...,
+        id: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["id", b"id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["id", b"id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___S2sPipelineId = S2sPipelineId
+Global___S2sPipelineId: _TypeAlias = S2sPipelineId  # noqa: Y015
 
-@typing.final
-class ListS2sPipelinesRequest(google.protobuf.message.Message):
+@_typing.final
+class ListS2sPipelinesRequest(_message.Message):
     """The top-level message sent by client to <code>ListS2sPipelines</code> endpoint. Currently without arguments.
     TODO: add filtering options
     """
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
     def __init__(
         self,
     ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ListS2sPipelinesRequest = ListS2sPipelinesRequest
+Global___ListS2sPipelinesRequest: _TypeAlias = ListS2sPipelinesRequest  # noqa: Y015
 
-@typing.final
-class ListS2sPipelinesResponse(google.protobuf.message.Message):
+@_typing.final
+class ListS2sPipelinesResponse(_message.Message):
     """The top-level message received from <code>ListS2sPipelines</code> endpoint."""
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    PIPELINES_FIELD_NUMBER: builtins.int
-    @property
-    def pipelines(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[global___S2sPipeline]:
+    PIPELINES_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def pipelines(self) -> _containers.RepeatedCompositeFieldContainer[Global___S2sPipeline]:
         """Collection of S2S pipelines of the server."""
 
     def __init__(
         self,
         *,
-        pipelines: collections.abc.Iterable[global___S2sPipeline] | None = ...,
+        pipelines: _abc.Iterable[Global___S2sPipeline] | None = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["pipelines", b"pipelines"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["pipelines", b"pipelines"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ListS2sPipelinesResponse = ListS2sPipelinesResponse
+Global___ListS2sPipelinesResponse: _TypeAlias = ListS2sPipelinesResponse  # noqa: Y015
 
-@typing.final
-class S2sStreamRequest(google.protobuf.message.Message):
+@_typing.final
+class S2sStreamRequest(_message.Message):
     """The top-level message sent by the client to the <code>S2sStream</code> method.
     Multiple request messages should be sent in order:
     <ul>
@@ -1272,38 +1289,42 @@ class S2sStreamRequest(google.protobuf.message.Message):
     </ul>
     """
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    PIPELINE_ID_FIELD_NUMBER: builtins.int
-    SESSION_ID_FIELD_NUMBER: builtins.int
-    AUDIO_FIELD_NUMBER: builtins.int
-    END_OF_STREAM_FIELD_NUMBER: builtins.int
-    INITIAL_INTENT_DISPLAY_NAME_FIELD_NUMBER: builtins.int
-    pipeline_id: builtins.str
+    PIPELINE_ID_FIELD_NUMBER: _builtins.int
+    SESSION_ID_FIELD_NUMBER: _builtins.int
+    AUDIO_FIELD_NUMBER: _builtins.int
+    END_OF_STREAM_FIELD_NUMBER: _builtins.int
+    INITIAL_INTENT_DISPLAY_NAME_FIELD_NUMBER: _builtins.int
+    pipeline_id: _builtins.str
     """Optional. The CSI pipeline ID specified in the initial request."""
-    session_id: builtins.str
+    session_id: _builtins.str
     """<p>Optional. The session or call ID specified in the initial request. It&apos;s up to the API caller to choose an appropriate string. It can be a random number or some type of user identifier (preferably hashed).</p>"""
-    audio: builtins.bytes
+    audio: _builtins.bytes
     """Optional. The input audio content to be recognized."""
-    end_of_stream: builtins.bool
+    end_of_stream: _builtins.bool
     """If <code>true</code>, the recognizer will not return any further hypotheses about this piece of the audio. May only be populated for <code>event_type</code> = <code>RECOGNITION_EVENT_TRANSCRIPT</code>."""
-    initial_intent_display_name: builtins.str
+    initial_intent_display_name: _builtins.str
     """Optional. Intent display name to trigger in NLU system in the beginning of the conversation."""
     def __init__(
         self,
         *,
-        pipeline_id: builtins.str = ...,
-        session_id: builtins.str = ...,
-        audio: builtins.bytes = ...,
-        end_of_stream: builtins.bool = ...,
-        initial_intent_display_name: builtins.str = ...,
+        pipeline_id: _builtins.str = ...,
+        session_id: _builtins.str = ...,
+        audio: _builtins.bytes = ...,
+        end_of_stream: _builtins.bool = ...,
+        initial_intent_display_name: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["audio", b"audio", "end_of_stream", b"end_of_stream", "initial_intent_display_name", b"initial_intent_display_name", "pipeline_id", b"pipeline_id", "session_id", b"session_id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["audio", b"audio", "end_of_stream", b"end_of_stream", "initial_intent_display_name", b"initial_intent_display_name", "pipeline_id", b"pipeline_id", "session_id", b"session_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___S2sStreamRequest = S2sStreamRequest
+Global___S2sStreamRequest: _TypeAlias = S2sStreamRequest  # noqa: Y015
 
-@typing.final
-class S2sStreamResponse(google.protobuf.message.Message):
+@_typing.final
+class S2sStreamResponse(_message.Message):
     """The top-level message returned from the <code>S2sStream</code> method.
     A response message is returned for each utterance of the input stream. It contains the full response from NLU system in <code>detect_intent_response</code> or the full T2S response in <code>synthesize_response</code>.
     Multiple response messages can be returned in order:
@@ -1318,25 +1339,25 @@ class S2sStreamResponse(google.protobuf.message.Message):
     </ul>
     """
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    DETECT_INTENT_RESPONSE_FIELD_NUMBER: builtins.int
-    SYNTHESIZE_RESPONSE_FIELD_NUMBER: builtins.int
-    SIP_TRIGGER_FIELD_NUMBER: builtins.int
-    UTTERANCE_ID_FIELD_NUMBER: builtins.int
-    CHUNK_INDEX_FIELD_NUMBER: builtins.int
-    LAST_CHUNK_FIELD_NUMBER: builtins.int
-    TURN_EPOCH_FIELD_NUMBER: builtins.int
-    RESPONSE_SEQUENCE_FIELD_NUMBER: builtins.int
-    utterance_id: builtins.str
+    DETECT_INTENT_RESPONSE_FIELD_NUMBER: _builtins.int
+    SYNTHESIZE_RESPONSE_FIELD_NUMBER: _builtins.int
+    SIP_TRIGGER_FIELD_NUMBER: _builtins.int
+    UTTERANCE_ID_FIELD_NUMBER: _builtins.int
+    CHUNK_INDEX_FIELD_NUMBER: _builtins.int
+    LAST_CHUNK_FIELD_NUMBER: _builtins.int
+    TURN_EPOCH_FIELD_NUMBER: _builtins.int
+    RESPONSE_SEQUENCE_FIELD_NUMBER: _builtins.int
+    utterance_id: _builtins.str
     """Optional. Identifier of the utterance this response belongs to. All chunks of one synthesized utterance share the same <code>utterance_id</code>"""
-    chunk_index: builtins.int
+    chunk_index: _builtins.int
     """Optional. Zero-based index of this chunk within the utterance identified by <code>utterance_id</code>"""
-    last_chunk: builtins.bool
+    last_chunk: _builtins.bool
     """Optional. If <code>true</code>, this is the last chunk of the utterance identified by <code>utterance_id</code>"""
-    turn_epoch: builtins.int
+    turn_epoch: _builtins.int
     """Optional. Monotonic turn epoch of the conversation turn that produced this response. Used by consumers to fence stale audio of an interrupted turn"""
-    response_sequence: builtins.int
+    response_sequence: _builtins.int
     """<p>Optional. One-based sequence number of this response on its <code>S2sStream</code>, assigned by the server
     when it yields the response and counted over EVERY response of the stream (audio, NLU and SIP trigger), so it
     is independent of whether anything is stored or framed. <code>0</code> means the server does not number its
@@ -1345,48 +1366,52 @@ class S2sStreamResponse(google.protobuf.message.Message):
     <p>It names a response that has no <code>utterance_id</code> (the greeting, a merged utterance, a filler,
     the apology) in <code>PlaybackCut.response_sequence</code> and in a <code>PLAYBACK_DONE</code> report.</p>
     """
-    @property
-    def detect_intent_response(self) -> ondewo.nlu.session_pb2.DetectIntentResponse:
+    @_builtins.property
+    def detect_intent_response(self) -> _session_pb2.DetectIntentResponse:
         """full NLU detect intent response"""
 
-    @property
-    def synthesize_response(self) -> ondewo.t2s.text_to_speech_pb2.SynthesizeResponse:
+    @_builtins.property
+    def synthesize_response(self) -> _text_to_speech_pb2.SynthesizeResponse:
         """full T2S synthesize response"""
 
-    @property
-    def sip_trigger(self) -> global___SipTrigger:
+    @_builtins.property
+    def sip_trigger(self) -> Global___SipTrigger:
         """SIP trigger message"""
 
     def __init__(
         self,
         *,
-        detect_intent_response: ondewo.nlu.session_pb2.DetectIntentResponse | None = ...,
-        synthesize_response: ondewo.t2s.text_to_speech_pb2.SynthesizeResponse | None = ...,
-        sip_trigger: global___SipTrigger | None = ...,
-        utterance_id: builtins.str = ...,
-        chunk_index: builtins.int = ...,
-        last_chunk: builtins.bool = ...,
-        turn_epoch: builtins.int = ...,
-        response_sequence: builtins.int = ...,
+        detect_intent_response: _session_pb2.DetectIntentResponse | None = ...,
+        synthesize_response: _text_to_speech_pb2.SynthesizeResponse | None = ...,
+        sip_trigger: Global___SipTrigger | None = ...,
+        utterance_id: _builtins.str = ...,
+        chunk_index: _builtins.int = ...,
+        last_chunk: _builtins.bool = ...,
+        turn_epoch: _builtins.int = ...,
+        response_sequence: _builtins.int = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["detect_intent_response", b"detect_intent_response", "response", b"response", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["chunk_index", b"chunk_index", "detect_intent_response", b"detect_intent_response", "last_chunk", b"last_chunk", "response", b"response", "response_sequence", b"response_sequence", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response", "turn_epoch", b"turn_epoch", "utterance_id", b"utterance_id"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["response", b"response"]) -> typing.Literal["detect_intent_response", "synthesize_response", "sip_trigger"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["detect_intent_response", b"detect_intent_response", "response", b"response", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["chunk_index", b"chunk_index", "detect_intent_response", b"detect_intent_response", "last_chunk", b"last_chunk", "response", b"response", "response_sequence", b"response_sequence", "sip_trigger", b"sip_trigger", "synthesize_response", b"synthesize_response", "turn_epoch", b"turn_epoch", "utterance_id", b"utterance_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_response: _TypeAlias = _typing.Literal["detect_intent_response", "synthesize_response", "sip_trigger"]  # noqa: Y015
+    _WhichOneofArgType_response: _TypeAlias = _typing.Literal["response", b"response"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_response) -> _WhichOneofReturnType_response | None: ...
 
-global___S2sStreamResponse = S2sStreamResponse
+Global___S2sStreamResponse: _TypeAlias = S2sStreamResponse  # noqa: Y015
 
-@typing.final
-class SipTrigger(google.protobuf.message.Message):
+@_typing.final
+class SipTrigger(_message.Message):
     """SIP trigger message."""
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
     class _SipTriggerType:
-        ValueType = typing.NewType("ValueType", builtins.int)
-        V: typing_extensions.TypeAlias = ValueType
+        ValueType = _typing.NewType("ValueType", _builtins.int)
+        V: _TypeAlias = ValueType  # noqa: Y015
 
-    class _SipTriggerTypeEnumTypeWrapper(google.protobuf.internal.enum_type_wrapper._EnumTypeWrapper[SipTrigger._SipTriggerType.ValueType], builtins.type):
-        DESCRIPTOR: google.protobuf.descriptor.EnumDescriptor
+    class _SipTriggerTypeEnumTypeWrapper(_enum_type_wrapper._EnumTypeWrapper[SipTrigger._SipTriggerType.ValueType], _builtins.type):
+        DESCRIPTOR: _descriptor.EnumDescriptor
         UNSPECIFIED: SipTrigger._SipTriggerType.ValueType  # 0
         """should never be used"""
         HANGUP: SipTrigger._SipTriggerType.ValueType  # 1
@@ -1428,85 +1453,96 @@ class SipTrigger(google.protobuf.message.Message):
     PLAY_AUDIO: SipTrigger.SipTriggerType.ValueType  # 7
     """play audio"""
 
-    TYPE_FIELD_NUMBER: builtins.int
-    CONTENT_FIELD_NUMBER: builtins.int
-    type: global___SipTrigger.SipTriggerType.ValueType
+    TYPE_FIELD_NUMBER: _builtins.int
+    CONTENT_FIELD_NUMBER: _builtins.int
+    type: Global___SipTrigger.SipTriggerType.ValueType
     """Type of the SIP trigger."""
-    @property
-    def content(self) -> google.protobuf.struct_pb2.Struct:
+    @_builtins.property
+    def content(self) -> _struct_pb2.Struct:
         """extra parameters for the trigger"""
 
     def __init__(
         self,
         *,
-        type: global___SipTrigger.SipTriggerType.ValueType = ...,
-        content: google.protobuf.struct_pb2.Struct | None = ...,
+        type: Global___SipTrigger.SipTriggerType.ValueType = ...,
+        content: _struct_pb2.Struct | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["content", b"content"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["content", b"content", "type", b"type"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["content", b"content"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["content", b"content", "type", b"type"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___SipTrigger = SipTrigger
+Global___SipTrigger: _TypeAlias = SipTrigger  # noqa: Y015
 
-@typing.final
-class CheckUpstreamHealthResponse(google.protobuf.message.Message):
+@_typing.final
+class CheckUpstreamHealthResponse(_message.Message):
     """Health checks."""
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    S2T_STATUS_FIELD_NUMBER: builtins.int
-    NLU_STATUS_FIELD_NUMBER: builtins.int
-    T2S_STATUS_FIELD_NUMBER: builtins.int
-    @property
-    def s2t_status(self) -> google.rpc.status_pb2.Status:
+    S2T_STATUS_FIELD_NUMBER: _builtins.int
+    NLU_STATUS_FIELD_NUMBER: _builtins.int
+    T2S_STATUS_FIELD_NUMBER: _builtins.int
+    @_builtins.property
+    def s2t_status(self) -> _status_pb2.Status:
         """Health checks for Speech-2-Text"""
 
-    @property
-    def nlu_status(self) -> google.rpc.status_pb2.Status:
+    @_builtins.property
+    def nlu_status(self) -> _status_pb2.Status:
         """Health checks for NLU"""
 
-    @property
-    def t2s_status(self) -> google.rpc.status_pb2.Status:
+    @_builtins.property
+    def t2s_status(self) -> _status_pb2.Status:
         """Health checks for Text-2-Speech"""
 
     def __init__(
         self,
         *,
-        s2t_status: google.rpc.status_pb2.Status | None = ...,
-        nlu_status: google.rpc.status_pb2.Status | None = ...,
-        t2s_status: google.rpc.status_pb2.Status | None = ...,
+        s2t_status: _status_pb2.Status | None = ...,
+        nlu_status: _status_pb2.Status | None = ...,
+        t2s_status: _status_pb2.Status | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["nlu_status", b"nlu_status", "s2t_status", b"s2t_status", "t2s_status", b"t2s_status"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["nlu_status", b"nlu_status", "s2t_status", b"s2t_status", "t2s_status", b"t2s_status"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["nlu_status", b"nlu_status", "s2t_status", b"s2t_status", "t2s_status", b"t2s_status"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["nlu_status", b"nlu_status", "s2t_status", b"s2t_status", "t2s_status", b"t2s_status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___CheckUpstreamHealthResponse = CheckUpstreamHealthResponse
+Global___CheckUpstreamHealthResponse: _TypeAlias = CheckUpstreamHealthResponse  # noqa: Y015
 
-@typing.final
-class ControlStreamRequest(google.protobuf.message.Message):
+@_typing.final
+class ControlStreamRequest(_message.Message):
     """Control stream message."""
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
     def __init__(
         self,
     ) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ControlStreamRequest = ControlStreamRequest
+Global___ControlStreamRequest: _TypeAlias = ControlStreamRequest  # noqa: Y015
 
-@typing.final
-class ControlStreamResponse(google.protobuf.message.Message):
+@_typing.final
+class ControlStreamResponse(_message.Message):
     """Control stream response message."""
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CONTROL_STATUS_FIELD_NUMBER: builtins.int
-    EPOCH_FIELD_NUMBER: builtins.int
-    MEDIA_CONTROL_FIELD_NUMBER: builtins.int
-    PLAYBACK_CUT_REQUEST_ID_FIELD_NUMBER: builtins.int
-    control_status: global___ControlStatus.ValueType
+    CONTROL_STATUS_FIELD_NUMBER: _builtins.int
+    EPOCH_FIELD_NUMBER: _builtins.int
+    MEDIA_CONTROL_FIELD_NUMBER: _builtins.int
+    PLAYBACK_CUT_REQUEST_ID_FIELD_NUMBER: _builtins.int
+    control_status: Global___ControlStatus.ValueType
     """Control status"""
-    epoch: builtins.int
+    epoch: _builtins.int
     """Monotonic barge-in epoch/sequence number so control status transitions are correlatable with the <code>S2sStreamResponse</code> <code>turn_epoch</code> and a second barge-in during a resumed remainder can never be coalesced away"""
-    playback_cut_request_id: builtins.int
+    playback_cut_request_id: _builtins.int
     """<p>Optional. Non-zero only on a <code>BARGE_IN</code> transition sent by a server that consumes
     <code>PlaybackCut</code>: the server asks the client to report the cut with <code>PLAYBACK_CUT</code> and to
     echo this value in <code>PlaybackCut.playback_cut_request_id</code>. The value is the server's
@@ -1517,8 +1553,8 @@ class ControlStreamResponse(google.protobuf.message.Message):
     configured, the seed of a new control stream, a media-control message, or any status other than
     <code>BARGE_IN</code>.</p>
     """
-    @property
-    def media_control(self) -> global___CallMediaControlLevel:
+    @_builtins.property
+    def media_control(self) -> Global___CallMediaControlLevel:
         """<p>Optional. The per-call operator media control level. Set ONLY on media-control messages: pushed when the
         level changes (<code>SetCallMediaControl</code>) and sent as the seed on every <code>GetControlStream</code>
         connect.</p>
@@ -1533,39 +1569,42 @@ class ControlStreamResponse(google.protobuf.message.Message):
     def __init__(
         self,
         *,
-        control_status: global___ControlStatus.ValueType = ...,
-        epoch: builtins.int = ...,
-        media_control: global___CallMediaControlLevel | None = ...,
-        playback_cut_request_id: builtins.int = ...,
+        control_status: Global___ControlStatus.ValueType = ...,
+        epoch: _builtins.int = ...,
+        media_control: Global___CallMediaControlLevel | None = ...,
+        playback_cut_request_id: _builtins.int = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["media_control", b"media_control"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["control_status", b"control_status", "epoch", b"epoch", "media_control", b"media_control", "playback_cut_request_id", b"playback_cut_request_id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["media_control", b"media_control"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["control_status", b"control_status", "epoch", b"epoch", "media_control", b"media_control", "playback_cut_request_id", b"playback_cut_request_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ControlStreamResponse = ControlStreamResponse
+Global___ControlStreamResponse: _TypeAlias = ControlStreamResponse  # noqa: Y015
 
-@typing.final
-class SetControlStatusRequest(google.protobuf.message.Message):
+@_typing.final
+class SetControlStatusRequest(_message.Message):
     """Request to set control status."""
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CONTROL_STATUS_FIELD_NUMBER: builtins.int
-    PLAYBACK_CUT_FIELD_NUMBER: builtins.int
-    UTTERANCE_ID_FIELD_NUMBER: builtins.int
-    RESPONSE_SEQUENCE_FIELD_NUMBER: builtins.int
-    control_status: global___ControlStatus.ValueType
+    CONTROL_STATUS_FIELD_NUMBER: _builtins.int
+    PLAYBACK_CUT_FIELD_NUMBER: _builtins.int
+    UTTERANCE_ID_FIELD_NUMBER: _builtins.int
+    RESPONSE_SEQUENCE_FIELD_NUMBER: _builtins.int
+    control_status: Global___ControlStatus.ValueType
     """Control status"""
-    utterance_id: builtins.str
+    utterance_id: _builtins.str
     """<p>Optional. Set only with <code>PLAYBACK_DONE</code>: the <code>S2sStreamResponse.utterance_id</code> of the
     utterance whose playback completed. Empty for a response that carries no <code>utterance_id</code>; that one
     is named by <code>response_sequence</code>.</p>
     """
-    response_sequence: builtins.int
+    response_sequence: _builtins.int
     """<p>Optional. Set only with <code>PLAYBACK_DONE</code>: the <code>S2sStreamResponse.response_sequence</code> of
     the last response of the completed utterance. <code>0</code> if the server does not number its responses.</p>
     """
-    @property
-    def playback_cut(self) -> global___PlaybackCut:
+    @_builtins.property
+    def playback_cut(self) -> Global___PlaybackCut:
         """Optional. Set if and only if <code>control_status</code> is <code>PLAYBACK_CUT</code>. A
         <code>PLAYBACK_CUT</code> without it is answered <code>INVALID_ARGUMENT</code>; any other status ignores it
         """
@@ -1573,18 +1612,21 @@ class SetControlStatusRequest(google.protobuf.message.Message):
     def __init__(
         self,
         *,
-        control_status: global___ControlStatus.ValueType = ...,
-        playback_cut: global___PlaybackCut | None = ...,
-        utterance_id: builtins.str = ...,
-        response_sequence: builtins.int = ...,
+        control_status: Global___ControlStatus.ValueType = ...,
+        playback_cut: Global___PlaybackCut | None = ...,
+        utterance_id: _builtins.str = ...,
+        response_sequence: _builtins.int = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["playback_cut", b"playback_cut"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["control_status", b"control_status", "playback_cut", b"playback_cut", "response_sequence", b"response_sequence", "utterance_id", b"utterance_id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["playback_cut", b"playback_cut"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["control_status", b"control_status", "playback_cut", b"playback_cut", "response_sequence", b"response_sequence", "utterance_id", b"utterance_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___SetControlStatusRequest = SetControlStatusRequest
+Global___SetControlStatusRequest: _TypeAlias = SetControlStatusRequest  # noqa: Y015
 
-@typing.final
-class PlaybackCut(google.protobuf.message.Message):
+@_typing.final
+class PlaybackCut(_message.Message):
     """<p>Where playback stood when the client aborted it for a <code>BARGE_IN</code>, reported with
     <code>PLAYBACK_CUT</code>. All audio positions refer to the response named by <code>utterance_id</code> /
     <code>response_sequence</code> and are measured by the client on the thread that owns the audio connection.</p>
@@ -1594,98 +1636,106 @@ class PlaybackCut(google.protobuf.message.Message):
     minus the audio that was still queued in it and was flushed.</p>
     """
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    PLAYBACK_CUT_REQUEST_ID_FIELD_NUMBER: builtins.int
-    BARGE_IN_EPOCH_FIELD_NUMBER: builtins.int
-    UTTERANCE_ID_FIELD_NUMBER: builtins.int
-    CHUNK_INDEX_FIELD_NUMBER: builtins.int
-    RESPONSE_SEQUENCE_FIELD_NUMBER: builtins.int
-    WRITTEN_AUDIO_US_FIELD_NUMBER: builtins.int
-    QUEUED_AUDIO_US_FIELD_NUMBER: builtins.int
-    QUEUED_AUDIO_ESTIMATED_FIELD_NUMBER: builtins.int
-    CUT_MONOTONIC_NS_FIELD_NUMBER: builtins.int
-    REMAINDER_HELD_FIELD_NUMBER: builtins.int
-    playback_cut_request_id: builtins.int
+    PLAYBACK_CUT_REQUEST_ID_FIELD_NUMBER: _builtins.int
+    BARGE_IN_EPOCH_FIELD_NUMBER: _builtins.int
+    UTTERANCE_ID_FIELD_NUMBER: _builtins.int
+    CHUNK_INDEX_FIELD_NUMBER: _builtins.int
+    RESPONSE_SEQUENCE_FIELD_NUMBER: _builtins.int
+    WRITTEN_AUDIO_US_FIELD_NUMBER: _builtins.int
+    QUEUED_AUDIO_US_FIELD_NUMBER: _builtins.int
+    QUEUED_AUDIO_ESTIMATED_FIELD_NUMBER: _builtins.int
+    CUT_MONOTONIC_NS_FIELD_NUMBER: _builtins.int
+    REMAINDER_HELD_FIELD_NUMBER: _builtins.int
+    playback_cut_request_id: _builtins.int
     """The <code>ControlStreamResponse.playback_cut_request_id</code> of the <code>BARGE_IN</code> this cut answers.
     The server records a cut only while this id is pending on the current stream; any other id is answered OK and
     dropped (see <code>PLAYBACK_CUT</code>)
     """
-    barge_in_epoch: builtins.int
+    barge_in_epoch: _builtins.int
     """The <code>ControlStreamResponse.epoch</code> of that <code>BARGE_IN</code>"""
-    utterance_id: builtins.str
+    utterance_id: _builtins.str
     """The <code>S2sStreamResponse.utterance_id</code> playing at the cut. Empty if that response has none, or if
     nothing was playing
     """
-    chunk_index: builtins.int
+    chunk_index: _builtins.int
     """The <code>S2sStreamResponse.chunk_index</code> playing at the cut"""
-    response_sequence: builtins.int
+    response_sequence: _builtins.int
     """The <code>S2sStreamResponse.response_sequence</code> playing at the cut. <code>0</code> if nothing was playing
     or the server does not number its responses
     """
-    written_audio_us: builtins.int
+    written_audio_us: _builtins.int
     """Microseconds of audio of that utterance (or of that single response, if it has no <code>utterance_id</code>)
     handed to the audio device since it started playing, across a resumed remainder
     """
-    queued_audio_us: builtins.int
+    queued_audio_us: _builtins.int
     """Microseconds of audio still queued in the audio device at the cut, read once just before the queue was
     flushed. If the device latency could not be read, the client sends its configured target buffer length
     instead and sets <code>queued_audio_estimated</code>
     """
-    queued_audio_estimated: builtins.bool
+    queued_audio_estimated: _builtins.bool
     """<code>true</code> if <code>queued_audio_us</code> is the configured target buffer length rather than a
     latency read
     """
-    cut_monotonic_ns: builtins.int
+    cut_monotonic_ns: _builtins.int
     """<code>CLOCK_MONOTONIC</code> time of the cut in nanoseconds. The client runs on the same host as the server,
     so the server can compare it with its own monotonic clock
     """
-    remainder_held: builtins.bool
+    remainder_held: _builtins.bool
     """<code>true</code> if the client kept the un-played remainder so that <code>RESUME_PLAYBACK</code> can play it"""
     def __init__(
         self,
         *,
-        playback_cut_request_id: builtins.int = ...,
-        barge_in_epoch: builtins.int = ...,
-        utterance_id: builtins.str = ...,
-        chunk_index: builtins.int = ...,
-        response_sequence: builtins.int = ...,
-        written_audio_us: builtins.int = ...,
-        queued_audio_us: builtins.int = ...,
-        queued_audio_estimated: builtins.bool = ...,
-        cut_monotonic_ns: builtins.int = ...,
-        remainder_held: builtins.bool = ...,
+        playback_cut_request_id: _builtins.int = ...,
+        barge_in_epoch: _builtins.int = ...,
+        utterance_id: _builtins.str = ...,
+        chunk_index: _builtins.int = ...,
+        response_sequence: _builtins.int = ...,
+        written_audio_us: _builtins.int = ...,
+        queued_audio_us: _builtins.int = ...,
+        queued_audio_estimated: _builtins.bool = ...,
+        cut_monotonic_ns: _builtins.int = ...,
+        remainder_held: _builtins.bool = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["barge_in_epoch", b"barge_in_epoch", "chunk_index", b"chunk_index", "cut_monotonic_ns", b"cut_monotonic_ns", "playback_cut_request_id", b"playback_cut_request_id", "queued_audio_estimated", b"queued_audio_estimated", "queued_audio_us", b"queued_audio_us", "remainder_held", b"remainder_held", "response_sequence", b"response_sequence", "utterance_id", b"utterance_id", "written_audio_us", b"written_audio_us"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["barge_in_epoch", b"barge_in_epoch", "chunk_index", b"chunk_index", "cut_monotonic_ns", b"cut_monotonic_ns", "playback_cut_request_id", b"playback_cut_request_id", "queued_audio_estimated", b"queued_audio_estimated", "queued_audio_us", b"queued_audio_us", "remainder_held", b"remainder_held", "response_sequence", b"response_sequence", "utterance_id", b"utterance_id", "written_audio_us", b"written_audio_us"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___PlaybackCut = PlaybackCut
+Global___PlaybackCut: _TypeAlias = PlaybackCut  # noqa: Y015
 
-@typing.final
-class SetControlStatusResponse(google.protobuf.message.Message):
+@_typing.final
+class SetControlStatusResponse(_message.Message):
     """Response of setting the control status with the old and new status objects. For a report that is not a state
     (<code>PLAYBACK_CUT</code>) both fields carry the status the server holds, unchanged.
     """
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    OLD_CONTROL_STATUS_FIELD_NUMBER: builtins.int
-    NEW_CONTROL_STATUS_FIELD_NUMBER: builtins.int
-    old_control_status: global___ControlStatus.ValueType
+    OLD_CONTROL_STATUS_FIELD_NUMBER: _builtins.int
+    NEW_CONTROL_STATUS_FIELD_NUMBER: _builtins.int
+    old_control_status: Global___ControlStatus.ValueType
     """Previous 'old' control status"""
-    new_control_status: global___ControlStatus.ValueType
+    new_control_status: Global___ControlStatus.ValueType
     """Current 'new' control status"""
     def __init__(
         self,
         *,
-        old_control_status: global___ControlStatus.ValueType = ...,
-        new_control_status: global___ControlStatus.ValueType = ...,
+        old_control_status: Global___ControlStatus.ValueType = ...,
+        new_control_status: Global___ControlStatus.ValueType = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["new_control_status", b"new_control_status", "old_control_status", b"old_control_status"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["new_control_status", b"new_control_status", "old_control_status", b"old_control_status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___SetControlStatusResponse = SetControlStatusResponse
+Global___SetControlStatusResponse: _TypeAlias = SetControlStatusResponse  # noqa: Y015
 
-@typing.final
-class CallMediaControlLevel(google.protobuf.message.Message):
+@_typing.final
+class CallMediaControlLevel(_message.Message):
     """<p>Per-call operator media control level, sent by ondewo-sip to <code>SetCallMediaControl</code> and pushed by the
     server on the control stream (<code>ControlStreamResponse.media_control</code>).</p>
 
@@ -1693,135 +1743,146 @@ class CallMediaControlLevel(google.protobuf.message.Message):
     requests from ondewo-sip with <code>SipMute</code> / <code>SipUnMute</code>.</p>
     """
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    BOT_MUTED_FIELD_NUMBER: builtins.int
-    LISTENING_PAUSED_FIELD_NUMBER: builtins.int
-    GENERATION_FIELD_NUMBER: builtins.int
-    REASON_FIELD_NUMBER: builtins.int
-    bot_muted: builtins.bool
+    BOT_MUTED_FIELD_NUMBER: _builtins.int
+    LISTENING_PAUSED_FIELD_NUMBER: _builtins.int
+    GENERATION_FIELD_NUMBER: _builtins.int
+    REASON_FIELD_NUMBER: _builtins.int
+    bot_muted: _builtins.bool
     """<p>If <code>true</code>, the bot is muted: no text-to-speech is synthesized for new responses (the NLU turn
     still runs), the in-flight utterance is aborted and discarded (never resumed), and soft-timeout fillers,
     re-prompts and <code>PLAY_AUDIO</code> triggers produce no audio.</p>
     """
-    listening_paused: builtins.bool
+    listening_paused: _builtins.bool
     """<p>If <code>true</code>, the bot stops listening: the caller audio sent to speech-to-text is replaced by muted
     zero frames at the capture cadence (the stream stays open and its clock stays aligned with the call), S2T
     responses are dropped before barge-in adjudication and before NLU, and the turn, soft and silence
     timers are suspended (they restart from zero on resume). Blanked audio is never back-filled.</p>
     """
-    generation: builtins.int
+    generation: _builtins.int
     """<p>ondewo-sip's container-lifetime monotonic counter. Never reset per call. The server applies a level only
     when this value is strictly greater than the last applied one.</p>
     """
-    reason: builtins.str
+    reason: _builtins.str
     """<p>Bounded reason token for logs and telemetry: <code>operator</code>, <code>participant</code>,
     <code>takeover</code> or <code>resync</code>.</p>
     """
     def __init__(
         self,
         *,
-        bot_muted: builtins.bool = ...,
-        listening_paused: builtins.bool = ...,
-        generation: builtins.int = ...,
-        reason: builtins.str = ...,
+        bot_muted: _builtins.bool = ...,
+        listening_paused: _builtins.bool = ...,
+        generation: _builtins.int = ...,
+        reason: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["bot_muted", b"bot_muted", "generation", b"generation", "listening_paused", b"listening_paused", "reason", b"reason"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["bot_muted", b"bot_muted", "generation", b"generation", "listening_paused", b"listening_paused", "reason", b"reason"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___CallMediaControlLevel = CallMediaControlLevel
+Global___CallMediaControlLevel: _TypeAlias = CallMediaControlLevel  # noqa: Y015
 
-@typing.final
-class SetCallMediaControlResponse(google.protobuf.message.Message):
+@_typing.final
+class SetCallMediaControlResponse(_message.Message):
     """<p>Response of <code>SetCallMediaControl</code>.</p>"""
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    APPLIED_FIELD_NUMBER: builtins.int
-    CHANGED_FIELD_NUMBER: builtins.int
-    STALE_FIELD_NUMBER: builtins.int
-    BOT_PLAYBACK_IN_FLIGHT_FIELD_NUMBER: builtins.int
-    REFUSAL_REASON_FIELD_NUMBER: builtins.int
-    changed: builtins.bool
+    APPLIED_FIELD_NUMBER: _builtins.int
+    CHANGED_FIELD_NUMBER: _builtins.int
+    STALE_FIELD_NUMBER: _builtins.int
+    BOT_PLAYBACK_IN_FLIGHT_FIELD_NUMBER: _builtins.int
+    REFUSAL_REASON_FIELD_NUMBER: _builtins.int
+    changed: _builtins.bool
     """<p><code>true</code> if the effective level changed.</p>"""
-    stale: builtins.bool
+    stale: _builtins.bool
     """<p><code>true</code> if the request's generation was not greater than the last applied generation. The
     request was ignored.</p>
     """
-    bot_playback_in_flight: builtins.bool
+    bot_playback_in_flight: _builtins.bool
     """<p><code>true</code> while an utterance is still draining to the caller.</p>"""
-    refusal_reason: builtins.str
+    refusal_reason: _builtins.str
     """<p>Empty when the level was applied. Otherwise a stable refusal token: <code>amd-in-progress</code>
     (<code>listening_paused</code> refused during the answering-machine-detection window).</p>
     """
-    @property
-    def applied(self) -> global___CallMediaControlLevel:
+    @_builtins.property
+    def applied(self) -> Global___CallMediaControlLevel:
         """<p>The level the server holds after this request.</p>"""
 
     def __init__(
         self,
         *,
-        applied: global___CallMediaControlLevel | None = ...,
-        changed: builtins.bool = ...,
-        stale: builtins.bool = ...,
-        bot_playback_in_flight: builtins.bool = ...,
-        refusal_reason: builtins.str = ...,
+        applied: Global___CallMediaControlLevel | None = ...,
+        changed: _builtins.bool = ...,
+        stale: _builtins.bool = ...,
+        bot_playback_in_flight: _builtins.bool = ...,
+        refusal_reason: _builtins.str = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["applied", b"applied"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["applied", b"applied", "bot_playback_in_flight", b"bot_playback_in_flight", "changed", b"changed", "refusal_reason", b"refusal_reason", "stale", b"stale"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["applied", b"applied"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["applied", b"applied", "bot_playback_in_flight", b"bot_playback_in_flight", "changed", b"changed", "refusal_reason", b"refusal_reason", "stale", b"stale"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___SetCallMediaControlResponse = SetCallMediaControlResponse
+Global___SetCallMediaControlResponse: _TypeAlias = SetCallMediaControlResponse  # noqa: Y015
 
-@typing.final
-class CallerDtmfRequest(google.protobuf.message.Message):
+@_typing.final
+class CallerDtmfRequest(_message.Message):
     """<p>One DTMF key the caller pressed, sent by ondewo-sip to <code>SetCallerDtmf</code>.</p>"""
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    CALL_ID_FIELD_NUMBER: builtins.int
-    SEQUENCE_FIELD_NUMBER: builtins.int
-    DIGIT_FIELD_NUMBER: builtins.int
-    DURATION_MS_FIELD_NUMBER: builtins.int
-    RECEIVED_UNIX_NS_FIELD_NUMBER: builtins.int
-    call_id: builtins.str
+    CALL_ID_FIELD_NUMBER: _builtins.int
+    SEQUENCE_FIELD_NUMBER: _builtins.int
+    DIGIT_FIELD_NUMBER: _builtins.int
+    DURATION_MS_FIELD_NUMBER: _builtins.int
+    RECEIVED_UNIX_NS_FIELD_NUMBER: _builtins.int
+    call_id: _builtins.str
     """<p>ondewo-sip's id of the call the key belongs to (<code>SipStatus.call_id</code>). A key of another call
     than the server's current one is refused.</p>
     """
-    sequence: builtins.int
+    sequence: _builtins.int
     """<p>1 for the first key of the call, then +1 per key ondewo-sip admitted. A sequence number not greater than
     the last one accepted for the call is refused.</p>
     """
-    digit: builtins.str
+    digit: _builtins.str
     """<p>The key: one of <code>0</code>-<code>9</code>, <code>*</code>, <code>#</code>, <code>A</code>-<code>D</code>.
     Never logged in clear.</p>
     """
-    duration_ms: builtins.int
+    duration_ms: _builtins.int
     """<p>How long the key was held, in milliseconds; 0 when unknown.</p>"""
-    received_unix_ns: builtins.int
+    received_unix_ns: _builtins.int
     """<p>When ondewo-sip received the key, in nanoseconds since the Unix epoch (for the key-to-audio latency).</p>"""
     def __init__(
         self,
         *,
-        call_id: builtins.str = ...,
-        sequence: builtins.int = ...,
-        digit: builtins.str = ...,
-        duration_ms: builtins.int = ...,
-        received_unix_ns: builtins.int = ...,
+        call_id: _builtins.str = ...,
+        sequence: _builtins.int = ...,
+        digit: _builtins.str = ...,
+        duration_ms: _builtins.int = ...,
+        received_unix_ns: _builtins.int = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["call_id", b"call_id", "digit", b"digit", "duration_ms", b"duration_ms", "received_unix_ns", b"received_unix_ns", "sequence", b"sequence"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["call_id", b"call_id", "digit", b"digit", "duration_ms", b"duration_ms", "received_unix_ns", b"received_unix_ns", "sequence", b"sequence"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___CallerDtmfRequest = CallerDtmfRequest
+Global___CallerDtmfRequest: _TypeAlias = CallerDtmfRequest  # noqa: Y015
 
-@typing.final
-class CallerDtmfResponse(google.protobuf.message.Message):
+@_typing.final
+class CallerDtmfResponse(_message.Message):
     """<p>Response of <code>SetCallerDtmf</code>.</p>"""
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    ACCEPTED_FIELD_NUMBER: builtins.int
-    REASON_FIELD_NUMBER: builtins.int
-    accepted: builtins.bool
+    ACCEPTED_FIELD_NUMBER: _builtins.int
+    REASON_FIELD_NUMBER: _builtins.int
+    accepted: _builtins.bool
     """<p><code>true</code> if the server took the key as caller input.</p>"""
-    reason: builtins.str
+    reason: _builtins.str
     """<p>Empty when accepted. Otherwise a stable token: <code>disabled</code>, <code>no-call</code>,
     <code>other-call</code>, <code>stale-sequence</code>, <code>invalid-digit</code>, <code>listening-paused</code>,
     <code>amd-in-progress</code>, <code>undeclared</code> or <code>invalid-key</code> (a menu key outside the menu's
@@ -1830,15 +1891,19 @@ class CallerDtmfResponse(google.protobuf.message.Message):
     def __init__(
         self,
         *,
-        accepted: builtins.bool = ...,
-        reason: builtins.str = ...,
+        accepted: _builtins.bool = ...,
+        reason: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["accepted", b"accepted", "reason", b"reason"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["accepted", b"accepted", "reason", b"reason"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___CallerDtmfResponse = CallerDtmfResponse
+Global___CallerDtmfResponse: _TypeAlias = CallerDtmfResponse  # noqa: Y015
 
-@typing.final
-class WarmTransferOutcomeNotice(google.protobuf.message.Message):
+@_typing.final
+class WarmTransferOutcomeNotice(_message.Message):
     """<p>A warm-transfer outcome the bot must tell the caller, sent by ondewo-sip to
     <code>DeliverWarmTransferOutcomeNotice</code>.</p>
 
@@ -1851,35 +1916,35 @@ class WarmTransferOutcomeNotice(google.protobuf.message.Message):
     the texts.</p>
     """
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    REQUEST_ID_FIELD_NUMBER: builtins.int
-    OUTCOME_FIELD_NUMBER: builtins.int
-    INTRO_SESSION_FIELD_NUMBER: builtins.int
-    CALLEE_DISPLAY_NAME_FIELD_NUMBER: builtins.int
-    CAUSE_FIELD_NUMBER: builtins.int
-    FALLBACK_TEXT_FIELD_NUMBER: builtins.int
-    request_id: builtins.str
+    REQUEST_ID_FIELD_NUMBER: _builtins.int
+    OUTCOME_FIELD_NUMBER: _builtins.int
+    INTRO_SESSION_FIELD_NUMBER: _builtins.int
+    CALLEE_DISPLAY_NAME_FIELD_NUMBER: _builtins.int
+    CAUSE_FIELD_NUMBER: _builtins.int
+    FALLBACK_TEXT_FIELD_NUMBER: _builtins.int
+    request_id: _builtins.str
     """<p>ondewo-vtsi's transfer request id, or ondewo-sip's delegated request id for
     <code>WARM_TRANSFER_OUTCOME_DELEGATION_EXPIRED</code>. 1 to 128 characters. A second notice with the same id
     on the same call is answered <code>DUPLICATE</code> and changes nothing.</p>
     """
-    outcome: global___WarmTransferOutcome.ValueType
+    outcome: Global___WarmTransferOutcome.ValueType
     """<p>What happened to the transfer. <code>WARM_TRANSFER_OUTCOME_UNSPECIFIED</code> is answered
     <code>INVALID</code>.</p>
     """
-    intro_session: builtins.str
+    intro_session: _builtins.str
     """<p>NLU session name of the intro session, which holds the decline reason. Only with
     <code>WARM_TRANSFER_OUTCOME_DECLINED</code>, and empty when the target gave no reason; ignored with any other
     outcome.</p>
     """
-    callee_display_name: builtins.str
+    callee_display_name: _builtins.str
     """<p>Display name of the transfer target, at most 128 characters. May be empty.</p>"""
-    cause: builtins.str
+    cause: _builtins.str
     """<p>Bounded lowercase token naming the cause, at most 64 characters, e.g. <code>voicemail-suspected</code>,
     <code>target-hung-up</code> or <code>no-free-listener</code>. For logs and telemetry only.</p>
     """
-    fallback_text: builtins.str
+    fallback_text: _builtins.str
     """<p>The sentence the bot speaks when it cannot commit the notice as a turn: rendered by ondewo-vtsi from its
     template, with the target's display name and without any decline reason. At most 1024 characters. Empty with
     <code>WARM_TRANSFER_OUTCOME_DELEGATION_EXPIRED</code>.</p>
@@ -1887,39 +1952,47 @@ class WarmTransferOutcomeNotice(google.protobuf.message.Message):
     def __init__(
         self,
         *,
-        request_id: builtins.str = ...,
-        outcome: global___WarmTransferOutcome.ValueType = ...,
-        intro_session: builtins.str = ...,
-        callee_display_name: builtins.str = ...,
-        cause: builtins.str = ...,
-        fallback_text: builtins.str = ...,
+        request_id: _builtins.str = ...,
+        outcome: Global___WarmTransferOutcome.ValueType = ...,
+        intro_session: _builtins.str = ...,
+        callee_display_name: _builtins.str = ...,
+        cause: _builtins.str = ...,
+        fallback_text: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["callee_display_name", b"callee_display_name", "cause", b"cause", "fallback_text", b"fallback_text", "intro_session", b"intro_session", "outcome", b"outcome", "request_id", b"request_id"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["callee_display_name", b"callee_display_name", "cause", b"cause", "fallback_text", b"fallback_text", "intro_session", b"intro_session", "outcome", b"outcome", "request_id", b"request_id"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___WarmTransferOutcomeNotice = WarmTransferOutcomeNotice
+Global___WarmTransferOutcomeNotice: _TypeAlias = WarmTransferOutcomeNotice  # noqa: Y015
 
-@typing.final
-class WarmTransferOutcomeNoticeResponse(google.protobuf.message.Message):
+@_typing.final
+class WarmTransferOutcomeNoticeResponse(_message.Message):
     """<p>Response of <code>DeliverWarmTransferOutcomeNotice</code>.</p>"""
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    STATUS_FIELD_NUMBER: builtins.int
-    status: global___WarmTransferOutcomeNoticeStatus.ValueType
+    STATUS_FIELD_NUMBER: _builtins.int
+    status: Global___WarmTransferOutcomeNoticeStatus.ValueType
     """<p>How the server took the notice. The checks run in this order: <code>DISABLED</code>,
     <code>INVALID</code>, <code>DUPLICATE</code>, then <code>QUEUED</code>.</p>
     """
     def __init__(
         self,
         *,
-        status: global___WarmTransferOutcomeNoticeStatus.ValueType = ...,
+        status: Global___WarmTransferOutcomeNoticeStatus.ValueType = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["status", b"status"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["status", b"status"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___WarmTransferOutcomeNoticeResponse = WarmTransferOutcomeNoticeResponse
+Global___WarmTransferOutcomeNoticeResponse: _TypeAlias = WarmTransferOutcomeNoticeResponse  # noqa: Y015
 
-@typing.final
-class Condition(google.protobuf.message.Message):
+@_typing.final
+class Condition(_message.Message):
     """A condition message with its type and value.
     A Condition can be of various types.
     Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:
@@ -1952,94 +2025,102 @@ class Condition(google.protobuf.message.Message):
     </code></pre>
     """
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    TYPE_FIELD_NUMBER: builtins.int
-    VALUE_FIELD_NUMBER: builtins.int
-    type: global___ConditionType.ValueType
+    TYPE_FIELD_NUMBER: _builtins.int
+    VALUE_FIELD_NUMBER: _builtins.int
+    type: Global___ConditionType.ValueType
     """Condition type"""
-    value: builtins.str
+    value: _builtins.str
     """Value of the condition. Examples of conditions values based on the condition type are given in the <code>ConditionType</code> documentation."""
     def __init__(
         self,
         *,
-        type: global___ConditionType.ValueType = ...,
-        value: builtins.str = ...,
+        type: Global___ConditionType.ValueType = ...,
+        value: _builtins.str = ...,
     ) -> None: ...
-    def ClearField(self, field_name: typing.Literal["type", b"type", "value", b"value"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _Never  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["type", b"type", "value", b"value"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___Condition = Condition
+Global___Condition: _TypeAlias = Condition  # noqa: Y015
 
-@typing.final
-class ControlMessageServiceParameters(google.protobuf.message.Message):
+@_typing.final
+class ControlMessageServiceParameters(_message.Message):
     """Parameters of the control message passed to the service specified in the control message."""
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    T2S_CONFIG_FIELD_NUMBER: builtins.int
-    S2T_CONFIG_FIELD_NUMBER: builtins.int
-    TRANSFER_ID_FIELD_NUMBER: builtins.int
-    WAV_FILES_FIELD_NUMBER: builtins.int
-    TEXT_FIELD_NUMBER: builtins.int
-    CONTEXT_FIELD_NUMBER: builtins.int
-    SESSION_ID_FIELD_NUMBER: builtins.int
-    CONTEXT_NAME_FIELD_NUMBER: builtins.int
-    CONDITION_START_FIELD_NUMBER: builtins.int
-    CONDITION_END_FIELD_NUMBER: builtins.int
-    transfer_id: builtins.str
+    T2S_CONFIG_FIELD_NUMBER: _builtins.int
+    S2T_CONFIG_FIELD_NUMBER: _builtins.int
+    TRANSFER_ID_FIELD_NUMBER: _builtins.int
+    WAV_FILES_FIELD_NUMBER: _builtins.int
+    TEXT_FIELD_NUMBER: _builtins.int
+    CONTEXT_FIELD_NUMBER: _builtins.int
+    SESSION_ID_FIELD_NUMBER: _builtins.int
+    CONTEXT_NAME_FIELD_NUMBER: _builtins.int
+    CONDITION_START_FIELD_NUMBER: _builtins.int
+    CONDITION_END_FIELD_NUMBER: _builtins.int
+    transfer_id: _builtins.str
     """SIP: callee id to transfer call to"""
-    text: builtins.str
+    text: _builtins.str
     """text, e.g. for NLU detect intent response or Text-2-Speech voice synthesis"""
-    session_id: builtins.str
+    session_id: _builtins.str
     """NLU: the session id of a NLU session"""
-    context_name: builtins.str
+    context_name: _builtins.str
     """NLU: the name of the context of a NLU session"""
-    @property
-    def t2s_config(self) -> ondewo.t2s.text_to_speech_pb2.RequestConfig:
+    @_builtins.property
+    def t2s_config(self) -> _text_to_speech_pb2.RequestConfig:
         """Text-2-Speech: configuration to control the synthesis of a text into audio"""
 
-    @property
-    def s2t_config(self) -> ondewo.s2t.speech_to_text_pb2.TranscribeRequestConfig:
+    @_builtins.property
+    def s2t_config(self) -> _speech_to_text_pb2.TranscribeRequestConfig:
         """Speech-2-Text: configuration to control the recognition of text based on human voice audio"""
 
-    @property
-    def wav_files(self) -> google.protobuf.internal.containers.RepeatedScalarFieldContainer[builtins.bytes]:
+    @_builtins.property
+    def wav_files(self) -> _containers.RepeatedScalarFieldContainer[_builtins.bytes]:
         """SIP: bytes of audio files to play to a caller"""
 
-    @property
-    def context(self) -> ondewo.nlu.context_pb2.Context:
+    @_builtins.property
+    def context(self) -> _context_pb2.Context:
         """NLU: context for creating, updating or deleting contextual information from a NLU session"""
 
-    @property
-    def condition_start(self) -> global___Condition:
+    @_builtins.property
+    def condition_start(self) -> Global___Condition:
         """CSI: the condition that defines when a control message should be executed"""
 
-    @property
-    def condition_end(self) -> global___Condition:
+    @_builtins.property
+    def condition_end(self) -> Global___Condition:
         """CSI: the condition that defines when a control message should stop its execution"""
 
     def __init__(
         self,
         *,
-        t2s_config: ondewo.t2s.text_to_speech_pb2.RequestConfig | None = ...,
-        s2t_config: ondewo.s2t.speech_to_text_pb2.TranscribeRequestConfig | None = ...,
-        transfer_id: builtins.str = ...,
-        wav_files: collections.abc.Iterable[builtins.bytes] | None = ...,
-        text: builtins.str = ...,
-        context: ondewo.nlu.context_pb2.Context | None = ...,
-        session_id: builtins.str = ...,
-        context_name: builtins.str = ...,
-        condition_start: global___Condition | None = ...,
-        condition_end: global___Condition | None = ...,
+        t2s_config: _text_to_speech_pb2.RequestConfig | None = ...,
+        s2t_config: _speech_to_text_pb2.TranscribeRequestConfig | None = ...,
+        transfer_id: _builtins.str = ...,
+        wav_files: _abc.Iterable[_builtins.bytes] | None = ...,
+        text: _builtins.str = ...,
+        context: _context_pb2.Context | None = ...,
+        session_id: _builtins.str = ...,
+        context_name: _builtins.str = ...,
+        condition_start: Global___Condition | None = ...,
+        condition_end: Global___Condition | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["condition_end", b"condition_end", "condition_start", b"condition_start", "config", b"config", "context", b"context", "s2t_config", b"s2t_config", "t2s_config", b"t2s_config"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["condition_end", b"condition_end", "condition_start", b"condition_start", "config", b"config", "context", b"context", "context_name", b"context_name", "s2t_config", b"s2t_config", "session_id", b"session_id", "t2s_config", b"t2s_config", "text", b"text", "transfer_id", b"transfer_id", "wav_files", b"wav_files"]) -> None: ...
-    def WhichOneof(self, oneof_group: typing.Literal["config", b"config"]) -> typing.Literal["t2s_config", "s2t_config"] | None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["condition_end", b"condition_end", "condition_start", b"condition_start", "config", b"config", "context", b"context", "s2t_config", b"s2t_config", "t2s_config", b"t2s_config"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["condition_end", b"condition_end", "condition_start", b"condition_start", "config", b"config", "context", b"context", "context_name", b"context_name", "s2t_config", b"s2t_config", "session_id", b"session_id", "t2s_config", b"t2s_config", "text", b"text", "transfer_id", b"transfer_id", "wav_files", b"wav_files"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    _WhichOneofReturnType_config: _TypeAlias = _typing.Literal["t2s_config", "s2t_config"]  # noqa: Y015
+    _WhichOneofArgType_config: _TypeAlias = _typing.Literal["config", b"config"]  # noqa: Y015
+    def WhichOneof(self, oneof_group: _WhichOneofArgType_config) -> _WhichOneofReturnType_config | None: ...
 
-global___ControlMessageServiceParameters = ControlMessageServiceParameters
+Global___ControlMessageServiceParameters: _TypeAlias = ControlMessageServiceParameters  # noqa: Y015
 
-@typing.final
-class ControlMessage(google.protobuf.message.Message):
+@_typing.final
+class ControlMessage(_message.Message):
     """A control message.
     Example of a JSON how to invoke a control message via ONDEWO RABBITMQ service:
     <pre><code>
@@ -2067,27 +2148,30 @@ class ControlMessage(google.protobuf.message.Message):
     </code></pre>
     """
 
-    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+    DESCRIPTOR: _descriptor.Descriptor
 
-    SERVICE_FIELD_NUMBER: builtins.int
-    METHOD_FIELD_NUMBER: builtins.int
-    PARAMETERS_FIELD_NUMBER: builtins.int
-    service: global___ControlMessageServiceName.ValueType
+    SERVICE_FIELD_NUMBER: _builtins.int
+    METHOD_FIELD_NUMBER: _builtins.int
+    PARAMETERS_FIELD_NUMBER: _builtins.int
+    service: Global___ControlMessageServiceName.ValueType
     """Service to control. Valid service names are: <code>ondewo_nlu</code>, <code>ondewo_t2s</code>, <code>ondewo_s2t</code>, <code>ondewo_sip</code> and <code>ondewo_csi</code>."""
-    method: global___ControlMessageServiceMethod.ValueType
+    method: Global___ControlMessageServiceMethod.ValueType
     """Method to invoke on the service"""
-    @property
-    def parameters(self) -> global___ControlMessageServiceParameters:
+    @_builtins.property
+    def parameters(self) -> Global___ControlMessageServiceParameters:
         """Parameters to use to invoke the method of the service"""
 
     def __init__(
         self,
         *,
-        service: global___ControlMessageServiceName.ValueType = ...,
-        method: global___ControlMessageServiceMethod.ValueType = ...,
-        parameters: global___ControlMessageServiceParameters | None = ...,
+        service: Global___ControlMessageServiceName.ValueType = ...,
+        method: Global___ControlMessageServiceMethod.ValueType = ...,
+        parameters: Global___ControlMessageServiceParameters | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["parameters", b"parameters"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["method", b"method", "parameters", b"parameters", "service", b"service"]) -> None: ...
+    _HasFieldArgType: _TypeAlias = _typing.Literal["parameters", b"parameters"]  # noqa: Y015
+    def HasField(self, field_name: _HasFieldArgType) -> _builtins.bool: ...
+    _ClearFieldArgType: _TypeAlias = _typing.Literal["method", b"method", "parameters", b"parameters", "service", b"service"]  # noqa: Y015
+    def ClearField(self, field_name: _ClearFieldArgType) -> None: ...
+    def WhichOneof(self, oneof_group: _Never) -> None: ...
 
-global___ControlMessage = ControlMessage
+Global___ControlMessage: _TypeAlias = ControlMessage  # noqa: Y015
