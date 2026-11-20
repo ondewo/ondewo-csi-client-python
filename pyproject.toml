@@ -52,7 +52,7 @@ dependencies = [
     # vendored-proto skew that fails SILENTLY, because one physical copy of ondewo/s2t survives on disk and
     # the last writer wins.
     "ondewo-s2t-client>=7.6.0,<7.7.0",
-    "ondewo-t2s-client>=6.6.3,<6.7.0",
+    "ondewo-t2s-client>=6.7.0,<6.8.0",
     "protobuf>=7.35.1,<8",
     "requests",
     "setuptools",
