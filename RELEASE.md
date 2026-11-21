@@ -2,6 +2,16 @@
 
 *****************
 
+## Release ONDEWO CSI Python Client 5.9.2
+
+### New Features
+
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) Offline-token start-up, as ondewo-nlu-client has it: `ClientConfig.refresh_token` (appended as the last field) hands the client a Keycloak *offline* refresh token instead of a password, and the client then never sends a password grant. `KeycloakTokenProvider(refresh_token=...)` (appended as the last parameter) starts with a `grant_type=refresh_token` exchange and auto-refreshes exactly as on the password path. Keycloak's brute-force detection counts failed LOGINS, so N processes booting at once with one technical user are a burst the realm penalises, while N refresh grants of one offline token are not (measured: 3/10 password grants accepted at 0 ms spacing, 10/10 refresh grants).
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) A Keycloak config needs `password` OR `refresh_token`; when both are set the token wins, and a refused token is never answered with a password login. The token is redacted from the config's repr like the password, takes part (hashed) in the shared-provider registry key, so two token-only configs of different tenants never share a provider, and the `token_expiration_in_s` window is armed on both paths.
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) Tests: `test_client_config_refresh_token.py` and the offline-token classes of `test_keycloak_refresh_resilience.py`, both shared verbatim by every python SDK.
+
+*****************
+
 ## Release ONDEWO CSI Python Client 5.9.1
 
 ### Bug Fixes
