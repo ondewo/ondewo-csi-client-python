@@ -2497,7 +2497,7 @@ wheels = [
 
 [[package]]
 name = "ondewo-csi-client"
-version = "5.9.0"
+version = "5.9.1"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },

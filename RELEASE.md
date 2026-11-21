@@ -2,6 +2,24 @@
 
 *****************
 
+## Release ONDEWO CSI Python Client 5.9.1
+
+### Bug Fixes
+
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) Keycloak token refresh: a failed refresh no longer ends the background refresh thread. Any exception from the token endpoint (a 502 from a proxy, a DNS failure, a restarting Keycloak, a dead offline session) escaped the thread target and killed it, and nothing re-armed it, so the access token lapsed for the life of the process. The thread now survives every failure and retries with backoff.
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) Keycloak token refresh: the per-call (lazy) refresh in `KeycloakTokenProvider.authorization_metadata()` honours the same failure backoff as the background thread, so a Keycloak outage no longer turns every gRPC call into a token request sent while the provider lock is held.
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) A token that is still valid keeps being served when its refresh fails inside the 30 s expiry leeway; only an EXPIRED token raises. It raises `KeycloakAuthenticationError` whatever failed underneath: network errors (`requests.ConnectionError`, `Timeout`, `OSError`), a non-2xx status, a body that is not JSON or not a JSON object, a missing `access_token` and a non-numeric `expires_in` are all mapped to it with the original exception chained. A malformed response no longer changes any provider state.
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) `KeycloakTokenProvider.stop()` (and so `__del__`) skips the thread join once the interpreter is finalizing, so process exit on CPython >= 3.13 no longer prints "Exception ignored while calling deallocator". A token response without an `access_token` is reported by its field names only, never its values (a token response is credential material).
+
+### Improvements
+
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) One Keycloak refresh implementation, byte-identical across the ondewo python SDKs (nlu, csi, s2t, sip, survey, t2s, vtsi): failed refreshes back off with full jitter from 5 s doubling up to 300 s, the background thread and the per-call path share that backoff, and a success resets it. Each failure logs one WARNING with the attempt number, the retry delay and how long the current token stays valid; the first success afterwards logs one INFO. No credential appears in either line.
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) The token-endpoint HTTP timeout is 10 s (was 30 s): a refresh runs under the provider lock that every call reads its bearer token through, so this bounds how long a hung Keycloak can stall the client. Quoted Keycloak error bodies are cut at 500 characters.
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) `KeycloakTokenProvider` accepts `random_fn` (the jitter source, appended as the last parameter); the backoff is measured from the moment a failure is recorded, so an attempt that hung for the whole timeout does not schedule a retry that is already due.
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) New `test_keycloak_refresh_resilience.py`, shared verbatim by every python SDK: every failure kind, the backoff ladder and its bounds, the shared lazy and background backoff, the still-valid-token path, 16 threads during an outage (one token request), a real daemon thread recovering after three different failures, malformed responses, credential-free logs, `stop()` during interpreter finalization and the credential-keyed provider registry.
+
+*****************
+
 ## Release ONDEWO CSI Python Client 5.9.0
 
 ### New Features

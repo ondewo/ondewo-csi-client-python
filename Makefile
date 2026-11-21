@@ -19,7 +19,7 @@
 
 # MUST BE THE SAME AS API in Mayor and Minor Version Number
 # example: API 2.9.0 --> Client 2.9.X
-ONDEWO_CSI_VERSION=5.9.0
+ONDEWO_CSI_VERSION=5.9.1
 # The version as an anchored-regex fragment (dots escaped), for every heading / version match below. No line but the
 # assignment above may carry an equals sign AFTER the version variable's name: older ondewo-csi-api release drivers
 # rewrote every such line wholesale (tests/unit/test_release_runs_in_a_fresh_clone.py replays that rewrite).
