@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ondewo-csi-client"
-version = "5.9.2"
+version = "5.9.3"
 description = "ONDEWO Communication System Integration (CSI) Client library for Python"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -43,16 +43,18 @@ dependencies = [
     # The generated conversation_pb2.py imports ondewo/nlu/session.proto and context.proto by name. ondewo-csi-api
     # 5.9.0 tracks ondewo-nlu-api 7.4.0 and uses nothing nlu-api 7.5.0 or 7.6.0 added, so the 7.4, the 7.5 (the
     # barge-in turn control of ondewo-csi and ondewo-cai) and the 7.6 line (the warm-transfer intro RPCs of
-    # ondewo-vtsi and ondewo-cai) all serve it; consumers that also install ondewo-vtsi-client (which vendors
+    # ondewo-vtsi and ondewo-cai) and the 7.7 line (the typed session-step interruption and the aligned heard-text
+    # precisions of ondewo-csi and ondewo-cai) all serve it; consumers that also install ondewo-vtsi-client (which vendors
     # ondewo/nlu) still need one line on both sides. The 7.1.1 floor's reason (the offline-token hand-off and the
     # refresh thread surviving a failed refresh) is carried by every 7.4.x release.
-    "ondewo-nlu-client>=7.4,<7.7",
+    "ondewo-nlu-client>=7.4,<7.8",
     # Held in LOCKSTEP with the s2t protos ondewo-csi-api vendors: csi-api 5.9.0 tracks ondewo-s2t-api 7.6.0,
     # whose speech-to-text.proto conversation.proto imports -- pairing that with a 7.5.x s2t-client is the
     # vendored-proto skew that fails SILENTLY, because one physical copy of ondewo/s2t survives on disk and
     # the last writer wins.
     "ondewo-s2t-client>=7.6.0,<7.7.0",
-    "ondewo-t2s-client>=6.7.0,<6.8.0",
+    # ondewo-csi-api vendors no t2s protos; 6.8.0 adds only response fields (text spans, word timings).
+    "ondewo-t2s-client>=6.7.0,<6.9.0",
     "protobuf>=7.35.1,<8",
     "requests",
     "setuptools",

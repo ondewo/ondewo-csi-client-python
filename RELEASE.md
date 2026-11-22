@@ -2,6 +2,14 @@
 
 *****************
 
+## Release ONDEWO CSI Python Client 5.9.3
+
+### Improvements
+
+* [[OND236-120]](https://ondewo.atlassian.net/browse/OND236-120) Widens the dependency ranges to `ondewo-nlu-client>=7.4,<7.8` (7.7.0: typed `SessionStep.interruption`, aligned heard-text precisions) and `ondewo-t2s-client>=6.7.0,<6.9.0` (6.8.0: streaming text spans and word timings). No generated code changed.
+
+*****************
+
 ## Release ONDEWO CSI Python Client 5.9.2
 
 ### New Features
